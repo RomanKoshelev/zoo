@@ -1,0 +1,4 @@
+TODO:
+
+- run experiment with training the tentacle
+- move to python 3.4
