@@ -191,4 +191,4 @@ def test_train_world_tentacle_and_apple():
 # =================================================================================================================
 
 if __name__ == '__main__':
-    test_world_tentacle_and_apple()
+    test_play_world_tentacle_and_apple()
