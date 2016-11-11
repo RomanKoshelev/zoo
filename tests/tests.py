@@ -99,4 +99,4 @@ def test_experiment_hierarchy():
     print("Summary: ", exp.summary())
 
 if __name__ == '__main__':
-    test_experiment()
+    test_experiment_hierarchy()
