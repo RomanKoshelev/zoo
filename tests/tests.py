@@ -1,87 +1,17 @@
 from __future__ import print_function
-import gym
+
 import os
+
+import gym
 import tensorflow as tf
+from core.agent import Agent
+from core.experiment import Experiment
+from core.mind import Mind
+from core.procedure import Procedure
+from core.world import World
 
 
 # =================================================================================================================
-
-class World:
-    def __init__(self):
-        self.agent = None
-        self.env = None
-        self.state = None
-        self.step = 0
-        self.done = False
-
-    def reset(self):
-        self._reset()
-
-    def _reset(self):
-        raise NotImplementedError
-
-    def proceed(self, steps=1):
-        return self._proceed(steps)
-
-    def _proceed(self, steps):
-        raise NotImplementedError
-
-
-class Agent:
-    def __init__(self, mind):
-        self.mind = mind
-
-    def act(self, state):
-        return self._act(state)
-
-    def _act(self, state):
-        return self.mind.predict(state)
-
-
-class Mind:
-    def __init__(self):
-        pass
-
-    def predict(self, state):
-        return self._predict(state)
-
-    def _predict(self, state):
-        raise NotImplementedError
-
-
-class Procedure:
-    def __init__(self):
-        pass
-
-    def run(self):
-        self._run()
-
-    def _run(self):
-        raise NotImplementedError
-
-
-class Experiment:
-    def __init__(self, proc, world, agent, mind):
-        self.proc = proc
-        self.world = world
-        self.agent = agent
-        self.mind = mind
-        self.done = False
-
-    def execute(self):
-        mind = self.mind()
-        agent = self.agent(mind)
-        world = self.world(agent)
-        proc = self.proc(world)
-        proc.run()
-        self.done = True
-
-    def summary(self):
-        return "Done: %s" % self.done
-
-
-# =================================================================================================================
-
 class TentacleAndApple(World):
 
     def __init__(self, agent):
@@ -107,16 +37,21 @@ class Tentacle(Agent):
     def __init__(self, mind):
         Agent.__init__(self, mind)
 
+    def _train(self, episodes, steps):
+        self.mind.train(episodes, steps)
+
 
 class DDPG(Mind):
 
     def __init__(self):
         Mind.__init__(self)
         self.algorithm = None
+        self.env = None
 
     def init(self, env, sess):
         # todo: refactor
-        from mind.DDPG.ddpg import DDPG_PeterKovacs
+        self.env = env
+        from minds.DDPG.ddpg import DDPG_PeterKovacs
         obs_dim = env.observation_space.shape[0]
         act_dim = env.action_space.shape[0]
         obs_box = [env.observation_space.low, env.observation_space.high]
@@ -135,10 +70,13 @@ class DDPG(Mind):
     def _predict(self, state):
         return self.algorithm.act(state)[0]
 
+    def _train(self, episodes, steps):
+        print(episodes, steps)
+        return self.algorithm.train(self.env, episodes, steps, 1)
+
 
 class Play(Procedure):
     def __init__(self, world):
-
         Procedure.__init__(self)
         self.world = world
 
@@ -186,9 +124,18 @@ def test_play_world_tentacle_and_apple():
 
 
 def test_train_world_tentacle_and_apple():
-    pass
+    mind = DDPG()
+    agent = Tentacle(mind)
+    world = TentacleAndApple(agent)
+
+    config = tf.ConfigProto()
+    config.gpu_options.allow_growth = True
+    sess = tf.Session(config=config)
+
+    mind.init(world.env, sess)
+    agent.train(episodes=2, steps=100)
 
 # =================================================================================================================
 
 if __name__ == '__main__':
-    test_play_world_tentacle_and_apple()
+    test_train_world_tentacle_and_apple()
