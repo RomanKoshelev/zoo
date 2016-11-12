@@ -14,6 +14,18 @@ class World:
     def _reset(self):
         raise NotImplementedError
 
+    def step(self, action):
+        return self._step(action)
+
+    def _step(self, action):
+        raise NotImplementedError
+
+    def render(self):
+        self._render()
+
+    def _render(self):
+        raise NotImplementedError
+
     @property
     def id(self):
         return self._get_id()
@@ -48,3 +60,11 @@ class World:
 
     def _get_act_box(self):
         raise NotImplementedError
+
+    @property
+    def summary(self):
+        return self._get_summary()
+
+    def _get_summary(self):
+        raise NotImplementedError
+

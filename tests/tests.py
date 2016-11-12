@@ -36,6 +36,7 @@ class TensorflowPlatform(Platform):
 def test_train_world_tentacle_and_apple():
     with TensorflowPlatform() as platform:
         with TentacleAndAppleWorld() as world:
+            print(world.summary)
             mind = DdpgMind()
             mind.train(platform, world, episodes=2, steps=100)
 
