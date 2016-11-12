@@ -4,7 +4,7 @@ import gym
 import tensorflow as tf
 from core.experiment import Experiment
 from core.minds.ddpg.ddpg_mind import DdpgMind
-from core.worlds.tentacle_and_apple.world import TentacleAndApple
+from core.worlds.tentacle_and_apple.tentacle_and_apple_world import TentacleAndApple
 from core.procedures.play import Play
 from core.agents.tentacle import Tentacle
 

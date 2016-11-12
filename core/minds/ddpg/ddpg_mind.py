@@ -12,7 +12,7 @@ class DdpgMind(Mind):
     def init(self, env, sess):
         # todo: refactor
         self.env = env
-        from core.minds.ddpg.alg.ddpg_algorithm import DDPG_PeterKovacs
+        from core.minds.ddpg.alg.ddpg_alg import DDPG_PeterKovacs
         obs_dim = env.observation_space.shape[0]
         act_dim = env.action_space.shape[0]
         obs_box = [env.observation_space.low, env.observation_space.high]
