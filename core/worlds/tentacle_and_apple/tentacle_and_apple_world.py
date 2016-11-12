@@ -2,7 +2,7 @@ import gym
 from core.world import World
 
 
-class TentacleAndApple(World):
+class TentacleAndAppleWorld(World):
 
     def __init__(self, agent):
         World.__init__(self)

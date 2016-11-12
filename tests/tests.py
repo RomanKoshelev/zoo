@@ -4,15 +4,15 @@ import gym
 import tensorflow as tf
 from core.experiment import Experiment
 from core.minds.ddpg.ddpg_mind import DdpgMind
-from core.worlds.tentacle_and_apple.tentacle_and_apple_world import TentacleAndApple
+from core.worlds.tentacle_and_apple.tentacle_and_apple_world import TentacleAndAppleWorld
 from core.procedures.play import Play
-from core.agents.tentacle import Tentacle
+from core.agents.tentacleagent import TentacleAgent
 
 
 # =================================================================================================================
 
 def test_experiment_hierarchy():
-    exp = Experiment(proc=Play, world=TentacleAndApple, agent=Tentacle, mind=DdpgMind)
+    exp = Experiment(proc=Play, world=TentacleAndAppleWorld, agent=TentacleAgent, mind=DdpgMind)
     exp.execute()
     assert exp.done
     print("Summary: ", exp.summary())
@@ -33,8 +33,8 @@ def test_gym_env_tentacle_and_apple():
 
 def test_play_world_tentacle_and_apple():
     mind = DdpgMind()
-    agent = Tentacle(mind)
-    world = TentacleAndApple(agent)
+    agent = TentacleAgent(mind)
+    world = TentacleAndAppleWorld(agent)
 
     config = tf.ConfigProto()
     config.gpu_options.allow_growth = True
@@ -48,8 +48,8 @@ def test_play_world_tentacle_and_apple():
 
 def test_train_world_tentacle_and_apple():
     mind = DdpgMind()
-    agent = Tentacle(mind)
-    world = TentacleAndApple(agent)
+    agent = TentacleAgent(mind)
+    world = TentacleAndAppleWorld(agent)
 
     config = tf.ConfigProto()
     config.gpu_options.allow_growth = True

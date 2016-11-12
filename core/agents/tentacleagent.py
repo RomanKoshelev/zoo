@@ -1,7 +1,7 @@
 from core.agent import Agent
 
 
-class Tentacle(Agent):
+class TentacleAgent(Agent):
     def __init__(self, mind):
         Agent.__init__(self, mind)
 
