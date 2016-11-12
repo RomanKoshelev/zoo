@@ -66,5 +66,13 @@ class World:
         return self._get_summary()
 
     def _get_summary(self):
-        raise NotImplementedError
+        r = "\n==============================================================================\n"
+        r += ("obs_dim: %d\n" % self.obs_dim)
+        r += ("obs_box: %s\n" % self.obs_box[0])
+        r += ("         %s\n" % self.obs_box[1])
+        r += ("act_dim: %d\n" % self.act_dim)
+        r += ("act_box: %s\n" % self.act_box[0])
+        r += ("         %s\n" % self.act_box[1])
+        r += "==============================================================================\n\n"
+        return r
 

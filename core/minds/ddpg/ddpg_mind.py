@@ -9,18 +9,21 @@ class DdpgMind(Mind):
 
     def _train(self, platform, world, episodes, steps):
 
-        path = "./weigths"
+        # todo: refactore -- use config arg
+        path = "../out/weigths"
         if os.path.exists(path):
             import shutil
             shutil.rmtree(path)
         if not os.path.exists(path):
             os.makedirs(path)
 
-        save_every_episodes = 1
+        # todo: refactore -- use config arg
+        save_every_episodes = 10
 
         def callback(ep):
             if (ep > 0 and ep % save_every_episodes == 0) or (ep == episodes - 1):
                 algorithm.save(model_path)
+                print()
 
         algorithm = DDPG_PeterKovacs(
             platform.session,
