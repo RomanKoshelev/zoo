@@ -4,33 +4,15 @@ import os
 
 import gym
 import tensorflow as tf
+
 from core.agent import Agent
 from core.experiment import Experiment
 from core.mind import Mind
 from core.procedure import Procedure
-from core.world import World
 
+from worlds.tentacle_and_apple.world import TentacleAndApple
 
 # =================================================================================================================
-class TentacleAndApple(World):
-
-    def __init__(self, agent):
-        World.__init__(self)
-        self.agent = agent
-        self.env = gym.make("TentacleAndApple-v1")
-        self.reset()
-
-    def _reset(self):
-        self.state = self.env.reset()
-        self.step = 0
-        self.done = False
-
-    def _proceed(self, steps=1):
-        for _ in xrange(steps):
-            self.env.render()
-            a = self.agent.act(self.state)
-            self.state, _, self.done, _ = self.env.step(a)
-            self.step += 1
 
 
 class Tentacle(Agent):
