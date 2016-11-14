@@ -17,13 +17,14 @@ class DdpgMind(Mind):
         if not os.path.exists(path):
             os.makedirs(path)
 
-        # todo: refactore -- use config arg
-        save_every_episodes = 10
+        # todo: refactore -- use config arg .save_every_steps
+        save_every_episodes = 100
 
         def callback(ep):
             if (ep > 0 and ep % save_every_episodes == 0) or (ep == episodes - 1):
+                print("")
                 algorithm.save(model_path)
-                print()
+                print("")
 
         algorithm = DDPG_PeterKovacs(
             platform.session,
@@ -31,6 +32,10 @@ class DdpgMind(Mind):
             world.obs_dim,
             world.act_dim,
             world.act_box)
+
+        # todo: refactore -- use the world default value
+        if steps is None:
+            steps = 3000
 
         model_path = os.path.join(path, algorithm.scope + ".ckpt")
 
