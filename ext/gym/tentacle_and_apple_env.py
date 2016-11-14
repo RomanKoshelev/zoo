@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 from __future__ import print_function
 import Box2D
-import gym
-
 import numpy as np
 from Box2D.b2 import (circleShape, fixtureDef, polygonShape, revoluteJointDef, weldJointDef)
+import gym
 from gym import spaces
 from gym.utils import seeding
+from gym.envs.classic_control import rendering
 
 # region Configuration
 FPS = 25
@@ -275,7 +275,6 @@ class TentacleAndApple(gym.Env):
         return VIEWPORT_W / SCALE, VIEWPORT_H / SCALE
 
     def _render(self, mode='human', close=False):
-        from gym.envs.classic_control import rendering
         if close:
             if self.viewer is not None:
                 self.viewer.close()
@@ -310,7 +309,6 @@ class TentacleAndApple(gym.Env):
         return self.viewer.render(return_rgb_array=mode == 'rgb_array')
 
     def draw_extra(self):
-        from gym.envs.classic_control import rendering
         head = self.tentacle[len(self.tentacle) - 1]
         x, y, r = head.position[0], head.position[1], 0.1
         d = self.metadata.get('extra')
@@ -342,7 +340,7 @@ def sample_action(env, state):
 
 def main():
     game = "TentacleAndApple-v1"
-    env = gym.make(game)
+    env = openai.make(game)
     env.monitor.start('/tmp/' + game, force=True)
     env.reset()
     step = 0

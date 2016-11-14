@@ -2,7 +2,7 @@ import gym
 from core.world import World
 
 
-class OpenAiGym(World):
+class GymWorld(World):
 
     def __init__(self, env_id):
         World.__init__(self)

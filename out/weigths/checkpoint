@@ -1,2 +1,0 @@
-model_checkpoint_path: "DDPG_PeterKovacs_InvertedDoublePendulum_v1.ckpt"
-all_model_checkpoint_paths: "DDPG_PeterKovacs_InvertedDoublePendulum_v1.ckpt"
