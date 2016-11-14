@@ -2,14 +2,15 @@ import gym
 from core.world import World
 
 
-class TentacleAndAppleWorld(World):
+class OpenAiGym(World):
 
-    def __init__(self):
+    def __init__(self, env_id):
         World.__init__(self)
         self.env = None
+        self.env_id = env_id
 
     def __enter__(self):
-        self.env = gym.make("TentacleAndApple-v1")
+        self.env = gym.make(self.env_id)
         self.reset()
         return self
 
