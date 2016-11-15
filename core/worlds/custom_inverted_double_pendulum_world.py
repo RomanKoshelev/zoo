@@ -1,8 +1,7 @@
-from core.worlds.openai_gym_world import GymWorld
+from core.worlds.gym_world import GymWorld
 
 
 class CustomInvertedDoublePendulumWorld(GymWorld):
 
-    def __init__(self):
-        GymWorld.__init__(self, "CustomInvertedDoublePendulum-v1")
-
+    def __init__(self, agent=None):
+        GymWorld.__init__(self, "CustomInvertedDoublePendulum-v1", agent)

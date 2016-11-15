@@ -4,8 +4,9 @@ from core.world import World
 
 class GymWorld(World):
 
-    def __init__(self, env_id):
+    def __init__(self, env_id, agent=None):
         World.__init__(self)
+        self.agent = agent
         self.env = None
         self.env_id = env_id
 

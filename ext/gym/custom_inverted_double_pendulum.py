@@ -1,11 +1,14 @@
 import numpy as np
 from gym import utils
+
+from core.world import World
 from ext.gym import custom_mujoco_env
 
 
 class CustomInvertedDoublePendulum(custom_mujoco_env.MujocoEnv, utils.EzPickle):
     def __init__(self):
-        custom_mujoco_env.MujocoEnv.__init__(self, 'custom_inverted_double_pendulum.xml', 5)
+        model_path = World.__default__.agent.model_path
+        custom_mujoco_env.MujocoEnv.__init__(self, model_path=model_path, frame_skip=5)
         utils.EzPickle.__init__(self)
 
     # noinspection PyUnresolvedReferences

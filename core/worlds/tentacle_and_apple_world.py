@@ -1,4 +1,4 @@
-from core.worlds.openai_gym_world import GymWorld
+from core.worlds.gym_world import GymWorld
 
 
 class TentacleAndAppleWorld(GymWorld):

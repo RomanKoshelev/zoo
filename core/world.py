@@ -1,5 +1,8 @@
 class World:
+    __default__ = None
+
     def __init__(self):
+        World.__default__ = self
         self.state = None
 
     def __enter__(self):
