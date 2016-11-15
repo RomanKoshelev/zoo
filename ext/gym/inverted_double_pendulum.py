@@ -2,13 +2,13 @@ import numpy as np
 from gym import utils
 
 from core.context import Context
-from ext.gym import custom_mujoco_env
+from ext.gym.adopted_mujoco_env import AdoptedMujocoEnv
 
 
-class CustomInvertedDoublePendulum(custom_mujoco_env.MujocoEnv, utils.EzPickle):
+class InvertedDoublePendulum(AdoptedMujocoEnv, utils.EzPickle):
     def __init__(self):
         self.agent = Context.world.agent
-        custom_mujoco_env.MujocoEnv.__init__(self, model_path=self.agent.model_path, frame_skip=5)
+        AdoptedMujocoEnv.__init__(self, model_path=self.agent.model_path, frame_skip=5)
         utils.EzPickle.__init__(self)
 
     # noinspection PyUnresolvedReferences

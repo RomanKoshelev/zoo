@@ -113,7 +113,11 @@ class DDPG_PeterKovacs:
     @property
     def scope(self):
         name = "%s_%s" % (self.__class__.__name__, self.world_id)
-        return name.replace('-', '_')
+        return name.\
+            replace('-', '_').\
+            replace(':', '_').\
+            replace(' ', '_').\
+            replace('.', '_')
 
     def save(self, path):
         self.saver.save(self.sess, path)
