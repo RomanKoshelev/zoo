@@ -1,6 +1,7 @@
 from __future__ import print_function
 
-from core.agents.custom_inverted_double_pendulum_agent import CustomInvertedDoublePendulumAgent
+from core.agents.heavy_pendulum_agent import HeavyPendulumAgent
+from core.agents.standard_pendulum_agent import StandardPendulumAgent
 from core.minds.ddpg_mind import DdpgMind
 from core.platforms.tensorflow_platform import TensorflowPlatform
 from core.worlds.inverted_double_pendulum_world import InvertedDoublePendulumWorld
@@ -27,7 +28,16 @@ def test_train_world_custom_inverted_double_pendulum():
 
 def test_train_world_custom_inverted_double_pendulum_with_custom_agent():
     with TensorflowPlatform() as platform:
-            agent = CustomInvertedDoublePendulumAgent()
+            agent = StandardPendulumAgent()
+            with InvertedDoublePendulumWorld(agent) as world:
+                print(world.summary)
+                mind = DdpgMind()
+                mind.train(platform, world)
+
+
+def test_heavy_pendulum_agent():
+    with TensorflowPlatform() as platform:
+            agent = HeavyPendulumAgent()
             with InvertedDoublePendulumWorld(agent) as world:
                 print(world.summary)
                 mind = DdpgMind()
@@ -38,6 +48,7 @@ def test_train_world_custom_inverted_double_pendulum_with_custom_agent():
 
 
 if __name__ == '__main__':
-    test_train_world_custom_inverted_double_pendulum_with_custom_agent()
+    test_heavy_pendulum_agent()
+    # test_train_world_custom_inverted_double_pendulum_with_custom_agent()
     # test_train_world_custom_inverted_double_pendulum()
     # test_train_world_tentacle_and_apple()
