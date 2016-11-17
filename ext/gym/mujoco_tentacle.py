@@ -44,4 +44,4 @@ class MujocoTentacle(AdoptedMujocoEnv, utils.EzPickle):
         v = self.viewer
         v.cam.trackbodyid = 0
         v.cam.distance = v.model.stat.extent * 0.5
-        v.cam.lookat[2] += 3  # v.model.stat.center[2]
+        v.cam.lookat[2] = v.model.stat.center[2] - 2
