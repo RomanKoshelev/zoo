@@ -74,10 +74,12 @@ class ActorNetwork(object):
 
         return state, out, [W1, b1, W2, b2, W3, b3]
 
-    def weight_variable(self, shape):
+    @staticmethod
+    def weight_variable(shape):
         initial = tf.random_uniform(shape, minval=-0.05, maxval=0.05)
         return tf.Variable(initial)
 
-    def bias_variable(self, shape):
+    @staticmethod
+    def bias_variable(shape):
         initial = tf.constant(0.01, shape=shape)
         return tf.Variable(initial)
