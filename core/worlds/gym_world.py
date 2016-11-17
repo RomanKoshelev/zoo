@@ -20,7 +20,7 @@ class GymWorld(World):
             self.env.close()
 
     def _render(self):
-        pass
+        self.env.render()
 
     def _step(self, action):
         return self.env.step(action)

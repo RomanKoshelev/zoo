@@ -7,3 +7,9 @@ class Mind:
 
     def _train(self, platform, world, episodes, steps):
         raise NotImplementedError
+
+    def predict(self, world, state):
+        return self._predict(world, state)
+
+    def _predict(self, world, state):
+        raise NotImplementedError
