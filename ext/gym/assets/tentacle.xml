@@ -15,20 +15,24 @@
 -->
 <mujoco model="cartpole">
   <compiler coordinate="local" inertiafromgeom="true"/>
+
   <custom>
-    <numeric data="2" name="frame_skip"/>
+    <numeric data="0" name="frame_skip"/>
   </custom>
+
   <default>
     <joint damping="0.05"/>
     <geom contype="0" friction="1 0.1 0.1" rgba="0.7 0.7 0 1"/>
   </default>
+
   <option gravity="1e-5 0 -9.81" integrator="RK4" timestep="0.01"/>
+
   <size nstack="3000"/>
+
   <worldbody>
     <geom name="floor" pos="0 0 -3.0" rgba="0.1 0.1 0.1 1" size="40 40 40" type="plane"/>
-    <geom name="rail" pos="0 0 0" quat="0.707 0 0.707 0" rgba=".8 0.0 0.0 1" size="0.02 1" type="capsule"/>
     <body name="cart" pos="0 0 0">
-      <joint axis="1 0 0" limited="true" margin="0.01" name="slider" pos="0 0 0" range="-1 1" type="slide"/>
+      <!-- joint axis="1 0 0" limited="true" margin="0.01" name="slider" pos="0 0 0" range="-1 1" type="slide"/-->
       <geom name="cart" pos="0 0 0" quat="0.707 0 0.707 0" size="0.1 0.1" type="capsule"/>
       <body name="pole" pos="0 0 0">
         <joint axis="0 1 0" name="hinge" pos="0 0 0" type="hinge"/>
@@ -41,7 +45,10 @@
       </body>
     </body>
   </worldbody>
+
   <actuator>
-    <motor ctrllimited="true" ctrlrange="-1 1" gear="500" joint="slider" name="slide"/>
+    <motor ctrllimited="true" ctrlrange="-1 1" gear="10" joint="hinge" name="hinge"/>
+    <motor ctrllimited="true" ctrlrange="-1 1" gear="10" joint="hinge2" name="hinge2"/>
   </actuator>
+
 </mujoco>

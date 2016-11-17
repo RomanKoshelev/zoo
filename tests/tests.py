@@ -49,6 +49,15 @@ def test_heavy_pendulum_agent():
                 mind.train(platform, world)
 
 
+def test_random_mind():
+    with TensorflowPlatform() as platform:
+        agent = TentacleAgent()
+        with TentacleWorld(agent) as world:
+            mind = RandomMind()
+            proc = StandardProc()
+            proc.demo(platform, world, mind, steps=100)
+
+
 def test_mujoco_tentacle_world():
     with TensorflowPlatform() as platform:
         agent = TentacleAgent()
