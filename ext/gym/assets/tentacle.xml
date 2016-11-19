@@ -1,12 +1,12 @@
 <mujoco model="tentacle">
   <compiler coordinate="local" inertiafromgeom="true"/>
 
-  <option gravity="1e-5 0 -9.81" integrator="RK4" timestep="0.02"/>
+  <option gravity="1e-5 0 -9.81" integrator="RK4" timestep="0.01"/>
 
   <default>
     <joint type="hinge"  pos="0 0 0" axis="0 1 0" limited='true' damping="0.05" />
-    <geom  type="capsule" contype="1" friction="1 0.1 0.1" rgba="0 .8 .0 1" pos='0 0 0' />
-    <site type="sphere" rgba="1. 1. 1. 0" size="0.001"/>
+    <geom type="capsule" conaffinity="1" contype="1" condim='3' friction=".1 .1 .1" rgba="0 .8 .0 1" pos='0 0 0' />
+    <site type="sphere" rgba=".2 .2 1.5 1" size="0.001"/>
     <motor ctrllimited='true' gear="10" />
   </default>
 
@@ -33,13 +33,13 @@
     <light diffuse=".5 .5 .5" pos="0 30 30" dir="0 -1 -1"/>
 
     <!-- ground -->
-    <geom name='floor' size='10 10 0.125' type='plane' material="MatPlane" condim='3'/>
+    <geom name='floor' size='10 10 0.125' type='plane' material="MatPlane"/>
 
     <!-- agent -->
     <body name="agent" pos="0 3 0">
 
       <!-- base -->
-      <geom name='base' type='cylinder' fromto='0 0 0  0 0 .15' size='.5' rgba=".9 .8 .0 1"/>
+      <geom name='base' type='cylinder' fromto='0 0 0  0 0 .15' size='.5' rgba=".4 .4 .0 1"/>
       <geom fromto="0 0 .1 0 0 .15" size="0.1"/>
 
       <!-- segment 1 -->
@@ -59,8 +59,8 @@
 
             <!-- head -->
             <body name="head" pos="0 0 .57">
-              <geom type = "sphere" rgba=".3 .3 1.5 1" size="0.07"/>
-              <site name="head" size="0.07"/>
+              <geom type='cylinder' fromto='0 0 0  0 0 .02' rgba="1.2 1.2 0. 1" size='.25'/>
+              <site name="head" pos="0 0 0.01" size="0.05"/>
             </body>
           </body>
         </body>
@@ -70,9 +70,9 @@
   </worldbody>
 
   <actuator>
-    <motor name="hinge_1" ctrlrange="-90 +90" joint="hinge_1"/>
-    <motor name="hinge_2" ctrlrange="-40 +40" joint="hinge_2"/>
-    <motor name="hinge_3" ctrlrange="-20 +20" joint="hinge_3"/>
+    <motor name="hinge_1" ctrlrange="-200 +200" joint="hinge_1"/>
+    <motor name="hinge_2" ctrlrange="-100 +100" joint="hinge_2"/>
+    <motor name="hinge_3" ctrlrange=" -50  +50" joint="hinge_3"/>
   </actuator>
 
 </mujoco>
