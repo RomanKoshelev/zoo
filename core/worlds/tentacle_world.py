@@ -1,4 +1,4 @@
-from core.worlds.gym_world import GymWorld
+from core.worlds.base.gym_world import GymWorld
 
 
 class TentacleWorld(GymWorld):

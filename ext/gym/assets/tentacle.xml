@@ -12,7 +12,7 @@
 
   <!-- materials etc. -->
   <asset>
-    <texture name="texplane" type="2d" builtin="checker" rgb1=".2 .9 .4" rgb2=".1 0.7 0.2" width="100" height="100"/>
+    <texture name="texplane" type="2d" builtin="checker" rgb1=".2 .9 .4" rgb2=".1 .7 .2" width="100" height="100"/>
     <material name='MatPlane' reflectance='0.' texture="texplane" texrepeat="1 1" texuniform="true"/>
   </asset>
 
@@ -34,16 +34,27 @@
     <!-- ground -->
     <geom name='floor' pos='0 0 0' size='10 10 0.125' type='plane' material="MatPlane" condim='3'/>
 
-    <!-- tentacle -->
-    <body name="tentacle" pos="0 2 0">
-      <geom name="tentacle" pos="0 0 0" quat="0.707 0 0.707 0" size="0.1 0.1" type="capsule"/>
-      <body name="pole" pos="0 0 0">
-        <joint axis="0 1 0" limited='true' range=' -50  50' name="hinge" pos="0 0 0" type="hinge"/>
-        <geom fromto="0 0 0 0 0 0.6" name="cpole" rgba="0 1.8 0.0 1" size="0.045 0.3" type="capsule"/>
-        <body name="pole2" pos="0 0 0.6">
-          <joint axis="0 1 0" limited='true' range=' -50  50' name="hinge2" pos="0 0 0" type="hinge"/>
-          <geom fromto="0 0 0 0 0 0.6" name="cpole2" rgba="0 0.0 1.9 1" size="0.045 0.3" type="capsule"/>
-          <site name="tip" pos="0 0 .6" size="0.01 0.01"/>
+    <!-- agent -->
+    <body name="agent" pos="0 2 0">
+
+      <!-- base -->
+      <geom name='base' type='cylinder' fromto='0 0 0  0 0 .15' size='.5' rgba=".9 .8 .0 1"/>
+
+      <!-- segment 1 -->
+      <body name="segment_1" pos="0 0 0.15">
+        <joint name="hinge_1" type="hinge"  pos="0 0 0" axis="0 1 0" limited='true' range=' -50  50'/>
+        <geom fromto="0 0 0 0 0 .9" rgba="0 .8 .0 1" size="0.075" type="capsule"/>
+
+        <!-- segment 2 -->
+        <body name="segment_2" pos="0 0 .95">
+          <joint name="hinge_2" type="hinge"  pos="0 0 0" axis="0 1 0" limited='true' range=' -50  50'/>
+          <geom fromto="0 0 0 0 0 .7" rgba="0 .8 .0 1" size="0.06" type="capsule"/>
+
+          <body name="segment_3" pos="0 0 .75">
+            <joint name="hinge_3" type="hinge"  pos="0 0 0" axis="0 1 0" limited='true' range=' -50  50'/>
+            <geom fromto="0 0 0 0 0 .5" rgba="0 .8 .0 1" size="0.05" type="capsule"/>
+            <site name="tip" pos="0 0 .6" size="0.01 0.01"/>
+          </body>
         </body>
       </body>
     </body>
@@ -51,8 +62,9 @@
   </worldbody>
 
   <actuator>
-    <motor ctrllimited="true" ctrlrange="-7 7" gear="10" joint="hinge" name="hinge"/>
-    <motor ctrllimited="true" ctrlrange="-3 3" gear="10" joint="hinge2" name="hinge2"/>
+    <motor name="hinge_1" ctrllimited="true" ctrlrange="-50 50" gear="10" joint="hinge_1"/>
+    <motor name="hinge_2" ctrllimited="true" ctrlrange="-15 15" gear="10" joint="hinge_2"/>
+    <motor name="hinge_3" ctrllimited="true" ctrlrange=" -5  5" gear="10" joint="hinge_3"/>
   </actuator>
 
 </mujoco>
