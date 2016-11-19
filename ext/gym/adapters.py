@@ -1,8 +1,10 @@
 import os
+
+import mujoco_py
 from gym.envs.mujoco.mujoco_env import MujocoEnv
 
 
-class AdoptedMujocoEnv(MujocoEnv):
+class ZooMujocoEnv(MujocoEnv):
     def __init__(self, model_path, frame_skip):
         if model_path.startswith("/"):
             fullpath = model_path
@@ -17,3 +19,11 @@ class AdoptedMujocoEnv(MujocoEnv):
 
     def _step(self, action):
         raise NotImplemented
+
+    def _get_viewer(self):
+        if self.viewer is None:
+            self.viewer = mujoco_py.MjViewer(init_height=800, init_width=1200)
+            self.viewer.start()
+            self.viewer.set_model(self.model)
+            self.viewer_setup()
+        return self.viewer

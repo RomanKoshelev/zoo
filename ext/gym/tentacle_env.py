@@ -2,13 +2,13 @@ import numpy as np
 from gym import utils
 
 from core.context import Context
-from ext.gym.adopted_mujoco_env import AdoptedMujocoEnv
+from ext.gym.adapters import ZooMujocoEnv
 
 
-class MujocoTentacle(AdoptedMujocoEnv, utils.EzPickle):
+class TentacleEnv(ZooMujocoEnv, utils.EzPickle):
     def __init__(self):
         self.agent = Context.world.agent
-        AdoptedMujocoEnv.__init__(self, model_path=self.agent.model_path, frame_skip=5)
+        ZooMujocoEnv.__init__(self, model_path=self.agent.model_path, frame_skip=5)
         utils.EzPickle.__init__(self)
 
     # noinspection PyUnresolvedReferences

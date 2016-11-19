@@ -64,7 +64,7 @@ def test_mujoco_tentacle_world():
         with TentacleWorld(agent) as world:
             mind = RandomMind()
             proc = StandardProc()
-            proc.demo(platform, world, mind, steps=100)
+            proc.demo(platform, world, mind, steps=10000)
 
 
 # =================================================================================================================
