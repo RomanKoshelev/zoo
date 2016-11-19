@@ -8,7 +8,7 @@ from ext.gym.base.zoo_mujoco_env import ZooMujocoEnv
 class TentacleEnv(ZooMujocoEnv, utils.EzPickle):
     def __init__(self):
         self.agent = Context.world.agent
-        ZooMujocoEnv.__init__(self, model_path=self.agent.model_path, frame_skip=5)
+        ZooMujocoEnv.__init__(self, model_path=self.agent.model_path, frame_skip=1)
         utils.EzPickle.__init__(self)
 
     # noinspection PyUnresolvedReferences
