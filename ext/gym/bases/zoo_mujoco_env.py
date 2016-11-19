@@ -9,7 +9,7 @@ class ZooMujocoEnv(MujocoEnv):
         if model_path.startswith("/"):
             fullpath = model_path
         else:
-            fullpath = os.path.join(os.path.dirname(__file__), "assets", model_path)
+            fullpath = os.path.join(os.path.dirname(__file__), "../assets", model_path)
         if not os.path.exists(fullpath):
             raise IOError("File %s does not exist" % fullpath)
         MujocoEnv.__init__(self, fullpath, frame_skip)
