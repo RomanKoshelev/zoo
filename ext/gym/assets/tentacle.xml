@@ -4,9 +4,10 @@
   <option gravity="1e-5 0 -9.81" integrator="RK4" timestep="0.01"/>
 
   <default>
-    <joint damping="0.05"/>
-    <geom contype="0" friction="1 0.1 0.1" rgba="0.7 0.7 0 1"/>
-    <site type="sphere" rgba=".9 0 0 .5" size="0.05"/>
+    <joint type="hinge"  pos="0 0 0" axis="0 1 0" limited='true' damping="0.05" />
+    <geom  type="capsule" contype="0" friction="1 0.1 0.1" rgba="0 .8 .0 1" pos='0 0 0' />
+    <site type="sphere" rgba=".5 .5 1.5 1" size="0.075"/>
+    <motor ctrllimited='true' gear="10" />
   </default>
 
 
@@ -32,28 +33,28 @@
     <light diffuse=".5 .5 .5" pos="0 30 30" dir="0 -1 -1"/>
 
     <!-- ground -->
-    <geom name='floor' pos='0 0 0' size='10 10 0.125' type='plane' material="MatPlane" condim='3'/>
+    <geom name='floor' size='10 10 0.125' type='plane' material="MatPlane" condim='3'/>
 
     <!-- agent -->
-    <body name="agent" pos="0 2 0">
+    <body name="agent" pos="0 3 0">
 
       <!-- base -->
       <geom name='base' type='cylinder' fromto='0 0 0  0 0 .15' size='.5' rgba=".9 .8 .0 1"/>
 
       <!-- segment 1 -->
       <body name="segment_1" pos="0 0 0.15">
-        <joint name="hinge_1" type="hinge"  pos="0 0 0" axis="0 1 0" limited='true' range=' -50  50'/>
-        <geom fromto="0 0 0 0 0 .9" rgba="0 .8 .0 1" size="0.075" type="capsule"/>
+        <joint name="hinge_1" range=' -30  30'/>
+        <geom fromto="0 0 0 0 0 .9" size="0.075"/>
 
         <!-- segment 2 -->
         <body name="segment_2" pos="0 0 .95">
-          <joint name="hinge_2" type="hinge"  pos="0 0 0" axis="0 1 0" limited='true' range=' -50  50'/>
-          <geom fromto="0 0 0 0 0 .7" rgba="0 .8 .0 1" size="0.06" type="capsule"/>
+          <joint name="hinge_2" range=' -70  70'/>
+          <geom fromto="0 0 0 0 0 .7" size="0.06"/>
 
           <body name="segment_3" pos="0 0 .75">
-            <joint name="hinge_3" type="hinge"  pos="0 0 0" axis="0 1 0" limited='true' range=' -50  50'/>
-            <geom fromto="0 0 0 0 0 .5" rgba="0 .8 .0 1" size="0.05" type="capsule"/>
-            <site name="tip" pos="0 0 .6" size="0.01 0.01"/>
+            <joint name="hinge_3" range=' -90  90'/>
+            <geom fromto="0 0 0 0 0 .5" size="0.05"/>
+            <site name="tip" pos="0 0 .57" />
           </body>
         </body>
       </body>
@@ -62,9 +63,9 @@
   </worldbody>
 
   <actuator>
-    <motor name="hinge_1" ctrllimited="true" ctrlrange="-50 50" gear="10" joint="hinge_1"/>
-    <motor name="hinge_2" ctrllimited="true" ctrlrange="-15 15" gear="10" joint="hinge_2"/>
-    <motor name="hinge_3" ctrllimited="true" ctrlrange=" -5  5" gear="10" joint="hinge_3"/>
+    <motor name="hinge_1" ctrlrange="-50 50" joint="hinge_1"/>
+    <motor name="hinge_2" ctrlrange=" -5  5" joint="hinge_2"/>
+    <motor name="hinge_3" ctrlrange=" -3  3" joint="hinge_3"/>
   </actuator>
 
 </mujoco>

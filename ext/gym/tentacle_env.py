@@ -43,7 +43,7 @@ class TentacleEnv(ZooMujocoEnv, utils.EzPickle):
     def viewer_setup(self):
         v = self.viewer
         v.cam.trackbodyid = 0
-        v.cam.distance = 6
-        v.cam.elevation = -20
+        v.cam.distance = 8
+        v.cam.elevation = -10
         v.cam.azimuth = -90
         v.cam.lookat[2] = v.model.stat.center[2] - 2
