@@ -5,16 +5,16 @@
 
   <default>
     <joint type="hinge"  pos="0 0 0" axis="0 1 0" limited='true' damping="0.05" />
-    <geom type="capsule" conaffinity="1" contype="1" condim='3' friction=".1 .1 .1" rgba="0 .8 .0 1" pos='0 0 0' />
-    <site type="sphere" rgba=".2 .2 1.5 1" size="0.001"/>
+    <geom type="capsule" conaffinity="1" contype="1" condim='3'
+          friction=".1 .1 .1" rgba="0 .8 .0 1" pos='0 0 0' margin="0.001"/>
+    <site type="sphere" rgba="1 1 1 0.5" pos="0 0 0" size="0.0001"/>
     <motor ctrllimited='true' gear="10" />
   </default>
 
 
-  <!-- materials etc. -->
   <asset>
     <texture name="texplane" type="2d" builtin="checker" rgb1=".2 .9 .4" rgb2=".1 .7 .2" width="100" height="100"/>
-    <material name='MatPlane' reflectance='0.' texture="texplane" texrepeat="1 1" texuniform="true"/>
+    <material name='MatPlane' reflectance='0.0' texture="texplane" texrepeat="1 1" texuniform="true"/>
   </asset>
 
   <visual>
@@ -34,6 +34,12 @@
 
     <!-- ground -->
     <geom name='floor' size='10 10 0.125' type='plane' material="MatPlane"/>
+
+    <!-- Target -->
+    <body name="target" pos="0 3 1">
+      <geom type="sphere" rgba="1. 0. 0. .75" size=".08" />
+      <site name="target"/>
+    </body>
 
     <!-- agent -->
     <body name="agent" pos="0 3 0">
@@ -58,9 +64,9 @@
             <geom fromto="0 0 0 0 0 .5" size="0.05"/>
 
             <!-- head -->
-            <body name="head" pos="0 0 .57">
-              <geom type='cylinder' fromto='0 0 0  0 0 .02' rgba="1.2 1.2 0. 1" size='.25'/>
-              <site name="head" pos="0 0 0.01" size="0.05"/>
+            <body name="head" pos="0 0 .5">
+              <geom type='cylinder' fromto='0 0 0  0 0 .06' rgba="1.2 1.2 0. 1" size='.06'/>
+              <site name="head" pos="0 0 0.06" rgba=".2 .2 1.5 0.5" size='.06'/>
             </body>
           </body>
         </body>

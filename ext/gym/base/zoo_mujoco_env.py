@@ -1,7 +1,9 @@
 import os
 
+import six
 import mujoco_py
 from gym.envs.mujoco.mujoco_env import MujocoEnv
+import numpy as np
 
 
 class ZooMujocoEnv(MujocoEnv):
@@ -27,3 +29,13 @@ class ZooMujocoEnv(MujocoEnv):
             self.viewer.set_model(self.model)
             self.viewer_setup()
         return self.viewer
+
+    def site_pos(self, site_name):
+        idx = self.model.site_names.index(six.b(site_name))
+        return np.asarray (self.model.data.site_xpos[idx])
+
+    def site_dist(self, site_name_1, site_name_2):
+        v1 = self.site_pos(site_name_1)
+        v2 = self.site_pos(site_name_2)
+        return np.linalg.norm(v1 - v2)
+

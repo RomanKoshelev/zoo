@@ -15,13 +15,12 @@ class TentacleEnv(ZooMujocoEnv, utils.EzPickle):
     def _step(self, action):
         self.do_simulation(action, self.frame_skip)
         ob = self._get_obs()
-        x, _, y = self.model.data.site_xpos[0]
-        # dist_penalty = 0.01 * x ** 2 + (y - 2) ** 2
-        # v1, v2 = self.model.data.qvel[1:3]
-        # vel_penalty = 0  # 1e-3 * v1 ** 2 + 5e-3 * v2 ** 2
-        # alive_bonus = 10
-        r = 0  # (alive_bonus - dist_penalty - vel_penalty)[0]
-        done = False  # bool(y <= 1)
+
+        d = self.site_dist("head", "target")
+        r = self.make_reward(d)
+        print("%5.2f %10.2f" % (d, r))
+
+        done = False
         return ob, r, done, {}
 
     def _get_obs(self):
@@ -47,3 +46,10 @@ class TentacleEnv(ZooMujocoEnv, utils.EzPickle):
         v.cam.elevation = -17
         v.cam.azimuth = -90
         v.cam.lookat[2] = v.model.stat.center[2] - 2
+
+    @staticmethod
+    def make_reward(d):
+        r = 0.05
+        rw_touch = + 100. * ((r / max(d, r)) ** 3)
+        rw_dist = - 10. * (d ** 2)
+        return rw_touch + rw_dist
