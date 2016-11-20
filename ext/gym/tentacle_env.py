@@ -11,14 +11,12 @@ class TentacleEnv(ZooMujocoEnv, utils.EzPickle):
         ZooMujocoEnv.__init__(self, model_path=self.agent.model_path, frame_skip=1)
         utils.EzPickle.__init__(self)
 
-    # noinspection PyUnresolvedReferences
     def _step(self, action):
         self.do_simulation(action, self.frame_skip)
         ob = self._get_obs()
 
         d = self.site_dist("head", "target")
         r = self.make_reward(d)
-        print("%5.2f %10.2f" % (d, r))
 
         done = False
         return ob, r, done, {}
@@ -48,8 +46,8 @@ class TentacleEnv(ZooMujocoEnv, utils.EzPickle):
         v.cam.lookat[2] = v.model.stat.center[2] - 2
 
     @staticmethod
-    def make_reward(d):
-        r = 0.05
-        rw_touch = + 100. * ((r / max(d, r)) ** 3)
-        rw_dist = - 10. * (d ** 2)
+    def make_reward(target_dist):
+        touch_radius = 0.05
+        rw_touch = + 100. * ((touch_radius / max(target_dist, touch_radius)) ** 3)
+        rw_dist = - 10. * (target_dist ** 2)
         return rw_touch + rw_dist
