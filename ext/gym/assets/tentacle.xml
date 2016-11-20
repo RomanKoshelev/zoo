@@ -1,7 +1,7 @@
 <mujoco model="tentacle">
   <compiler coordinate="local" inertiafromgeom="true"/>
 
-  <option gravity="1e-5 0 -9.81" integrator="RK4" timestep="0.01"/>
+  <option gravity="0 0 -9.81" integrator="RK4" timestep="0.005"/>
 
   <default>
     <joint type="hinge"  pos="0 0 0" axis="0 1 0" limited='true' damping="0.05" />
@@ -35,12 +35,6 @@
     <!-- ground -->
     <geom name='floor' size='10 10 0.125' type='plane' material="MatPlane"/>
 
-    <!-- Target -->
-    <body name="target" pos="0 3 1">
-      <geom type="sphere" rgba="1. 0. 0. .75" size=".08" />
-      <site name="target"/>
-    </body>
-
     <!-- agent -->
     <body name="agent" pos="0 3 0">
 
@@ -70,6 +64,19 @@
             </body>
           </body>
         </body>
+      </body>
+    </body>
+
+    <!-- Target -->
+    <body name="target_rail" pos="0 3 2.5">
+      <geom fromto="-2 0 0  +2 0 0" rgba="0.9 0. 0. 1" size="0.02"/>
+
+      <body name="target" pos="0 0 0">
+        <joint name="target_x" type="slide" armature="1" axis="1 0 0" damping="0" pos="0 3 0" range="-5 +5" ref=".1"/>
+        <joint name="target_z" type="slide" frictional="true" armature="1" axis="0 0 1" damping="0" pos="0 3 0" range="-1 1" ref="-.1"/>
+
+        <geom type="sphere" conaffinity="0" contype="0" rgba="1. 0. 0. 1." size=".05" mass="10.001"/>
+        <site name="target" pos="0 0 0.025"/>
       </body>
     </body>
 
