@@ -25,9 +25,10 @@ class TentacleEnv(ZooMujocoEnv, utils.EzPickle):
         return self.state_vector()
 
     def reset_model(self):
-        qpos = self.init_qpos
-        qvel = self.init_qvel
-        target = np.array([0, 0])
+        qpos = self.model.data.qpos.ravel().copy()
+        qvel = self.model.data.qvel.ravel().copy()
+        target = self.np_random.uniform(-1, +1, 2) * [1.5, 1.0]
+        # target = np.array([-2, +1])
         qpos[-2:] = target
         qvel[-2:] = np.array([0, 0])
 
