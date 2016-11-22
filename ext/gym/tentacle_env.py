@@ -8,6 +8,7 @@ from ext.gym.base.zoo_mujoco_env import ZooMujocoEnv
 class TentacleEnv(ZooMujocoEnv, utils.EzPickle):
     def __init__(self):
         self.agent = Context.world.agent
+        self.target_range = [1.5, 1.0]
         ZooMujocoEnv.__init__(self, model_path=self.agent.model_path, frame_skip=2)
         utils.EzPickle.__init__(self)
 
@@ -27,11 +28,8 @@ class TentacleEnv(ZooMujocoEnv, utils.EzPickle):
     def reset_model(self):
         qpos = self.model.data.qpos.ravel().copy()
         qvel = self.model.data.qvel.ravel().copy()
-        target = self.np_random.uniform(-1, +1, 2) * [1.5, 1.0]
-        # target = np.array([-2, +1])
-        qpos[-2:] = target
+        qpos[-2:] = self.np_random.uniform(-1, +1, 2) * self.target_range
         qvel[-2:] = np.array([0, 0])
-
         self.set_state(qpos, qvel)
         return self._get_obs()
 

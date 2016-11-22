@@ -4,8 +4,12 @@ from ext.alg.ddpg_peter_kovacs.ddpg_alg import DDPG_PeterKovacs
 
 
 class DdpgMind(Mind):
+
     def __init__(self):
         Mind.__init__(self)
+
+    def _predict(self, world, state):
+        raise NotImplementedError
 
     def _train(self, platform, world, episodes, steps):
 

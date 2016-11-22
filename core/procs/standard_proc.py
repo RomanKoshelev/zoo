@@ -19,3 +19,8 @@ class StandardProc(Proc):
                 if done or (t == steps - 1):
                     print("%3d  Reward = %+7.0f" % (ep, reward))
                     break
+
+    def _train(self, platform, world, mind, episodes, steps):
+        print(world.summary)
+
+        mind.train(platform, world, episodes, steps)
