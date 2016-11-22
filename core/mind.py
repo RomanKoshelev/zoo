@@ -13,3 +13,16 @@ class Mind:
 
     def _predict(self, world, state):
         raise NotImplementedError
+
+    def save(self, path):
+        self._save(path)
+
+    def _save(self, path):
+        raise NotImplementedError
+
+    def load(self, path):
+        self._load(path)
+
+    def _load(self, path):
+        raise NotImplementedError
+

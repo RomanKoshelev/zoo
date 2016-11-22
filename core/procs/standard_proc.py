@@ -8,6 +8,10 @@ class StandardProc(Proc):
     def _demo(self, platform, world, mind, episodes, steps):
         print(world.summary)
 
+        path = "../out/DDPG_PeterKovacs_Zoo_Mujoco_Tentacle_v1/weights.ckpt"
+        mind.init(platform, world)
+        mind.restore(path)
+
         for ep in xrange(episodes):
             s = world.reset()
             reward = 0

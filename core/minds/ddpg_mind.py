@@ -7,6 +7,25 @@ class DdpgMind(Mind):
 
     def __init__(self):
         Mind.__init__(self)
+        self.algorithm = None
+        self.platform = None
+        self.world = None
+
+    def init(self, platform, world):
+        self.platform = platform
+        self.world = world
+        self.algorithm = DDPG_PeterKovacs(
+            platform.session,
+            world.id,
+            world.obs_dim,
+            world.act_dim,
+            world.act_box)
+
+    def _load(self, path):
+        self.algorithm.restore(path)
+
+    def _save(self, path):
+        self.algorithm.save(path)
 
     def _predict(self, world, state):
         raise NotImplementedError

@@ -38,9 +38,19 @@ def test_train_mujoco_tentacle_world():
             proc.train(platform, world, mind, episodes=20000, steps=300)
 
 
+def test_demo_mujoco_tentacle_world():
+    with TensorflowPlatform() as platform:
+        agent = TentacleAgent()
+        with TentacleWorld(agent) as world:
+            mind = DdpgMind()
+            proc = StandardProc()
+            proc.demo(platform, world, mind, steps=300)
+
+
 # =================================================================================================================
 
 
 if __name__ == '__main__':
-    test_train_mujoco_tentacle_world()
+    test_demo_mujoco_tentacle_world()
+    # test_train_mujoco_tentacle_world()
     # test_mujoco_tentacle_world()
