@@ -80,8 +80,8 @@
 
   <actuator>
     <motor name="hinge_1" ctrlrange="-200 +200" joint="hinge_1"/>
-    <motor name="hinge_2" ctrlrange="-100 +100" joint="hinge_2"/>
-    <motor name="hinge_3" ctrlrange=" -50  +50" joint="hinge_3"/>
+    <motor name="hinge_2" ctrlrange="-150 +150" joint="hinge_2"/>
+    <motor name="hinge_3" ctrlrange="-100 +100" joint="hinge_3"/>
   </actuator>
 
 </mujoco>

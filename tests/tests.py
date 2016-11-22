@@ -35,7 +35,7 @@ def test_train_mujoco_tentacle_world():
         with TentacleWorld(agent) as world:
             mind = DdpgMind()
             proc = StandardProc()
-            proc.train(platform, world, mind, steps=300)
+            proc.train(platform, world, mind, episodes=20000, steps=300)
 
 
 # =================================================================================================================
