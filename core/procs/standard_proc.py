@@ -8,16 +8,16 @@ class StandardProc(Proc):
     def _demo(self, platform, world, mind, episodes, steps):
         print(world.summary)
 
-        path = "../out/DDPG_PeterKovacs_Zoo_Mujoco_Tentacle_v1/weights.ckpt"
+        path = "../out/002/weights.ckpt"
         mind.init(platform, world)
-        mind.restore(path)
+        mind.load(path)
 
         for ep in xrange(episodes):
             s = world.reset()
             reward = 0
             for t in xrange(steps):
                 world.render()
-                a = mind.predict(world, s)
+                a = mind.predict(s)
                 s, r, done, _ = world.step(a)
                 reward += r
                 if done or (t == steps - 1):
@@ -26,4 +26,10 @@ class StandardProc(Proc):
 
     def _train(self, platform, world, mind, episodes, steps):
         print(world.summary)
-        mind.train(platform, world, episodes, steps)
+
+        path = "../out/DDPG_PeterKovacs_Zoo_Mujoco_Tentacle_v1/weights.ckpt"
+        mind.init(platform, world)
+        # mind.load(path)
+
+        mind.path = path
+        mind.train(episodes, steps)

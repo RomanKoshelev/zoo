@@ -39,8 +39,8 @@ class DDPG_PeterKovacs:
                 world.render()
 
                 # add noise to action
-                nr_max = 0.7
-                nr_min = 0.1
+                nr_max = 0.5  # 0.7
+                nr_min = 0.4
                 nr_eps = min(1000., episodes / 10.)
                 nk = 1 - min(1., float(ep) / nr_eps)
                 nr = nr_min + nk * (nr_max - nr_min)

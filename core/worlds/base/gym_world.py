@@ -42,3 +42,4 @@ class GymWorld(World):
 
     def _reset(self):
         self.state = self.env.reset()
+        return self.state

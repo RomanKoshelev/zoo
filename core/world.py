@@ -14,7 +14,7 @@ class World:
         raise NotImplementedError
 
     def reset(self):
-        self._reset()
+        return self._reset()
 
     def _reset(self):
         raise NotImplementedError

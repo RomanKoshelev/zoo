@@ -27,10 +27,15 @@ class TentacleEnv(ZooMujocoEnv, utils.EzPickle):
 
     def reset_model(self):
         def target_pos():
-            return self.np_random.uniform(-1, +1, 2) * self.target_range
+            # tx, ty = self.np_random.uniform(-1, +1, 2) * self.target_range
+            tx = self.np_random.uniform(-.8, +.8) * self.target_range[0]
+            tz = self.np_random.uniform(.0, +1) * self.target_range[1]
+            return np.array([tx, tz])
 
-        qpos = self.model.data.qpos.ravel().copy()  # self.init_qpos
-        qvel = self.model.data.qvel.ravel().copy()  # self.init_qvel
+        # qpos = self.init_qpos
+        # qvel = self.init_qvel
+        qpos = self.model.data.qpos.ravel().copy()
+        qvel = self.model.data.qvel.ravel().copy()
         qpos[-2:] = target_pos()
         qvel[-2:] = np.array([0, 0])
         self.set_state(qpos, qvel)
