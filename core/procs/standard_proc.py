@@ -22,5 +22,4 @@ class StandardProc(Proc):
 
     def _train(self, platform, world, mind, episodes, steps):
         print(world.summary)
-
         mind.train(platform, world, episodes, steps)
