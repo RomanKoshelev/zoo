@@ -1,11 +1,8 @@
 import tensorflow as tf
 
-from core.platform import Platform
 
-
-class TensorflowPlatform(Platform):
+class TensorflowPlatform:
     def __init__(self):
-        Platform.__init__(self)
         self.session = None
 
     def __enter__(self):
