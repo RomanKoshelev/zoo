@@ -1,3 +1,6 @@
+import os
+
+
 class StandardProc:
     def __init__(self, platform_class, world_class, agent_class, mind_class):
         self.platform_class = platform_class
@@ -5,8 +8,9 @@ class StandardProc:
         self.agent_class = agent_class
         self.mind_class = mind_class
 
-    def train(self, weigts_path, episodes, steps):
+    def train(self, folder_path, episodes, steps):
         platform, world, mind = self._make_instances()
+        weigts_path = os.path.join(folder_path, "weights.ckpt")
         with platform, world, mind:
             print(world.summary)
             mind.restore(weigts_path)

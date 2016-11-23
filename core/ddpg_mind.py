@@ -1,3 +1,4 @@
+from __future__ import print_function
 from alg.ddpg_peter_kovacs.algorithm import DDPG_PeterKovacs
 import numpy as np
 
@@ -35,9 +36,7 @@ class DdpgMind:
                   (ep, self._reward, max_q))
 
             if (ep > 0 and ep % save_every_episodes == 0) or (ep == episodes - 1):
-                print("")
-                self._algorithm.save(weigts_path)
-                print("")
+                self.save(weigts_path)
 
             self.max_q = []
             self._reward = 0
@@ -46,9 +45,11 @@ class DdpgMind:
 
     def save(self, path):
         self._algorithm.save(path)
+        print("Saved [%s]" % path)
 
     def restore(self, path):
         self._algorithm.restore(path)
+        print("Restored [%s]" % path)
 
     def predict(self, state):
         a = self._algorithm.predict(state)

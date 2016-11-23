@@ -40,7 +40,8 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
 
             for step in xrange(steps):
                 # play
-                a = self._make_action(s) + self.exploration.noise()
+                a = self._make_action(s)
+                a = self._add_noise(a)
                 r, s2, done = self._world_step(a)
                 self._add_to_buffer(s, a, r, s2, done)
                 s = s2
@@ -64,6 +65,10 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
 
     def _make_action(self, s):
         return self.actor.predict([s])[0]
+
+    def _add_noise(self, a):
+        a = a + self.exploration.noise()
+        return np.clip(a, -1, 1)
 
     def _world_step(self, a):
         s2, r, done, _ = self.world.step(self.world.scale_action(a))
