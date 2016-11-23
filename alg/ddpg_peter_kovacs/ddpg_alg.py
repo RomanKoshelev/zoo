@@ -14,6 +14,7 @@ class DDPG_PeterKovacs:
         self.sess = sess
         self.world = world
         self.buff = ReplayBuffer(cfg.BUFFER_SIZE)
+        self.exploration = None
 
         with tf.variable_scope(scope):
             with tf.variable_scope('actor'):
@@ -29,19 +30,19 @@ class DDPG_PeterKovacs:
 
     def train(self, episodes, steps, callback):
 
-        exploration = OUNoise(self.world.act_dim, mu=0., sigma=.2, theta=.15)
+        self.exploration = OUNoise(self.world.act_dim, mu=0., sigma=.2, theta=.15)
 
         for ep in xrange(episodes):
             s, reward, terminal = self.world.reset(), 0, False
             max_q = 0
 
-            for t in xrange(steps):
+            for step in xrange(steps):
                 self.world.render()
 
                 a = self.actor.predict([s])
-                a, nr = self.add_noise(a, ep, episodes, exploration)
+                a, nr = self.add_noise(a, ep, episodes)
 
-                r, s, terminal = self.execute_step(a, s, terminal)
+                r, s, terminal = self.execute_step(a, s)
                 reward += r
 
                 a_batch, batch, r_batch, s2_batch, s_batch, t_batch = self.sample_batch()
@@ -51,25 +52,25 @@ class DDPG_PeterKovacs:
                 self.update_target_networks()
 
                 # end episode
-                if terminal or (t == steps - 1):
+                if terminal or (step == steps - 1):
                     print("ep: %3d  |  NR = %.2f  |  Reward: %+7.0f  |  Qmax: %+8.2f" %
-                          (ep, nr, reward, max_q / float(t)))
-                    exploration.reset()
+                          (ep, nr, reward, max_q / float(step)))
+                    self.exploration.reset()
                     break
 
             callback(ep)
 
-    def add_noise(self, a, ep, episodes, exploration):
+    def add_noise(self, a, ep, episodes):
         nr_max = 0.5  # 0.7
         nr_min = 0.4
         nr_eps = min(1000., episodes / 10.)
         nk = 1 - min(1., float(ep) / nr_eps)
         nr = nr_min + nk * (nr_max - nr_min)
-        n = exploration.noise()
+        n = self.exploration.noise()
         a = (1 - nr) * a + nr * n  # type: np.ndarray
         return a, nr
 
-    def execute_step(self, a, s, terminal):
+    def execute_step(self, a, s):
         s2, r, terminal, _ = self.world.step(self.world.scale_action(a))
         self.buff.add(s, a[0], r, s2, terminal)
         s = s2
