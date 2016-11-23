@@ -4,7 +4,7 @@ BASE_PATH = "./out/experiments"
 
 
 class Experiment:
-    def __init__(self, proc, name, descr=""):
+    def __init__(self, name, proc, descr=""):
         self.proc = proc
         self.name = name
         self.descr = descr
