@@ -2,7 +2,7 @@ import numpy as np
 from gym import utils
 
 from core.context import Context
-from ext.gym.base.zoo_mujoco_env import ZooMujocoEnv
+from env.zoo_mujoco_env import ZooMujocoEnv
 
 
 class TentacleEnv(ZooMujocoEnv, utils.EzPickle):

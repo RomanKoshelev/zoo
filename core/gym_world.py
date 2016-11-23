@@ -17,6 +17,7 @@ class GymWorld:
         self.reset()
         return self
 
+    # noinspection PyUnusedLocal
     def __exit__(self, *args):
         if self._env is not None:
             self._env.close()

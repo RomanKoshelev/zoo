@@ -1,4 +1,4 @@
-from ext.alg.ddpg_peter_kovacs.ddpg_alg import DDPG_PeterKovacs
+from alg.ddpg_peter_kovacs.ddpg_alg import DDPG_PeterKovacs
 
 
 class DdpgMind:
@@ -19,16 +19,6 @@ class DdpgMind:
     def __exit__(self, *args):
         pass
 
-    def restore(self, path):
-        self._algorithm.restore(path)
-
-    def save(self, path):
-        self._algorithm.save(path)
-
-    def predict(self, state):
-        a = self._algorithm.act(state)
-        return self._algorithm.world_action(a)
-
     def train(self, weigts_path, episodes, steps):
 
         def callback(ep):
@@ -39,3 +29,14 @@ class DdpgMind:
                 print("")
 
         return self._algorithm.train(self.world._env, episodes, steps, callback)
+
+    def restore(self, path):
+        self._algorithm.restore(path)
+
+    def save(self, path):
+        self._algorithm.save(path)
+
+    def predict(self, state):
+        a = self._algorithm.act(state)
+        return self._algorithm.world_action(a)
+
