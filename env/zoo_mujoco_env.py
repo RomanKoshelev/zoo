@@ -38,4 +38,3 @@ class ZooMujocoEnv(MujocoEnv):
         v1 = self.site_pos(site_name_1)
         v2 = self.site_pos(site_name_2)
         return np.linalg.norm(v1 - v2)
-

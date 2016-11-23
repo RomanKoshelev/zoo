@@ -10,33 +10,33 @@ import numpy as np
 
 
 class DDPG_PeterKovacs:
-    def __init__(self, sess, world_id, obs_dim, act_dim, act_box):
+    def __init__(self, sess, world, scope):
         self.sess = sess
-        self.world_id = world_id
-        self.obs_dim = obs_dim
-        self.act_dim = act_dim
-        self.act_box = act_box
+        self.world = world
         self.buff = ReplayBuffer(cfg.BUFFER_SIZE)
-        self.exploration = OUNoise(act_dim, mu=0., sigma=.2, theta=.15)
 
-        with tf.variable_scope(self.scope):
-            with tf.variable_scope("actor"):
-                self.actor = ActorNetwork(sess, obs_dim, act_dim, cfg.BATCH_SIZE, cfg.TAU, cfg.LRA, cfg.L2A)
-            with tf.variable_scope("critic"):
-                self.critic = CriticNetwork(sess, obs_dim, act_dim, cfg.BATCH_SIZE, cfg.TAU, cfg.LRC, cfg.L2C)
+        with tf.variable_scope(scope):
+            with tf.variable_scope('actor'):
+                self.actor = \
+                    ActorNetwork(sess, world.obs_dim, world.act_dim, cfg.BATCH_SIZE, cfg.TAU, cfg.LRA, cfg.L2A)
+            with tf.variable_scope('critic'):
+                self.critic = \
+                    CriticNetwork(sess, world.obs_dim, world.act_dim, cfg.BATCH_SIZE, cfg.TAU, cfg.LRC, cfg.L2C)
 
-        var_list = tf.get_collection(tf.GraphKeys.VARIABLES, scope=self.scope)
+        var_list = tf.get_collection(tf.GraphKeys.VARIABLES, scope=scope)
         self.sess.run(tf.initialize_variables(var_list))
         self.saver = tf.train.Saver(var_list)
 
-    def train(self, world, episodes, steps, callback):
+    def train(self, episodes, steps, callback):
+
+        exploration = OUNoise(self.world.act_dim, mu=0., sigma=.2, theta=.15)
 
         for ep in xrange(episodes):
-            s, reward, terminal = world.reset(), 0, False
+            s, reward, terminal = self.world.reset(), 0, False
             max_q = 0
 
             for t in xrange(steps):
-                world.render()
+                self.world.render()
 
                 # add noise to action
                 nr_max = 0.5  # 0.7
@@ -45,11 +45,11 @@ class DDPG_PeterKovacs:
                 nk = 1 - min(1., float(ep) / nr_eps)
                 nr = nr_min + nk * (nr_max - nr_min)
                 a = self.actor.predict([s])
-                n = self.exploration.noise()
+                n = exploration.noise()
                 a = (1 - nr) * a + nr * n  # type: np.ndarray
 
                 # execute step
-                s2, r, terminal, _ = world.step(self.world_action(a))
+                s2, r, terminal, _ = self.world.step(self.world.scale_action(a))
                 self.buff.add(s, a[0], r, s2, terminal)
                 s = s2
                 reward += r
@@ -84,40 +84,13 @@ class DDPG_PeterKovacs:
                 if terminal or (t == steps - 1):
                     print("ep: %3d  |  NR = %.2f  |  Reward: %+7.0f  |  Qmax: %+8.2f" %
                           (ep, nr, reward, max_q / float(t)))
-                    self.exploration.reset()
+                    exploration.reset()
                     break
 
             callback(ep)
 
-    def world_action(self, a):
-        ak = (a + 1.) / 2.
-        ae = self.act_box[0] + (self.act_box[1] - self.act_box[0]) * ak  # type: np.ndarray
-        return np.clip(ae, self.act_box[0], self.act_box[1])[0]
-
-    def run(self, env, episodes, steps):
-        for ep in xrange(episodes):
-            s = env.reset()
-            reward = 0
-            for t in xrange(steps):
-                env.render()
-                a = self.act(s)
-                s, r, done, _ = env.step(self.world_action(a))
-                reward += r
-                if done or (t == steps - 1):
-                    print("%3d  Reward = %+7.0f" % (ep, reward))
-                    break
-
-    def act(self, s):
+    def predict(self, s):
         return self.actor.predict([s])
-
-    @property
-    def scope(self):
-        name = "%s_%s" % (self.__class__.__name__, self.world_id)
-        return name.\
-            replace('-', '_').\
-            replace(':', '_').\
-            replace(' ', '_').\
-            replace('.', '_')
 
     def save(self, path):
         self.saver.save(self.sess, path)

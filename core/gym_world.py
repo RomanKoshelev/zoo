@@ -1,6 +1,7 @@
 import gym
 
 from core.context import Context
+import numpy as np
 
 
 class GymWorld:
@@ -51,6 +52,11 @@ class GymWorld:
     def reset(self):
         self.state = self._env.reset()
         return self.state
+
+    def scale_action(self, a):
+        ak = (a + 1.) / 2.
+        ae = self.act_box[0] + (self.act_box[1] - self.act_box[0]) * ak  # type: np.ndarray
+        return np.clip(ae, self.act_box[0], self.act_box[1])[0]
 
     @property
     def summary(self):
