@@ -9,7 +9,7 @@ class StandardProc:
         platform, world, mind = self._make_instances()
         with platform, world, mind:
             print(world.summary)
-            mind.restore(weigts_path)
+            # mind.restore(weigts_path)
             mind.train(weigts_path, episodes, steps)
 
     def demo(self, weigts_path, episodes, steps):

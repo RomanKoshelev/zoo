@@ -34,11 +34,11 @@ class DdpgMind:
 
         return self._algorithm.train(episodes, steps, callback)
 
-    def restore(self, path):
-        self._algorithm.restore(path)
-
     def save(self, path):
         self._algorithm.save(path)
+
+    def restore(self, path):
+        self._algorithm.restore(path)
 
     def predict(self, state):
         a = self._algorithm.predict(state)
