@@ -13,7 +13,7 @@ class ZooMujocoEnv(MujocoEnv):
         else:
             fullpath = os.path.join(os.path.dirname(__file__), "assets", model_path)
         if not os.path.exists(fullpath):
-            raise IOError("File %s does not exist" % fullpath)
+            raise IOError("File does not exist: [%s]" % fullpath)
         MujocoEnv.__init__(self, fullpath, frame_skip)
 
     def reset_model(self):

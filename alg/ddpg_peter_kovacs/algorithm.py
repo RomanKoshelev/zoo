@@ -17,7 +17,7 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
 
         self.world = world
         self.buff = ReplayBuffer(cfg.BUFFER_SIZE)
-        self.exploration = OUNoise(self.world.act_dim, mu=0., sigma=.3, theta=.15)
+        self.exploration = OUNoise(self.world.act_dim, mu=0., sigma=.1, theta=.01)  # .3 .15
 
         with tf.variable_scope(self.scope):
             with tf.variable_scope('actor'):
@@ -36,7 +36,9 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
 
         for episode in xrange(episodes):
             s = self.world.reset()
-            self.exploration.reset()
+
+            if episode % 10 == 0:
+                self.exploration.reset()
 
             for step in xrange(steps):
                 # play
