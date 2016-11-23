@@ -4,12 +4,11 @@ HIDDEN1_UNITS = 400
 HIDDEN2_UNITS = 300
 
 
+# noinspection PyPep8Naming
 class ActorNetwork(object):
-    def __init__(self, sess, state_size, action_size, BATCH_SIZE, TAU, LEARNING_RATE, L2):
+    def __init__(self, sess, state_size, action_size, TAU, LEARNING_RATE, L2):
         self.sess = sess
-        self.BATCH_SIZE = BATCH_SIZE
         self.TAU = TAU
-        self.LEARNING_RATE = LEARNING_RATE
         self.L2 = L2
 
         with tf.variable_scope("master"):

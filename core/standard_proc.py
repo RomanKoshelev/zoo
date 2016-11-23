@@ -35,3 +35,4 @@ class StandardProc:
         world = self.world_class(agent)
         mind = self.mind_class(platform, world)
         return platform, world, mind
+

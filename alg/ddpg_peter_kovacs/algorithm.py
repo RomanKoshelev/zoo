@@ -1,88 +1,79 @@
 from __future__ import print_function
 
+import numpy as np
 import tensorflow as tf
+
 import config as cfg
-from buffer import ReplayBuffer
 from actor import ActorNetwork
+from core.tensorflow_algorithm import TensorflowAlgorithm
+from buffer import ReplayBuffer
 from critic import CriticNetwork
 from noise import OUNoise
-import numpy as np
 
 
-class DDPG_PeterKovacs:
-    def __init__(self, sess, world, scope):
-        self.sess = sess
+class DDPG_PeterKovacs(TensorflowAlgorithm):
+    def __init__(self, sess, world):
+        super(self.__class__, self).__init__(sess, world.id)
+
         self.world = world
-        self.scope = scope
         self.buff = ReplayBuffer(cfg.BUFFER_SIZE)
+        self.exploration = OUNoise(self.world.act_dim, mu=0., sigma=.2, theta=.15)
 
         with tf.variable_scope(self.scope):
             with tf.variable_scope('actor'):
                 self.actor = \
-                    ActorNetwork(sess, world.obs_dim, world.act_dim, cfg.BATCH_SIZE, cfg.TAU, cfg.LRA, cfg.L2A)
+                    ActorNetwork(sess, world.obs_dim, world.act_dim, cfg.TAU, cfg.LRA, cfg.L2A)
             with tf.variable_scope('critic'):
                 self.critic = \
-                    CriticNetwork(sess, world.obs_dim, world.act_dim, cfg.BATCH_SIZE, cfg.TAU, cfg.LRC, cfg.L2C)
+                    CriticNetwork(sess, world.obs_dim, world.act_dim, cfg.TAU, cfg.LRC, cfg.L2C)
 
-        self.sess.run(tf.initialize_variables(self.get_var_list()))
-
-    def save(self, path):
-        saver = tf.train.Saver(self.get_var_list())
-        saver.save(self.sess, path)
-
-    def restore(self, path):
-        saver = tf.train.Saver(self.get_var_list())
-        saver.restore(self.sess, path)
+        self._initialize_variables()
 
     def predict(self, s):
         return self.actor.predict([s])
 
-    def train(self, episodes, steps, callback):
-
-        noise = OUNoise(self.world.act_dim, mu=0., sigma=.2, theta=.15)
+    def train(self, episodes, steps, add_noise, on_episode, on_step):
 
         for episode in xrange(episodes):
             s = self.world.reset()
-            reward = 0
-            max_q = 0
+            self.exploration.reset()
 
             for step in xrange(steps):
                 # play
-                a = self.make_action(s, noise, episode, episodes)
-                r, s2, done = self.world_step(a)
-                self.add_to_buffer(s, a, r, s2, done)
+                a = self._make_action(s)
+                a = add_noise(a, self.exploration.noise(), episode, episodes)
+                r, s2, done = self._world_step(a)
+                self._add_to_buffer(s, a, r, s2, done)
                 s = s2
 
                 # learn
-                bs, ba, br, bs2, bd = self.get_batch()
-                y = self.make_target(br, bs2, bd)
-                max_q += self.update_critic(y, bs, ba)
-                self.update_actor(bs)
-                self.update_target_networks()
+                bs, ba, br, bs2, bd = self._get_batch()
+                y = self._make_target(br, bs2, bd)
+                maxq = self._update_critic(y, bs, ba)
+                self._update_actor(bs)
+                self._update_target_networks()
+
+                # callback
+                on_step(r, maxq)
 
                 # end episode
-                self.world.render()
-                reward += r
-                if done or (step == steps - 1):
-                    print("Ep: %3d  |  Reward: %+7.0f  |  Qmax: %+8.2f" % (episode, reward, max_q / float(step)))
+                if done:
                     break
 
-            noise.reset()
-            callback(episode)
+            # callback
+            on_episode(episode)
 
-    def make_action(self, s, exploration, ep, episodes):
-        a = self.actor.predict([s])[0]
-        a = self.add_noise(a, exploration.noise(), ep, episodes)  # type: np.ndarray
-        return a
+    def _make_action(self, s):
+        return self.actor.predict([s])[0]
 
-    def world_step(self, a):
+    def _world_step(self, a):
         s2, r, done, _ = self.world.step(self.world.scale_action(a))
         return r, s2, done
 
-    def add_to_buffer(self, s, a, r, s2, done):
+    def _add_to_buffer(self, s, a, r, s2, done):
         self.buff.add(s, a, r, s2, done)
 
-    def make_target(self, r, s2, done):
+    def _make_target(self, r, s2, done):
         q = self.critic.target_predict(s2, self.actor.target_predict(s2))
         y = []
         for i in xrange(len(s2)):
@@ -92,31 +83,19 @@ class DDPG_PeterKovacs:
                 y.append(r[i] + cfg.GAMMA * q[i])
         return np.reshape(y, (-1, 1))
 
-    def update_critic(self, y, s, a):
+    def _update_critic(self, y, s, a):
         q, _ = self.critic.train(y, s, a)
         return np.amax(q)
 
-    def update_actor(self, s):
+    def _update_actor(self, s):
         grads = self.critic.gradients(s, self.actor.predict(s))
         self.actor.train(s, grads)
 
-    def update_target_networks(self):
+    def _update_target_networks(self):
         self.actor.target_train()
         self.critic.target_train()
 
-    def get_batch(self):
+    def _get_batch(self):
         batch = self.buff.getBatch(cfg.BATCH_SIZE)
         s, a, r, s2, done = zip(*batch)
         return s, a, r, s2, done
-
-    def get_var_list(self):
-        return tf.get_collection(tf.GraphKeys.VARIABLES, scope=self.scope)
-
-    @staticmethod
-    def add_noise(action, noise, episode, episodes):
-        nr_max = 0.5
-        nr_min = 0.4
-        nr_eps = min(1000., episodes / 10.)
-        nk = 1 - min(1., float(episode) / nr_eps)
-        k = nr_min + nk * (nr_max - nr_min)
-        return (1 - k) * action + k * noise

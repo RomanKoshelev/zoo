@@ -4,12 +4,11 @@ HIDDEN1_UNITS = 400
 HIDDEN2_UNITS = 300
 
 
+# noinspection PyPep8Naming
 class CriticNetwork(object):
-    def __init__(self, sess, state_size, action_size, BATCH_SIZE, TAU, LEARNING_RATE, L2):
+    def __init__(self, sess, state_size, action_size, TAU, LEARNING_RATE, L2):
         self.sess = sess
-        self.BATCH_SIZE = BATCH_SIZE
         self.TAU = TAU
-        self.LEARNING_RATE = LEARNING_RATE
         self.L2 = L2
 
         with tf.variable_scope("master"):
@@ -95,10 +94,12 @@ class CriticNetwork(object):
 
         return state, action, out, [W1, b1, W2, W2_action, b2, W3, b3]
 
-    def weight_variable(self, shape):
+    @staticmethod
+    def weight_variable(shape):
         initial = tf.truncated_normal(shape, stddev=0.001)
         return tf.Variable(initial)
 
-    def bias_variable(self, shape):
+    @staticmethod
+    def bias_variable(shape):
         initial = tf.constant(0.001, shape=shape)
         return tf.Variable(initial)
