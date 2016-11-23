@@ -32,7 +32,7 @@ class DdpgMind:
             save_every_episodes = 100
 
             max_q = np.mean(self._max_q)  # type: float
-            print("Ep: %3d  |  Reward: %+7.0f  |  Qmax: %+7.0f" %
+            print("Ep: %3d  |  Reward: %+7.0f  |  Qmax: %+8.1f" %
                   (ep, self._reward, max_q))
 
             if (ep > 0 and ep % save_every_episodes == 0) or (ep == episodes - 1):
@@ -44,12 +44,14 @@ class DdpgMind:
         return self._algorithm.train(episodes, steps, on_episod, on_step)
 
     def save(self, path):
+        print("\nSaving [%s].." % path)
         self._algorithm.save(path)
-        print("Saved [%s]" % path)
+        print("Done.\n")
 
     def restore(self, path):
+        print("\nRestoring [%s].." % path)
         self._algorithm.restore(path)
-        print("Restored [%s]" % path)
+        print("Done.\n")
 
     def predict(self, state):
         a = self._algorithm.predict(state)

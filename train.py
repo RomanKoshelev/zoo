@@ -1,24 +1,17 @@
 from __future__ import print_function
 
-from core.tentacle_agent import TentacleAgent
 from core.ddpg_mind import DdpgMind
 from core.tensorflow_platform import TensorflowPlatform
-from core.standard_proc import StandardProc
+from core.tentacle_agent import TentacleAgent
 from core.tentacle_world import TentacleWorld
-
-
-class Experiment:
-    def __init__(self):
-        pass
+from core.train_procedure import TrainProc
+from core.experiment import Experiment
 
 
 def train_mujoco_tentacle_world():
-    proc = StandardProc(TensorflowPlatform, TentacleWorld, TentacleAgent, DdpgMind)
-
-    # exp = Experiment(proc, "./out/", "My first experiment")
-
-    proc.train("./out/DDPG_PeterKovacs_Zoo_Mujoco_Tentacle_v1/", episodes=10000, steps=150)
-
+    proc = TrainProc(TensorflowPlatform, TentacleWorld, TentacleAgent, DdpgMind, episodes=10000, steps=150)
+    exp = Experiment(proc, "001", "My first experiment")
+    exp()
 
 if __name__ == '__main__':
     train_mujoco_tentacle_world()
