@@ -1,4 +1,4 @@
-from alg.ddpg_peter_kovacs.ddpg_alg import DDPG_PeterKovacs
+from alg.ddpg_peter_kovacs.algorithm import DDPG_PeterKovacs
 
 
 class DdpgMind:

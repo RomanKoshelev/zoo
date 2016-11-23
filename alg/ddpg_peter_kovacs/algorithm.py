@@ -2,10 +2,10 @@ from __future__ import print_function
 
 import tensorflow as tf
 import config as cfg
-from replay_buffer import ReplayBuffer
-from actor_network import ActorNetwork
-from critic_network import CriticNetwork
-from ou_noise import OUNoise
+from buffer import ReplayBuffer
+from actor import ActorNetwork
+from critic import CriticNetwork
+from noise import OUNoise
 import numpy as np
 
 
@@ -13,10 +13,10 @@ class DDPG_PeterKovacs:
     def __init__(self, sess, world, scope):
         self.sess = sess
         self.world = world
+        self.scope = scope
         self.buff = ReplayBuffer(cfg.BUFFER_SIZE)
-        self.exploration = None
 
-        with tf.variable_scope(scope):
+        with tf.variable_scope(self.scope):
             with tf.variable_scope('actor'):
                 self.actor = \
                     ActorNetwork(sess, world.obs_dim, world.act_dim, cfg.BATCH_SIZE, cfg.TAU, cfg.LRA, cfg.L2A)
@@ -24,23 +24,22 @@ class DDPG_PeterKovacs:
                 self.critic = \
                     CriticNetwork(sess, world.obs_dim, world.act_dim, cfg.BATCH_SIZE, cfg.TAU, cfg.LRC, cfg.L2C)
 
-        var_list = tf.get_collection(tf.GraphKeys.VARIABLES, scope=scope)
-        self.sess.run(tf.initialize_variables(var_list))
-        self.saver = tf.train.Saver(var_list)
+        self.sess.run(tf.initialize_variables(self.get_var_list()))
 
     def train(self, episodes, steps, callback):
 
-        self.exploration = OUNoise(self.world.act_dim, mu=0., sigma=.2, theta=.15)
+        exploration = OUNoise(self.world.act_dim, mu=0., sigma=.2, theta=.15)
 
         for ep in xrange(episodes):
-            s, reward, terminal = self.world.reset(), 0, False
+            s = self.world.reset()
+            reward = 0
             max_q = 0
 
             for step in xrange(steps):
                 self.world.render()
 
                 a = self.actor.predict([s])
-                a, nr = self.add_noise(a, ep, episodes)
+                a = self.add_noise(exploration.noise(), a, ep, episodes)
 
                 r, s, terminal = self.execute_step(a, s)
                 reward += r
@@ -53,22 +52,22 @@ class DDPG_PeterKovacs:
 
                 # end episode
                 if terminal or (step == steps - 1):
-                    print("ep: %3d  |  NR = %.2f  |  Reward: %+7.0f  |  Qmax: %+8.2f" %
-                          (ep, nr, reward, max_q / float(step)))
-                    self.exploration.reset()
+                    print("ep: %3d  | Reward: %+7.0f  |  Qmax: %+8.2f" %
+                          (ep, reward, max_q / float(step)))
+                    exploration.reset()
                     break
 
             callback(ep)
 
-    def add_noise(self, a, ep, episodes):
+    @staticmethod
+    def add_noise(noise, a, ep, episodes):
         nr_max = 0.5  # 0.7
         nr_min = 0.4
         nr_eps = min(1000., episodes / 10.)
         nk = 1 - min(1., float(ep) / nr_eps)
         nr = nr_min + nk * (nr_max - nr_min)
-        n = self.exploration.noise()
-        a = (1 - nr) * a + nr * n  # type: np.ndarray
-        return a, nr
+        a = (1 - nr) * a + nr * noise  # type: np.ndarray
+        return a
 
     def execute_step(self, a, s):
         s2, r, terminal, _ = self.world.step(self.world.scale_action(a))
@@ -108,10 +107,13 @@ class DDPG_PeterKovacs:
     def predict(self, s):
         return self.actor.predict([s])
 
+    def get_var_list(self):
+        return tf.get_collection(tf.GraphKeys.VARIABLES, scope=self.scope)
+
     def save(self, path):
-        self.saver.save(self.sess, path)
-        print("Saved [%s]" % path)
+        saver = tf.train.Saver(self.get_var_list())
+        saver.save(self.sess, path)
 
     def restore(self, path):
-        self.saver.restore(self.sess, path)
-        print("Restored [%s]" % path)
+        saver = tf.train.Saver(self.get_var_list())
+        saver.restore(self.sess, path)
