@@ -38,47 +38,17 @@ class DDPG_PeterKovacs:
             for t in xrange(steps):
                 self.world.render()
 
-                # add noise to action
-                nr_max = 0.5  # 0.7
-                nr_min = 0.4
-                nr_eps = min(1000., episodes / 10.)
-                nk = 1 - min(1., float(ep) / nr_eps)
-                nr = nr_min + nk * (nr_max - nr_min)
                 a = self.actor.predict([s])
-                n = exploration.noise()
-                a = (1 - nr) * a + nr * n  # type: np.ndarray
+                a, nr = self.add_noise(a, ep, episodes, exploration)
 
-                # execute step
-                s2, r, terminal, _ = self.world.step(self.world.scale_action(a))
-                self.buff.add(s, a[0], r, s2, terminal)
-                s = s2
+                r, s, terminal = self.execute_step(a, s, terminal)
                 reward += r
 
-                # sample minibatch
-                batch = self.buff.getBatch(cfg.BATCH_SIZE)
-                s_batch, a_batch, r_batch, s2_batch, t_batch = zip(*batch)
-
-                # set target
-                target_q = self.critic.target_predict(s2_batch, self.actor.target_predict(s2_batch))
-                y = []
-                for i in xrange(len(batch)):
-                    if t_batch[i]:
-                        y.append(r_batch[i])
-                    else:
-                        y.append(r_batch[i] + cfg.GAMMA * target_q[i])
-                y = np.reshape(y, (-1, 1))
-
-                # update critic
-                predicted_q, _ = self.critic.train(y, s_batch, a_batch)
-                max_q += np.amax(predicted_q)
-
-                # update actor
-                grads = self.critic.gradients(s_batch, self.actor.predict(s_batch))
-                self.actor.train(s_batch, grads)
-
-                # update the target networks
-                self.actor.target_train()
-                self.critic.target_train()
+                a_batch, batch, r_batch, s2_batch, s_batch, t_batch = self.sample_batch()
+                y = self.make_target(batch, r_batch, s2_batch, t_batch)
+                max_q = self.update_critic(a_batch, max_q, s_batch, y)
+                self.update_actor(s_batch)
+                self.update_target_networks()
 
                 # end episode
                 if terminal or (t == steps - 1):
@@ -88,6 +58,51 @@ class DDPG_PeterKovacs:
                     break
 
             callback(ep)
+
+    def add_noise(self, a, ep, episodes, exploration):
+        nr_max = 0.5  # 0.7
+        nr_min = 0.4
+        nr_eps = min(1000., episodes / 10.)
+        nk = 1 - min(1., float(ep) / nr_eps)
+        nr = nr_min + nk * (nr_max - nr_min)
+        n = exploration.noise()
+        a = (1 - nr) * a + nr * n  # type: np.ndarray
+        return a, nr
+
+    def execute_step(self, a, s, terminal):
+        s2, r, terminal, _ = self.world.step(self.world.scale_action(a))
+        self.buff.add(s, a[0], r, s2, terminal)
+        s = s2
+        return r, s, terminal
+
+    def sample_batch(self):
+        batch = self.buff.getBatch(cfg.BATCH_SIZE)
+        s_batch, a_batch, r_batch, s2_batch, t_batch = zip(*batch)
+        return a_batch, batch, r_batch, s2_batch, s_batch, t_batch
+
+    def make_target(self, batch, r_batch, s2_batch, t_batch):
+        target_q = self.critic.target_predict(s2_batch, self.actor.target_predict(s2_batch))
+        y = []
+        for i in xrange(len(batch)):
+            if t_batch[i]:
+                y.append(r_batch[i])
+            else:
+                y.append(r_batch[i] + cfg.GAMMA * target_q[i])
+        y = np.reshape(y, (-1, 1))
+        return y
+
+    def update_critic(self, a_batch, max_q, s_batch, y):
+        predicted_q, _ = self.critic.train(y, s_batch, a_batch)
+        max_q += np.amax(predicted_q)
+        return max_q
+
+    def update_actor(self, s_batch):
+        grads = self.critic.gradients(s_batch, self.actor.predict(s_batch))
+        self.actor.train(s_batch, grads)
+
+    def update_target_networks(self):
+        self.actor.target_train()
+        self.critic.target_train()
 
     def predict(self, s):
         return self.actor.predict([s])
