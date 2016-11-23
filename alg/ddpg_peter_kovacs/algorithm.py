@@ -32,7 +32,7 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
     def predict(self, s):
         return self.actor.predict([s])
 
-    def train(self, episodes, steps, add_noise, on_episode, on_step):
+    def train(self, episodes, steps, on_episode, on_step):
 
         for episode in xrange(episodes):
             s = self.world.reset()
@@ -40,8 +40,7 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
 
             for step in xrange(steps):
                 # play
-                a = self._make_action(s)
-                a = add_noise(a, self.exploration.noise(), episode, episodes)
+                a = self._make_action(s) + self.exploration.noise()
                 r, s2, done = self._world_step(a)
                 self._add_to_buffer(s, a, r, s2, done)
                 s = s2
