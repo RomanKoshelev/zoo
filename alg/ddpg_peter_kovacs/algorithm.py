@@ -26,47 +26,55 @@ class DDPG_PeterKovacs:
 
         self.sess.run(tf.initialize_variables(self.get_var_list()))
 
+    def save(self, path):
+        saver = tf.train.Saver(self.get_var_list())
+        saver.save(self.sess, path)
+
+    def restore(self, path):
+        saver = tf.train.Saver(self.get_var_list())
+        saver.restore(self.sess, path)
+
+    def predict(self, s):
+        return self.actor.predict([s])
+
     def train(self, episodes, steps, callback):
 
-        exploration = OUNoise(self.world.act_dim, mu=0., sigma=.2, theta=.15)
+        noise = OUNoise(self.world.act_dim, mu=0., sigma=.2, theta=.15)
 
-        for ep in xrange(episodes):
+        for episode in xrange(episodes):
             s = self.world.reset()
             reward = 0
             max_q = 0
 
             for step in xrange(steps):
-                self.world.render()
+                a = self.make_action(s, noise, episode, episodes)
 
-                a = self.actor.predict([s])
-                a = self.add_noise(exploration.noise(), a, ep, episodes)
+                r, s, done = self.execute_step(a, s)
 
-                r, s, terminal = self.execute_step(a, s)
-                reward += r
+                batch = self.get_batch()
 
-                a_batch, batch, r_batch, s2_batch, s_batch, t_batch = self.sample_batch()
-                y = self.make_target(batch, r_batch, s2_batch, t_batch)
-                max_q = self.update_critic(a_batch, max_q, s_batch, y)
-                self.update_actor(s_batch)
+                y = self.make_target(batch)
+
+                max_q += self.update_critic(batch, y)
+
+                self.update_actor(batch)
+
                 self.update_target_networks()
 
                 # end episode
-                if terminal or (step == steps - 1):
-                    print("ep: %3d  | Reward: %+7.0f  |  Qmax: %+8.2f" %
-                          (ep, reward, max_q / float(step)))
-                    exploration.reset()
+                self.world.render()
+                reward += r
+                if done or (step == steps - 1):
+                    print("episode: %3d  | Reward: %+7.0f  |  Qmax: %+8.2f" %
+                          (episode, reward, max_q / float(step)))
+                    noise.reset()
                     break
 
-            callback(ep)
+            callback(episode)
 
-    @staticmethod
-    def add_noise(noise, a, ep, episodes):
-        nr_max = 0.5  # 0.7
-        nr_min = 0.4
-        nr_eps = min(1000., episodes / 10.)
-        nk = 1 - min(1., float(ep) / nr_eps)
-        nr = nr_min + nk * (nr_max - nr_min)
-        a = (1 - nr) * a + nr * noise  # type: np.ndarray
+    def make_action(self, s, exploration, ep, episodes):
+        a = self.actor.predict([s])
+        a = self.add_noise(a, exploration.noise(), ep, episodes)  # type: np.ndarray
         return a
 
     def execute_step(self, a, s):
@@ -75,45 +83,49 @@ class DDPG_PeterKovacs:
         s = s2
         return r, s, terminal
 
-    def sample_batch(self):
-        batch = self.buff.getBatch(cfg.BATCH_SIZE)
-        s_batch, a_batch, r_batch, s2_batch, t_batch = zip(*batch)
-        return a_batch, batch, r_batch, s2_batch, s_batch, t_batch
+    def make_target(self, batch):
+        s, a, r, s2, done = self.zip_batch(batch)
 
-    def make_target(self, batch, r_batch, s2_batch, t_batch):
-        target_q = self.critic.target_predict(s2_batch, self.actor.target_predict(s2_batch))
+        target_q = self.critic.target_predict(s2, self.actor.target_predict(s2))
+
         y = []
         for i in xrange(len(batch)):
-            if t_batch[i]:
-                y.append(r_batch[i])
+            if done[i]:
+                y.append(r[i])
             else:
-                y.append(r_batch[i] + cfg.GAMMA * target_q[i])
-        y = np.reshape(y, (-1, 1))
-        return y
+                y.append(r[i] + cfg.GAMMA * target_q[i])
+        return np.reshape(y, (-1, 1))
 
-    def update_critic(self, a_batch, max_q, s_batch, y):
-        predicted_q, _ = self.critic.train(y, s_batch, a_batch)
-        max_q += np.amax(predicted_q)
-        return max_q
+    def update_critic(self, batch, y):
+        s, a, r, s2, done = self.zip_batch(batch)
+        q, _ = self.critic.train(y, s, a)
+        return np.amax(q)
 
-    def update_actor(self, s_batch):
-        grads = self.critic.gradients(s_batch, self.actor.predict(s_batch))
-        self.actor.train(s_batch, grads)
+    def update_actor(self, batch):
+        s, a, r, s2, done = self.zip_batch(batch)
+        grads = self.critic.gradients(s, self.actor.predict(s))
+        self.actor.train(s, grads)
 
     def update_target_networks(self):
         self.actor.target_train()
         self.critic.target_train()
 
-    def predict(self, s):
-        return self.actor.predict([s])
+    def get_batch(self):
+        return self.buff.getBatch(cfg.BATCH_SIZE)
 
     def get_var_list(self):
         return tf.get_collection(tf.GraphKeys.VARIABLES, scope=self.scope)
 
-    def save(self, path):
-        saver = tf.train.Saver(self.get_var_list())
-        saver.save(self.sess, path)
+    @staticmethod
+    def zip_batch(batch):
+        s, a, r, s2, done = zip(*batch)
+        return s, a, r, s2, done
 
-    def restore(self, path):
-        saver = tf.train.Saver(self.get_var_list())
-        saver.restore(self.sess, path)
+    @staticmethod
+    def add_noise(action, noise, episode, episodes):
+        nr_max = 0.5
+        nr_min = 0.4
+        nr_eps = min(1000., episodes / 10.)
+        nk = 1 - min(1., float(episode) / nr_eps)
+        k = nr_min + nk * (nr_max - nr_min)
+        return (1 - k) * action + k * noise
