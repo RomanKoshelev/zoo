@@ -21,11 +21,9 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
 
         with tf.variable_scope(self.scope):
             with tf.variable_scope('actor'):
-                self.actor = \
-                    ActorNetwork(sess, world.obs_dim, world.act_dim, cfg.TAU, cfg.LRA, cfg.L2A)
+                self.actor = ActorNetwork(sess, world.obs_dim, world.act_dim, cfg)
             with tf.variable_scope('critic'):
-                self.critic = \
-                    CriticNetwork(sess, world.obs_dim, world.act_dim, cfg.TAU, cfg.LRC, cfg.L2C)
+                self.critic = CriticNetwork(sess, world.obs_dim, world.act_dim, cfg)
 
         self._initialize_variables()
 
@@ -37,7 +35,7 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
         for episode in xrange(episodes):
             s = self.world.reset()
 
-            if episode % 10 == 0:
+            if episode % 100 == 0:
                 self.exploration.reset()
 
             for step in xrange(steps):

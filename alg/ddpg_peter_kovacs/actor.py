@@ -6,15 +6,15 @@ HIDDEN2_UNITS = 300
 
 # noinspection PyPep8Naming
 class ActorNetwork(object):
-    def __init__(self, sess, state_size, action_size, TAU, LEARNING_RATE, L2):
+    def __init__(self, sess, state_size, action_size, cfg):
         self.sess = sess
-        self.TAU = TAU
-        self.L2 = L2
+        self.TAU = cfg.TAU
+        self.L2 = cfg.L2A
 
-        with tf.variable_scope("master"):
+        with tf.variable_scope('master'):
             self.state, self.out, self.net = self.create_actor_network(state_size, action_size)
 
-        with tf.variable_scope("target"):
+        with tf.variable_scope('target'):
             self.target_state, self.target_update, self.target_net, self.target_out = \
                 self.crate_actor_target_network(state_size, self.net)
 
@@ -23,7 +23,7 @@ class ActorNetwork(object):
         self.params_grad = tf.gradients(
             self.out, self.net, -self.action_gradient)
         grads = zip(self.params_grad, self.net)
-        self.optimize = tf.train.AdamOptimizer(LEARNING_RATE).apply_gradients(grads)
+        self.optimize = tf.train.AdamOptimizer(cfg.LRA).apply_gradients(grads)
 
     def train(self, states, action_grads):
         self.sess.run(self.optimize, feed_dict={

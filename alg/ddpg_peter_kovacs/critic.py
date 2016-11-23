@@ -6,25 +6,25 @@ HIDDEN2_UNITS = 300
 
 # noinspection PyPep8Naming
 class CriticNetwork(object):
-    def __init__(self, sess, state_size, action_size, TAU, LEARNING_RATE, L2):
+    def __init__(self, sess, state_size, action_size, cfg):
         self.sess = sess
-        self.TAU = TAU
-        self.L2 = L2
+        self.TAU = cfg.TAU
+        self.L2 = cfg.L2C
 
-        with tf.variable_scope("master"):
+        with tf.variable_scope('master'):
             self.state, self.action, self.out, self.net = \
                 self.create_critic_network(state_size, action_size)
 
-        with tf.variable_scope("target"):
+        with tf.variable_scope('target'):
             self.target_state, self.target_action, self.target_update, self.target_net, self.target_out = \
                 self.crate_critic_target_network(state_size, action_size, self.net)
 
         # TRAINING
-        self.y = tf.placeholder("float", [None, 1], name='y')
+        self.y = tf.placeholder(tf.float32, [None, 1], name='y')
         self.error = tf.reduce_mean(tf.square(self.y - self.out))
         self.weight_decay = tf.add_n([self.L2 * tf.nn.l2_loss(var) for var in self.net])
         self.loss = self.error + self.weight_decay
-        self.optimize = tf.train.AdamOptimizer(LEARNING_RATE).minimize(self.loss)
+        self.optimize = tf.train.AdamOptimizer(cfg.LRC).minimize(self.loss)
 
         # GRADIENTS for policy update
         self.action_grads = tf.gradients(self.out, self.action)
