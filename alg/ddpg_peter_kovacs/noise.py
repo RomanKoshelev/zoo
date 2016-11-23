@@ -11,13 +11,12 @@ import numpy.random as nr
 
 # noinspection PyArgumentList
 class OUNoise:
-    """docstring for OUNoise"""
 
-    def __init__(self, action_dimension, mu=0., theta=0.15, sigma=.2):
+    def __init__(self, action_dimension, mu=0., sigma=.3, theta=0.15):
         self.action_dimension = action_dimension
         self.mu = mu
-        self.theta = theta
         self.sigma = sigma
+        self.theta = theta
         self.state = np.ones(self.action_dimension) * self.mu
         self.reset()
 
@@ -32,7 +31,7 @@ class OUNoise:
 
 
 if __name__ == '__main__':
-    ou = OUNoise(3, mu=0., sigma=.2, theta=.15)
+    ou = OUNoise(3, mu=0., sigma=.3, theta=.15)
     states = []
     for i in range(1000):
         states.append(ou.noise())

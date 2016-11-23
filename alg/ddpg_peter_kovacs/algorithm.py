@@ -17,7 +17,7 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
 
         self.world = world
         self.buff = ReplayBuffer(cfg.BUFFER_SIZE)
-        self.exploration = OUNoise(self.world.act_dim, mu=0., sigma=.2, theta=.15)
+        self.exploration = OUNoise(self.world.act_dim, mu=0., sigma=.3, theta=.15)
 
         with tf.variable_scope(self.scope):
             with tf.variable_scope('actor'):
@@ -68,7 +68,7 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
 
     def _add_noise(self, a):
         a = a + self.exploration.noise()
-        return np.clip(a, -1, 1)
+        return a  # np.clip(a, -1, 1)
 
     def _world_step(self, a):
         s2, r, done, _ = self.world.step(self.world.scale_action(a))
