@@ -54,9 +54,9 @@ class GymWorld:
         return self.state
 
     def scale_action(self, a):
-        ak = (a + 1.) / 2.
-        ae = self.act_box[0] + (self.act_box[1] - self.act_box[0]) * ak  # type: np.ndarray
-        return np.clip(ae, self.act_box[0], self.act_box[1])[0]
+        k = (a + 1.) / 2.
+        a = self.act_box[0] + (self.act_box[1] - self.act_box[0]) * k  # type: np.ndarray
+        return np.clip(a, self.act_box[0], self.act_box[1])
 
     @property
     def summary(self):

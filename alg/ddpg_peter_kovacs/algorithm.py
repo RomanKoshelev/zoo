@@ -47,62 +47,56 @@ class DDPG_PeterKovacs:
             max_q = 0
 
             for step in xrange(steps):
+                # play
                 a = self.make_action(s, noise, episode, episodes)
+                r, s2, done = self.world_step(a)
+                self.add_to_buffer(s, a, r, s2, done)
+                s = s2
 
-                r, s, done = self.execute_step(a, s)
-
-                batch = self.get_batch()
-
-                y = self.make_target(batch)
-
-                max_q += self.update_critic(batch, y)
-
-                self.update_actor(batch)
-
+                # learn
+                bs, ba, br, bs2, bd = self.get_batch()
+                y = self.make_target(br, bs2, bd)
+                max_q += self.update_critic(y, bs, ba)
+                self.update_actor(bs)
                 self.update_target_networks()
 
                 # end episode
                 self.world.render()
                 reward += r
                 if done or (step == steps - 1):
-                    print("episode: %3d  | Reward: %+7.0f  |  Qmax: %+8.2f" %
-                          (episode, reward, max_q / float(step)))
-                    noise.reset()
+                    print("Ep: %3d  |  Reward: %+7.0f  |  Qmax: %+8.2f" % (episode, reward, max_q / float(step)))
                     break
 
+            noise.reset()
             callback(episode)
 
     def make_action(self, s, exploration, ep, episodes):
-        a = self.actor.predict([s])
+        a = self.actor.predict([s])[0]
         a = self.add_noise(a, exploration.noise(), ep, episodes)  # type: np.ndarray
         return a
 
-    def execute_step(self, a, s):
-        s2, r, terminal, _ = self.world.step(self.world.scale_action(a))
-        self.buff.add(s, a[0], r, s2, terminal)
-        s = s2
-        return r, s, terminal
+    def world_step(self, a):
+        s2, r, done, _ = self.world.step(self.world.scale_action(a))
+        return r, s2, done
 
-    def make_target(self, batch):
-        s, a, r, s2, done = self.zip_batch(batch)
+    def add_to_buffer(self, s, a, r, s2, done):
+        self.buff.add(s, a, r, s2, done)
 
-        target_q = self.critic.target_predict(s2, self.actor.target_predict(s2))
-
+    def make_target(self, r, s2, done):
+        q = self.critic.target_predict(s2, self.actor.target_predict(s2))
         y = []
-        for i in xrange(len(batch)):
+        for i in xrange(len(s2)):
             if done[i]:
                 y.append(r[i])
             else:
-                y.append(r[i] + cfg.GAMMA * target_q[i])
+                y.append(r[i] + cfg.GAMMA * q[i])
         return np.reshape(y, (-1, 1))
 
-    def update_critic(self, batch, y):
-        s, a, r, s2, done = self.zip_batch(batch)
+    def update_critic(self, y, s, a):
         q, _ = self.critic.train(y, s, a)
         return np.amax(q)
 
-    def update_actor(self, batch):
-        s, a, r, s2, done = self.zip_batch(batch)
+    def update_actor(self, s):
         grads = self.critic.gradients(s, self.actor.predict(s))
         self.actor.train(s, grads)
 
@@ -111,15 +105,12 @@ class DDPG_PeterKovacs:
         self.critic.target_train()
 
     def get_batch(self):
-        return self.buff.getBatch(cfg.BATCH_SIZE)
+        batch = self.buff.getBatch(cfg.BATCH_SIZE)
+        s, a, r, s2, done = zip(*batch)
+        return s, a, r, s2, done
 
     def get_var_list(self):
         return tf.get_collection(tf.GraphKeys.VARIABLES, scope=self.scope)
-
-    @staticmethod
-    def zip_batch(batch):
-        s, a, r, s2, done = zip(*batch)
-        return s, a, r, s2, done
 
     @staticmethod
     def add_noise(action, noise, episode, episodes):
