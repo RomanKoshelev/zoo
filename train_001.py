@@ -10,7 +10,7 @@ from core.experiment import Experiment
 
 def train_mujoco_tentacle_world():
     train = TrainProc(TensorflowPlatform, TentacleWorld, TentacleAgent, DdpgMind, episodes=30000, steps=150)
-    exp = Experiment("001", train)
+    exp = Experiment(exp_id="001", proc=train)
     exp()
 
 if __name__ == '__main__':

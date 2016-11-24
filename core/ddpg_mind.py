@@ -58,4 +58,4 @@ class DdpgMind:
 
     def predict(self, state):
         a = self._algorithm.predict(state)
-        return self._algorithm.world_action(a)
+        return self.world.scale_action(a)
