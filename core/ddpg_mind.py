@@ -2,6 +2,8 @@ from __future__ import print_function
 from alg.ddpg_peter_kovacs.algorithm import DDPG_PeterKovacs
 import numpy as np
 
+from core.context import Context
+
 
 class DdpgMind:
     def __init__(self, platform, world):
@@ -27,13 +29,14 @@ class DdpgMind:
             self.world.render()
             self._reward += r
             self._max_q.append(maxq)
+            Context.window_title['step'] = ""
 
         def on_episod(ep):
             save_every_episodes = 100
 
             max_q = np.mean(self._max_q)  # type: float
-            print("Ep: %3d  |  Reward: %+7.0f  |  Qmax: %+8.1f" %
-                  (ep, self._reward, max_q))
+            print("Ep: %3d  |  Reward: %+7.0f  |  Qmax: %+8.1f" % (ep, self._reward, max_q))
+            Context.window_title['episod'] = "|  %d/%d: R = %+.0f, Q = +%.0f" % (ep, episodes, self._reward, max_q)
 
             if (ep > 0 and ep % save_every_episodes == 0) or (ep == episodes - 1):
                 self.save(weigts_path)

@@ -1,5 +1,7 @@
 import os
 
+from core.context import Context
+
 BASE_PATH = "./out/experiments"
 
 
@@ -11,6 +13,7 @@ class Experiment:
         self._make_folder(self.path)
 
     def __call__(self):
+        Context.window_title['exp'] = "|  %s #%s" % (self.proc.__class__.__name__, self.name)
         self.proc(path=self.path)
 
     @property

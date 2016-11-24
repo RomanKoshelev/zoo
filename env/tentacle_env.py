@@ -1,5 +1,6 @@
 import numpy as np
 from gym import utils
+from mujoco_py import glfw
 
 from core.context import Context
 from env.zoo_mujoco_env import ZooMujocoEnv
@@ -20,6 +21,8 @@ class TentacleEnv(ZooMujocoEnv, utils.EzPickle):
         r = self.make_reward(d)
 
         done = False
+
+        self._update_window_title()
         return ob, r, done, {}
 
     def _get_obs(self):
@@ -60,3 +63,12 @@ class TentacleEnv(ZooMujocoEnv, utils.EzPickle):
         rw_touch = + 100. * ((touch_radius / max(target_dist, touch_radius)) ** 3)
         rw_dist = - 10. * (target_dist ** 2)
         return rw_touch + rw_dist
+
+    def _update_window_title(self):
+        viewer = self._get_viewer()
+        window = viewer.window
+        # mx, my = glfw.get_cursor_pos(window)
+        t = Context.window_title
+        d = "  "
+        title = t['app'] + d + t['exp'] + d + t['episod'] + d + t['step'] + d + t['info']
+        glfw.set_window_title(window, title)
