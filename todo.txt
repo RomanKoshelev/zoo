@@ -1,4 +1,9 @@
 TODO:
 
+- run demo experiments
+- use pickle to save/restore enteties states
+    http://stackoverflow.com/questions/6568007/how-do-i-save-and-restore-multiple-variables-in-python
+    http://python.about.com/od/pythonstandardlibrary/a/pickle_intro.htm
+    https://www.safaribooksonline.com/library/view/head-first-python/9781449397524/ch04.html
 - run experiment with training the tentacle
 - move to python 3.4
