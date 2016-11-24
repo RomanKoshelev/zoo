@@ -18,6 +18,8 @@ class Experiment:
 
     def _update_title(self):
         Context.window_title['exp'] = "|  %s #%s" % (self.proc.__class__.__name__, self.id)
+        if self.id != self.ini_id:
+            Context.window_title['exp'] += "[%s]" % self.ini_id
 
     @property
     def out_path(self):

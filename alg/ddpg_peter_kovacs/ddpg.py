@@ -53,21 +53,19 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
                 self._update_actor(bs)
                 self._update_target_networks()
 
-                # callback
                 on_step(r, maxq)
 
-                # end episode
                 if done:
                     break
 
-            # callback
             on_episode(episode)
 
     def _make_action(self, s):
         return self.actor.predict([s])[0]
 
     def _add_noise(self, a):
-        a = a + self.exploration.noise()
+        k = .1
+        a += k * self.exploration.noise()
         return a  # np.clip(a, -1, 1)
 
     def _world_step(self, a):

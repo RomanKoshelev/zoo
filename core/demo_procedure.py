@@ -1,3 +1,4 @@
+from core.context import Context
 from core.procedure import Procedure
 import os
 
@@ -26,6 +27,9 @@ class DemoProc(Procedure):
                     a = mind.predict(s)
                     s, r, done, _ = world.step(a)
                     reward += r
-                    if done or (t == steps - 1):
-                        print("%3d  Reward = %+7.0f" % (ep, reward))
-                        break
+                print("%3d  Reward = %+7.0f" % (ep, reward))
+                self.update_title(ep, reward)
+
+    @staticmethod
+    def update_title(ep, reward):
+        Context.window_title['episod'] = "|  %d: R = %+.0f" % (ep, reward)

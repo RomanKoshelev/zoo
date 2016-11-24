@@ -9,8 +9,8 @@ from core.experiment import Experiment
 
 
 def demo_mujoco_tentacle_world():
-    demo = DemoProc(TensorflowPlatform, TentacleWorld, TentacleAgent, DdpgMind, episodes=30000, steps=100)
-    exp = Experiment("demo", demo, ini_from="002")
+    demo = DemoProc(TensorflowPlatform, TentacleWorld, TentacleAgent, DdpgMind, episodes=30000, steps=150)
+    exp = Experiment(exp_id="demo", proc=demo, ini_from="003")
     exp()
 
 if __name__ == '__main__':

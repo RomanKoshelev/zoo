@@ -1,5 +1,5 @@
 from __future__ import print_function
-from alg.ddpg_peter_kovacs.algorithm import DDPG_PeterKovacs
+from alg.ddpg_peter_kovacs.ddpg import DDPG_PeterKovacs
 import numpy as np
 
 from core.context import Context
