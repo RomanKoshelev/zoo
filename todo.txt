@@ -1,7 +1,12 @@
 TODO:
 
+
+ 001 = path
+
+ use from_path and to_path args of the experiment
+
 - run demo experiments
-- use pickle to save/restore enteties states
+- use pickle to save/restore algorithm state: episodes, replay buffer
     http://stackoverflow.com/questions/6568007/how-do-i-save-and-restore-multiple-variables-in-python
     http://python.about.com/od/pythonstandardlibrary/a/pickle_intro.htm
     https://www.safaribooksonline.com/library/view/head-first-python/9781449397524/ch04.html
