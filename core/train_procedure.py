@@ -1,15 +1,16 @@
 import os
 
+from core.context import Context
 from core.procedure import Procedure
 
 
 class TrainProc(Procedure):
-    def __init__(self, platform_class, world_class, agent_class, mind_class, **kwargs):
-        super(self.__class__, self).__init__(platform_class, world_class, agent_class, mind_class, kwargs)
+    def __init__(self, platform_class, world_class, agent_class, mind_class):
+        super(self.__class__, self).__init__(platform_class, world_class, agent_class, mind_class)
 
     def __call__(self, ini_path, out_path):
-        episodes = self.kwargs['episodes']
-        steps = self.kwargs['steps']
+        episodes = Context.config['episodes']
+        steps = Context.config['steps']
 
         platform, world, mind = self._make_instances()
         w_out_path = os.path.join(out_path, "weights.ckpt")

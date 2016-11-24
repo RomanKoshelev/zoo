@@ -29,10 +29,6 @@ class Experiment:
     def ini_path(self):
         return os.path.join(BASE_PATH, self.ini_id)
 
-    @property
-    def setting(self):
-        return self.proc.__class__.__name__ + "_" + self.proc.setting
-
     @staticmethod
     def _make_folder(path):
         if not os.path.exists(path):
