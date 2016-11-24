@@ -1,7 +1,4 @@
-class Context:
+class Context(object):
     window_title = dict(app="Rmus Zoo", exp="", episod="", step="", info="")
     world = None
     config = {}
-
-    def __init__(self):
-        pass

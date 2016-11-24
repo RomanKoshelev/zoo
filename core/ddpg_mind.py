@@ -12,6 +12,7 @@ class DdpgMind:
         self._algorithm = None
         self._reward = None
         self._max_q = None
+        self._nr = None
 
     def __enter__(self):
         self._algorithm = DDPG_PeterKovacs(self.platform.session, self.world)
@@ -25,9 +26,10 @@ class DdpgMind:
         self._reward = 0
         self._max_q = []
 
-        def on_step(r, maxq):
+        def on_step(r, maxq, nr):
             self.world.render()
             self._reward += r
+            self._nr = nr
             self._max_q.append(maxq)
             Context.window_title['step'] = ""
 
@@ -35,8 +37,8 @@ class DdpgMind:
             save_every_episodes = 100
 
             max_q = np.mean(self._max_q)  # type: float
-            print("Ep: %3d  |  Reward: %+7.0f  |  Qmax: %+8.1f" % (ep, self._reward, max_q))
-            Context.window_title['episod'] = "|  %d/%d: R = %+.0f, Q = +%.0f" % (ep, episodes, self._reward, max_q)
+            print("Ep: %3d  |  NR: %.2f  |  Reward: %+7.0f  |  Qmax: %+8.1f" % (ep, self._nr, self._reward, max_q))
+            Context.window_title['episod'] = "|  %d/%d: R = %+.0f, Q = %+.0f" % (ep, episodes, self._reward, max_q)
 
             if (ep > 0 and ep % save_every_episodes == 0) or (ep == episodes - 1):
                 self.save(weigts_path)

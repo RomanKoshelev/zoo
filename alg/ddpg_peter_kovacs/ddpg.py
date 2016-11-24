@@ -17,7 +17,7 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
 
         self.world = world
         self.buff = ReplayBuffer(cfg.BUFFER_SIZE)
-        self.exploration = OUNoise(self.world.act_dim, mu=0., sigma=.1, theta=.01)  # .3 .15
+        self.exploration = self.create_exploration()
 
         with tf.variable_scope(self.scope):
             with tf.variable_scope('actor'):
@@ -41,7 +41,8 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
             for step in xrange(steps):
                 # play
                 a = self._make_action(s)
-                a = self._add_noise(a)
+                nr = self._get_noise_rate(episode / float(episodes))
+                a = self._add_noise(a, nr)
                 r, s2, done = self._world_step(a)
                 self._add_to_buffer(s, a, r, s2, done)
                 s = s2
@@ -53,7 +54,7 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
                 self._update_actor(bs)
                 self._update_target_networks()
 
-                on_step(r, maxq)
+                on_step(r, maxq, nr)
 
                 if done:
                     break
@@ -63,9 +64,8 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
     def _make_action(self, s):
         return self.actor.predict([s])[0]
 
-    def _add_noise(self, a):
-        k = .1
-        a += k * self.exploration.noise()
+    def _add_noise(self, a, nr):
+        a += nr * self.exploration.noise()
         return a  # np.clip(a, -1, 1)
 
     def _world_step(self, a):
@@ -101,3 +101,14 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
         batch = self.buff.getBatch(cfg.BATCH_SIZE)
         s, a, r, s2, done = zip(*batch)
         return s, a, r, s2, done
+
+    def create_exploration(self):
+        from core.context import Context
+        return OUNoise(self.world.act_dim, mu=0,
+                       sigma=Context.config['train.noise_sigma'],
+                       theta=Context.config['train.noise_theta'])
+
+    @staticmethod
+    def _get_noise_rate(progress):
+        from core.context import Context
+        return Context.config.get('train.noise_rate_method')(progress)
