@@ -16,8 +16,6 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
         super(self.__class__, self).__init__(sess, world.id)
 
         self.world = world
-        self.buff = ReplayBuffer(cfg.BUFFER_SIZE)
-        self.exploration = self.create_exploration()
 
         with tf.variable_scope(self.scope):
             with tf.variable_scope('actor'):
@@ -32,23 +30,26 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
 
     def train(self, episodes, steps, on_episode, on_step):
 
+        expl = self.create_exploration()
+        buff = ReplayBuffer(cfg.BUFFER_SIZE)
+
         for episode in xrange(episodes):
             s = self.world.reset()
 
             if episode % 100 == 0:
-                self.exploration.reset()
+                expl.reset()
 
             for step in xrange(steps):
                 # play
                 a = self._make_action(s)
                 nr = self._get_noise_rate(episode / float(episodes))
-                a = self._add_noise(a, nr)
-                r, s2, done = self._world_step(a)
-                self._add_to_buffer(s, a, r, s2, done)
+                a += nr * expl.noise()
+                s2, r, done = self._world_step(a)
+                buff.add(s, a, r, s2, done)
                 s = s2
 
                 # learn
-                bs, ba, br, bs2, bd = self._get_batch()
+                bs, ba, br, bs2, bd = self._get_batch(buff)
                 y = self._make_target(br, bs2, bd)
                 maxq = self._update_critic(y, bs, ba)
                 self._update_actor(bs)
@@ -64,16 +65,9 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
     def _make_action(self, s):
         return self.actor.predict([s])[0]
 
-    def _add_noise(self, a, nr):
-        a += nr * self.exploration.noise()
-        return a  # np.clip(a, -1, 1)
-
     def _world_step(self, a):
         s2, r, done, _ = self.world.step(self.world.scale_action(a))
-        return r, s2, done
-
-    def _add_to_buffer(self, s, a, r, s2, done):
-        self.buff.add(s, a, r, s2, done)
+        return s2, r, done
 
     def _make_target(self, r, s2, done):
         q = self.critic.target_predict(s2, self.actor.target_predict(s2))
@@ -97,8 +91,9 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
         self.actor.target_train()
         self.critic.target_train()
 
-    def _get_batch(self):
-        batch = self.buff.getBatch(cfg.BATCH_SIZE)
+    @staticmethod
+    def _get_batch(buff):
+        batch = buff.getBatch(cfg.BATCH_SIZE)
         s, a, r, s2, done = zip(*batch)
         return s, a, r, s2, done
 
