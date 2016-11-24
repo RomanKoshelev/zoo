@@ -30,8 +30,8 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
 
     def train(self, episodes, steps, on_episode, on_step):
 
-        expl = self.create_exploration()
-        buff = ReplayBuffer(cfg.BUFFER_SIZE)
+        expl = self._create_exploration()
+        buff = self._create_buffer()
 
         for episode in xrange(episodes):
             s = self.world.reset()
@@ -97,7 +97,7 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
         s, a, r, s2, done = zip(*batch)
         return s, a, r, s2, done
 
-    def create_exploration(self):
+    def _create_exploration(self):
         from core.context import Context
         return OUNoise(self.world.act_dim, mu=0,
                        sigma=Context.config['train.noise_sigma'],
@@ -106,4 +106,9 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
     @staticmethod
     def _get_noise_rate(progress):
         from core.context import Context
-        return Context.config.get('train.noise_rate_method')(progress)
+        return Context.config['train.noise_rate_method'](progress)
+
+    @staticmethod
+    def _create_buffer():
+        from core.context import Context
+        return ReplayBuffer(Context.config['train.buffer_size'])

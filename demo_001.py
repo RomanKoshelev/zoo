@@ -1,5 +1,6 @@
 from __future__ import print_function
 
+from core.context import Context
 from core.ddpg_mind import DdpgMind
 from core.demo_procedure import DemoProc
 from core.tensorflow_platform import TensorflowPlatform
@@ -9,7 +10,12 @@ from core.experiment import Experiment
 
 
 def demo_mujoco_tentacle_world():
-    demo = DemoProc(TensorflowPlatform, TentacleWorld, TentacleAgent, DdpgMind, episodes=30000, steps=100)
+    Context.config = {
+        'episodes': 30000,
+        'steps': 100,
+    }
+
+    demo = DemoProc(TensorflowPlatform, TentacleWorld, TentacleAgent, DdpgMind)
     exp = Experiment("001.demo", demo, ini_from="001")
     exp()
 

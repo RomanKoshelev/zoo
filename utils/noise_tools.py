@@ -1,4 +1,4 @@
-def staircase5_noise_rate(progress):
+def staircase_5(progress):
     assert 0. <= progress <= 1.
 
     nr = 1.
@@ -15,3 +15,9 @@ def staircase5_noise_rate(progress):
         nr = 0.0
 
     return nr
+
+
+def linear_2(progress):
+    assert 0. <= progress <= 1.
+
+    return 2 * (1 - progress)
