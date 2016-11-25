@@ -10,6 +10,7 @@ from buffer import ReplayBuffer
 from critic import CriticNetwork
 from noise import OUNoise
 from core.context import Context
+from utils.string_tools import tab
 
 
 class DDPG_PeterKovacs(TensorflowAlgorithm):
@@ -31,9 +32,9 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
     def __str__(self):
         return "%s:\n\t%s\n\t%s\n\t%s" % (
             self.__class__.__name__,
-            self.world,
-            self.buffer,
-            "episode: %s" % self.episode,
+            "world: " + tab(self.world),
+            "buffer: " + tab(self.buffer),
+            "episode: " + str(self.episode),
         )
 
     def predict(self, s):

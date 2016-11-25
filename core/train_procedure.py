@@ -1,3 +1,4 @@
+from core.context import Context
 from core.procedure import Procedure
 
 
@@ -16,7 +17,9 @@ class TrainProc(Procedure):
         platform, world, mind = self._make_instances()
 
         with platform, world, mind:
+            print(Context.config)
             print(world.summary)
+            print("\nRestoring [%s]..\n" % init_path)
             mind.restore(init_path)
-            print(mind)
+            print(str(mind).replace('\t', "  "))
             mind.train(work_path)

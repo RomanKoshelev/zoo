@@ -4,6 +4,7 @@ import os
 
 from alg.ddpg_peter_kovacs.ddpg_alg import DDPG_PeterKovacs
 from core.context import Context
+from utils.string_tools import tab
 from utils.os_tools import provide_folder
 
 MODEL_PATH = "model/weights.ckpt"
@@ -25,11 +26,11 @@ class DdpgMind:
         pass
 
     def __str__(self):
-        return "%s:\n  %s\n  %s\n  %s\n" % (
+        return "%s\n\t%s\n\t%s\n\t%s\n" % (
             self.__class__.__name__,
-            self.platform,
-            self.world,
-            self._algorithm,
+            "platform: " + tab(self.platform),
+            "world: " + tab(self.world),
+            "algorithm: " + tab(self._algorithm),
         )
 
     def predict(self, state):
@@ -48,6 +49,7 @@ class DdpgMind:
             eps = Context.config['episodes']
             sve = Context.config['train.save_every_episodes']
             if (ep > self._saved_episode and ep % sve == 0) or (ep == eps):
+                print("\nSaving [%s]..\n" % work_path)
                 self._saved_episode = ep
                 self.save(work_path)
 
@@ -59,12 +61,10 @@ class DdpgMind:
         return self._algorithm.train(Context.config['episodes'], Context.config['steps'], on_episod)
 
     def save(self, folder):
-        print("\nSaving [%s]..\n" % folder)
         self.save_weights(folder)
         self.save_train_state(folder)
 
     def restore(self, folder):
-        print("\nRestoring [%s]..\n" % folder)
         self.restore_weights(folder)
         self.restore_train_state(folder)
 

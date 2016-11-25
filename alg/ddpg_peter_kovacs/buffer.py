@@ -4,12 +4,16 @@ import random
 
 class ReplayBuffer(object):
     def __init__(self, buffer_size):
-        self.buffer_size = buffer_size
+        self.buffer_size = int(buffer_size)
         self.num_experiences = 0
         self.buffer = deque()
 
     def __str__(self):
-        return "%s: %d/%d" % (self.__class__.__name__, self.num_experiences, self.buffer_size)
+        return "%s:\n\t%s\n\t%s" % (
+            self.__class__.__name__,
+            "buffer_size: " + str(self.buffer_size),
+            "num_experiences: " + str(self.num_experiences),
+        )
 
     def get_batch(self, batch_size):
         # Randomly sample batch_size examples

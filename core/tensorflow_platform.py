@@ -1,7 +1,7 @@
 import tensorflow as tf
 
 
-class TensorflowPlatform(object):
+class TensorflowPlatform:
     def __init__(self):
         self.session = None
 
@@ -16,5 +16,6 @@ class TensorflowPlatform(object):
         self.session = tf.Session(config=config)
         return self
 
-    def __exit__(self):
+    # noinspection PyUnusedLocal
+    def __exit__(self, *args):
         self.session.close()

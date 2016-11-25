@@ -1,4 +1,5 @@
 from core.gym_world import GymWorld
+from utils.string_tools import tab
 
 
 class TentacleWorld(GymWorld):
@@ -9,6 +10,6 @@ class TentacleWorld(GymWorld):
     def __str__(self):
         return "%s:\n\t%s\n\t%s" % (
             self.__class__.__name__,
-            self.agent,
-            "id: %s" % self.id,
+            "id: " + self.id,
+            "agent: " + tab(self.agent),
         )
