@@ -82,8 +82,7 @@ class DdpgMind:
             pickle.dump([
                 self._algorithm.episode,
                 self._algorithm.buffer,
-                # todo: qmax
-            ], f)
+            ], f, protocol=pickle.HIGHEST_PROTOCOL)
 
     def restore_train_state(self, folder):
         import pickle
