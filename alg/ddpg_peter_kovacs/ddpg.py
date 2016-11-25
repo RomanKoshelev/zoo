@@ -56,7 +56,7 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
             for step in xrange(steps):
                 # play
                 a = self._make_action(s)
-                a += nrate * expl.noise()
+                a = self._add_noise(a, expl.noise(), nrate)
                 s2, r, done = self._world_step(a)
                 self.buffer.add(s, a, r, s2, done)
                 s = s2
@@ -77,6 +77,10 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
                     break
 
             on_episode(self.episode, reward, nrate, np.mean(maxq))
+
+    @staticmethod
+    def _add_noise(a, n, k):
+        return (1 - k) * a + k * n
 
     def _make_action(self, s):
         return self.actor.predict([s])[0]
