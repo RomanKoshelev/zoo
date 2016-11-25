@@ -28,15 +28,15 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
     def predict(self, s):
         return self.actor.predict([s])
 
-    def train(self, episodes, steps, on_episode):
+    def train(self, first_episode, last_episode, steps, on_episode):
 
         expl = self._create_exploration()
         buff = self._create_buffer()
 
-        for episode in xrange(episodes):
+        for episode in range(first_episode, last_episode):
 
             s = self.world.reset()
-            nrate = self._get_noise_rate(episode, episodes)
+            nrate = self._get_noise_rate(episode, last_episode)
             maxq = []
             reward = 0
 
