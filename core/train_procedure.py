@@ -19,7 +19,7 @@ class TrainProc(Procedure):
         with platform, world, mind:
             print(Context.config)
             print(world.summary)
-            print("\nRestoring [%s]..\n" % init_path)
+            print("\nRestoring [%s] ...\n" % init_path)
             mind.restore(init_path)
             print(str(mind).replace('\t', "  "))
             mind.train(work_path)

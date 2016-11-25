@@ -49,14 +49,14 @@ class DdpgMind:
             eps = Context.config['episodes']
             sve = Context.config['train.save_every_episodes']
             if (ep > self._saved_episode and ep % sve == 0) or (ep == eps):
-                print("\nSaving [%s]..\n" % work_path)
+                print("\nSaving [%s] ...\n" % work_path)
                 self._saved_episode = ep
                 self.save(work_path)
 
         def on_episod(ep, reward, nr, maxq):
             log_episode(ep, nr, reward, maxq)
-            update_title(ep, nr, reward, maxq)
             save_results(ep)
+            update_title(ep, nr, reward, maxq)
 
         return self._algorithm.train(Context.config['episodes'], Context.config['steps'], on_episod)
 

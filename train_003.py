@@ -13,9 +13,9 @@ import os
 
 def train_mujoco_tentacle_world():
     Context.config = {
-        'episodes': 10000,
+        'episodes': 50000,
         'steps': 75,
-        'train.save_every_episodes': 100,
+        'train.save_every_episodes': 1000,
         'train.batch_size': 640,
         'train.buffer_size': 1e6,
         'train.noise_sigma': .1,
