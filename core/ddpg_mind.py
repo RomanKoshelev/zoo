@@ -1,7 +1,5 @@
 from __future__ import print_function
 from alg.ddpg_peter_kovacs.ddpg import DDPG_PeterKovacs
-import numpy as np
-
 from core.context import Context
 
 
@@ -10,9 +8,6 @@ class DdpgMind:
         self.platform = platform
         self.world = world
         self._algorithm = None
-        self._reward = None
-        self._max_q = None
-        self._nr = None
 
     def __enter__(self):
         self._algorithm = DDPG_PeterKovacs(self.platform.session, self.world)
@@ -22,42 +17,43 @@ class DdpgMind:
         pass
 
     def train(self, weigts_path):
-        episodes = Context.config['episodes']
-        steps = Context.config['steps']
-        save_every_episodes = Context.config['save_every_episodes']
+        def log_episode(e, n, r, q):
+            print("Ep: %3d  |  NR: %.2f  |  Reward: %+7.0f  |  Qmax: %+8.1f" % (e, n, r, q))
 
-        self._reward = 0
-        self._max_q = []
+        def update_title(e, n, r, q):
+            eps = Context.config['episodes']
+            Context.window_title['episod'] = "|  %d/%d: R = %+.0f, N = %.2f, Q = %+.0f" % (e, eps, n, r, q)
 
-        def on_step(r, maxq, nr):
-            self.world.render()
-            self._reward += r
-            self._nr = nr
-            self._max_q.append(maxq)
-            Context.window_title['step'] = ""
-
-        def on_episod(ep):
-            max_q = np.mean(self._max_q)  # type: float
-            print("Ep: %3d  |  NR: %.2f  |  Reward: %+7.0f  |  Qmax: %+8.1f" % (ep, self._nr, self._reward, max_q))
-            Context.window_title['episod'] = "|  %d/%d: R = %+.0f, Q = %+.0f" % (ep, episodes, self._reward, max_q)
-
-            if (ep > 0 and ep % save_every_episodes == 0) or (ep == episodes - 1):
+        def save_results(ep):
+            eps = Context.config['episodes']
+            sve = Context.config['train.save_every_episodes']
+            if (ep > 0 and ep % sve == 0) or (ep == eps - 1):
                 self.save(weigts_path)
 
-            self.max_q = []
-            self._reward = 0
+        def on_episod(ep, reward, nr, maxq):
+            log_episode(ep, nr, reward, maxq)
+            update_title(ep, nr, reward, maxq)
+            save_results(ep)
 
-        return self._algorithm.train(episodes, steps, on_episod, on_step)
+        episodes = Context.config['episodes']
+        steps = Context.config['steps']
+        return self._algorithm.train(episodes, steps, on_episod)
 
     def save(self, folder):
         print("\nSaving [%s].." % folder)
-        self._algorithm.save(self.weights_path(folder))
+        self.save_weights(folder)
         print("Done.\n")
 
     def restore(self, folder):
         print("\nRestoring [%s].." % folder)
-        self._algorithm.restore(self.weights_path(folder))
+        self.restore_weights(folder)
         print("Done.\n")
+
+    def restore_weights(self, folder):
+        self._algorithm.restore(self.weights_path(folder))
+
+    def save_weights(self, folder):
+        self._algorithm.save(self.weights_path(folder))
 
     def predict(self, state):
         a = self._algorithm.predict(state)

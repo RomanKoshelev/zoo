@@ -28,13 +28,17 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
     def predict(self, s):
         return self.actor.predict([s])
 
-    def train(self, episodes, steps, on_episode, on_step):
+    def train(self, episodes, steps, on_episode):
 
         expl = self._create_exploration()
         buff = self._create_buffer()
 
         for episode in xrange(episodes):
+
             s = self.world.reset()
+            nrate = self._get_noise_rate(episode, episodes)
+            maxq = []
+            reward = 0
 
             if episode % 100 == 0:
                 expl.reset()
@@ -42,8 +46,7 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
             for step in xrange(steps):
                 # play
                 a = self._make_action(s)
-                nr = self._get_noise_rate(episode / float(episodes))
-                a += nr * expl.noise()
+                a += nrate * expl.noise()
                 s2, r, done = self._world_step(a)
                 buff.add(s, a, r, s2, done)
                 s = s2
@@ -51,16 +54,19 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
                 # learn
                 bs, ba, br, bs2, bd = self._get_batch(buff)
                 y = self._make_target(br, bs2, bd)
-                maxq = self._update_critic(y, bs, ba)
+                q = self._update_critic(y, bs, ba)
                 self._update_actor(bs)
                 self._update_target_networks()
 
-                on_step(r, maxq, nr)
+                # show
+                self.world.render()
+                maxq.append(q)
+                reward += r
 
                 if done:
                     break
 
-            on_episode(episode)
+            on_episode(episode, reward, nrate, np.mean(maxq))
 
     def _make_action(self, s):
         return self.actor.predict([s])[0]
@@ -104,9 +110,9 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
                        theta=Context.config['train.noise_theta'])
 
     @staticmethod
-    def _get_noise_rate(progress):
+    def _get_noise_rate(episode, episodes):
         from core.context import Context
-        return Context.config['train.noise_rate_method'](progress)
+        return Context.config['train.noise_rate_method'](episode / float(episodes))
 
     @staticmethod
     def _create_buffer():
