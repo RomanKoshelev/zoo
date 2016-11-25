@@ -8,13 +8,13 @@ class DemoProc(Procedure):
         super(self.__class__, self).__init__(platform_class, world_class, agent_class, mind_class)
 
     # noinspection PyUnusedLocal
-    def __call__(self, ini_path, out_path):
+    def start(self, init_path, work_path):
         episodes = Context.config['episodes']
         steps = Context.config['steps']
 
         platform, world, mind = self._make_instances()
 
-        w_ini_path = os.path.join(ini_path, "weights.ckpt")
+        w_ini_path = os.path.join(init_path, "weights.ckpt")
 
         with platform, world, mind:
             print(world.summary)

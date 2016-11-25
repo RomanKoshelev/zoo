@@ -14,6 +14,7 @@ def train_mujoco_tentacle_world():
     Context.config = {
         'episodes': 30000,
         'steps': 75,
+        'save_every_episodes': 10,
         'train.buffer_size': 1e6,
         'train.noise_sigma': .1,
         'train.noise_theta': .01,
@@ -22,7 +23,7 @@ def train_mujoco_tentacle_world():
 
     train_proc = TrainProc(TensorflowPlatform, TentacleWorld, TentacleAgent, DdpgMind)
     experiment = Experiment("003", train_proc)
-    experiment()
+    experiment.start()
 
 if __name__ == '__main__':
     train_mujoco_tentacle_world()

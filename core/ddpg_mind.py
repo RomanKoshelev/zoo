@@ -21,7 +21,10 @@ class DdpgMind:
     def __exit__(self, *args):
         pass
 
-    def train(self, weigts_path, episodes, steps):
+    def train(self, weigts_path):
+        episodes = Context.config['episodes']
+        steps = Context.config['steps']
+        save_every_episodes = Context.config['save_every_episodes']
 
         self._reward = 0
         self._max_q = []
@@ -34,8 +37,6 @@ class DdpgMind:
             Context.window_title['step'] = ""
 
         def on_episod(ep):
-            save_every_episodes = 100
-
             max_q = np.mean(self._max_q)  # type: float
             print("Ep: %3d  |  NR: %.2f  |  Reward: %+7.0f  |  Qmax: %+8.1f" % (ep, self._nr, self._reward, max_q))
             Context.window_title['episod'] = "|  %d/%d: R = %+.0f, Q = %+.0f" % (ep, episodes, self._reward, max_q)
@@ -48,16 +49,21 @@ class DdpgMind:
 
         return self._algorithm.train(episodes, steps, on_episod, on_step)
 
-    def save(self, path):
-        print("\nSaving [%s].." % path)
-        self._algorithm.save(path)
+    def save(self, folder):
+        print("\nSaving [%s].." % folder)
+        self._algorithm.save(self.weights_path(folder))
         print("Done.\n")
 
-    def restore(self, path):
-        print("\nRestoring [%s].." % path)
-        self._algorithm.restore(path)
+    def restore(self, folder):
+        print("\nRestoring [%s].." % folder)
+        self._algorithm.restore(self.weights_path(folder))
         print("Done.\n")
 
     def predict(self, state):
         a = self._algorithm.predict(state)
         return self.world.scale_action(a)
+
+    @staticmethod
+    def weights_path(folder):
+        import os
+        return os.path.join(folder, "weights.ckpt")
