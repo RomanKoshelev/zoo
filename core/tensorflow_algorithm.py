@@ -18,10 +18,10 @@ class TensorflowAlgorithm(object):
     def _initialize_variables(self):
         self.sess.run(tf.initialize_variables(self._variables))
 
-    def save(self, path):
+    def save_weights(self, path):
         saver = tf.train.Saver(self._variables)
         saver.save(self.sess, path)
 
-    def restore(self, path):
+    def restore_weights(self, path):
         saver = tf.train.Saver(self._variables)
         saver.restore(self.sess, path)

@@ -18,7 +18,7 @@ class DemoProc(Procedure):
 
         with platform, world, mind:
             print(world.summary)
-            mind.restore(w_ini_path)
+            mind.restore_weights(w_ini_path)
             for ep in xrange(episodes):
                 s = world.reset()
                 reward = 0

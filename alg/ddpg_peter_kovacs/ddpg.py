@@ -9,6 +9,7 @@ from core.tensorflow_algorithm import TensorflowAlgorithm
 from buffer import ReplayBuffer
 from critic import CriticNetwork
 from noise import OUNoise
+from core.context import Context
 
 
 class DDPG_PeterKovacs(TensorflowAlgorithm):
@@ -16,6 +17,8 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
         super(self.__class__, self).__init__(sess, world.id)
 
         self.world = world
+        self.buffer = None
+        self.episode = 0
 
         with tf.variable_scope(self.scope):
             with tf.variable_scope('actor'):
@@ -25,22 +28,29 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
 
         self._initialize_variables()
 
+    def __str__(self):
+        return "%s:\n%s\n%s" % (
+            self.__class__.__name__,
+            self.world,
+            self.buffer,
+        )
+
     def predict(self, s):
         return self.actor.predict([s])
 
-    def train(self, first_episode, last_episode, steps, on_episode):
+    def train(self, first_episode, last_episode, steps, on_episode, saved_buffer=None):
 
         expl = self._create_exploration()
-        buff = self._create_buffer()
+        self.buffer = saved_buffer if saved_buffer is not None else self._create_buffer()
 
-        for episode in range(first_episode, last_episode):
+        for self.episode in range(first_episode, last_episode + 1):
 
+            nrate = self._get_noise_rate(self.episode, last_episode)
             s = self.world.reset()
-            nrate = self._get_noise_rate(episode, last_episode)
-            maxq = []
             reward = 0
+            maxq = []
 
-            if episode % 100 == 0:
+            if self.episode % 100 == 0:
                 expl.reset()
 
             for step in xrange(steps):
@@ -48,11 +58,11 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
                 a = self._make_action(s)
                 a += nrate * expl.noise()
                 s2, r, done = self._world_step(a)
-                buff.add(s, a, r, s2, done)
+                self.buffer.add(s, a, r, s2, done)
                 s = s2
 
                 # learn
-                bs, ba, br, bs2, bd = self._get_batch(buff)
+                bs, ba, br, bs2, bd = self._get_batch()
                 y = self._make_target(br, bs2, bd)
                 q = self._update_critic(y, bs, ba)
                 self._update_actor(bs)
@@ -66,7 +76,7 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
                 if done:
                     break
 
-            on_episode(episode, reward, nrate, np.mean(maxq))
+            on_episode(self.episode, reward, nrate, np.mean(maxq))
 
     def _make_action(self, s):
         return self.actor.predict([s])[0]
@@ -97,24 +107,20 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
         self.actor.target_train()
         self.critic.target_train()
 
-    @staticmethod
-    def _get_batch(buff):
-        batch = buff.getBatch(cfg.BATCH_SIZE)
+    def _get_batch(self):
+        batch = self.buffer.get_batch(Context.config['train.batch_size'])
         s, a, r, s2, done = zip(*batch)
         return s, a, r, s2, done
 
     def _create_exploration(self):
-        from core.context import Context
         return OUNoise(self.world.act_dim, mu=0,
                        sigma=Context.config['train.noise_sigma'],
                        theta=Context.config['train.noise_theta'])
 
     @staticmethod
     def _get_noise_rate(episode, episodes):
-        from core.context import Context
         return Context.config['train.noise_rate_method'](episode / float(episodes))
 
     @staticmethod
     def _create_buffer():
-        from core.context import Context
         return ReplayBuffer(Context.config['train.buffer_size'])

@@ -18,4 +18,5 @@ class TrainProc(Procedure):
         with platform, world, mind:
             print(world.summary)
             mind.restore(init_path)
+            print(mind)
             mind.train(work_path)

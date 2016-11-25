@@ -10,7 +10,6 @@ class Experiment:
         self.id = exp_id
         self.ini_id = ini_from if ini_from is not None else exp_id
         self._proc = proc
-        self._make_folder(self.work_path)
         self._update_title()
 
     def start(self):
@@ -26,11 +25,6 @@ class Experiment:
     @property
     def init_path(self):
         return os.path.join(BASE_PATH, self.ini_id)
-
-    @staticmethod
-    def _make_folder(path):
-        if not os.path.exists(path):
-            os.makedirs(path)
 
     def _update_title(self):
         Context.window_title['exp'] = "|  %s #%s" % (self._proc.__class__.__name__, self.id)
