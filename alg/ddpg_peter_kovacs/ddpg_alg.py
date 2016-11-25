@@ -18,7 +18,7 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
 
         self.world = world
         self.buffer = None
-        self.episode = 0
+        self.episode = None
 
         with tf.variable_scope(self.scope):
             with tf.variable_scope('actor'):
@@ -29,26 +29,30 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
         self._initialize_variables()
 
     def __str__(self):
-        return "%s:\n%s\n%s" % (
+        return "%s:\n\t%s\n\t%s\n\t%s" % (
             self.__class__.__name__,
             self.world,
             self.buffer,
+            "episode: %s" % self.episode,
         )
 
     def predict(self, s):
         return self.actor.predict([s])
 
-    def train(self, first_episode, last_episode, steps, on_episode, saved_buffer=None):
+    def train(self, last_episode, steps, on_episode):
+
+        first_episide = self.episode + 1 if self.episode is not None else 0
 
         expl = self._create_exploration()
-        self.buffer = saved_buffer if saved_buffer is not None else self._create_buffer()
+        if self.buffer is None:
+            self.buffer = self._create_buffer()
 
-        for self.episode in range(first_episode, last_episode + 1):
+        for self.episode in range(first_episide, last_episode + 1):
 
             nrate = self._get_noise_rate(self.episode, last_episode)
             s = self.world.reset()
             reward = 0
-            maxq = []
+            qmax = []
 
             if self.episode % 100 == 0:
                 expl.reset()
@@ -70,13 +74,13 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
 
                 # show
                 self.world.render()
-                maxq.append(q)
+                qmax.append(q)
                 reward += r
 
                 if done:
                     break
 
-            on_episode(self.episode, reward, nrate, np.mean(maxq))
+            on_episode(self.episode, reward, nrate, np.mean(qmax))
 
     @staticmethod
     def _add_noise(a, n, k):

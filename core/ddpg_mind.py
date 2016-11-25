@@ -2,7 +2,7 @@ from __future__ import print_function
 
 import os
 
-from alg.ddpg_peter_kovacs.ddpg import DDPG_PeterKovacs
+from alg.ddpg_peter_kovacs.ddpg_alg import DDPG_PeterKovacs
 from core.context import Context
 from utils.os_tools import provide_folder
 
@@ -15,8 +15,7 @@ class DdpgMind:
         self.platform = platform
         self.world = world
         self._algorithm = None
-        self._saved_episode = 0
-        self._saved_buffer = None
+        self._saved_episode = None
 
     def __enter__(self):
         self._algorithm = DDPG_PeterKovacs(self.platform.session, self.world)
@@ -26,12 +25,11 @@ class DdpgMind:
         pass
 
     def __str__(self):
-        return "%s:\n%s\n%s\n%s\nsaved_episode: %s" % (
+        return "%s:\n  %s\n  %s\n  %s\n" % (
             self.__class__.__name__,
             self.platform,
             self.world,
             self._algorithm,
-            self._saved_episode,
         )
 
     def predict(self, state):
@@ -44,7 +42,7 @@ class DdpgMind:
 
         def update_title(e, n, r, q):
             eps = Context.config['episodes']
-            Context.window_title['episod'] = "|  %d/%d: R = %+.0f, N = %.2f, Q = %+.0f" % (e, eps, r, n, q)
+            Context.window_title['episod'] = "|  %d/%d: N = %.2f, R = %+.0f, Q = %+.0f" % (e, eps, n, r, q)
 
         def save_results(ep):
             eps = Context.config['episodes']
@@ -58,10 +56,7 @@ class DdpgMind:
             update_title(ep, nr, reward, maxq)
             save_results(ep)
 
-        first_episide = self._saved_episode + 1 if self._saved_episode is not None else 0
-        last_episode = Context.config['episodes']
-        steps = Context.config['steps']
-        return self._algorithm.train(first_episide, last_episode, steps, on_episod, self._saved_buffer)
+        return self._algorithm.train(Context.config['episodes'], Context.config['steps'], on_episod)
 
     def save(self, folder):
         print("\nSaving [%s]..\n" % folder)
@@ -87,6 +82,7 @@ class DdpgMind:
             pickle.dump([
                 self._algorithm.episode,
                 self._algorithm.buffer,
+                # todo: qmax
             ], f)
 
     def restore_train_state(self, folder):
@@ -94,9 +90,10 @@ class DdpgMind:
         path = self.train_state_path(folder)
         with open(path, 'r') as f:
             [
-                self._saved_episode,
-                self._saved_buffer,
+                self._algorithm.episode,
+                self._algorithm.buffer,
             ] = pickle.load(f)
+        self._saved_episode = self._algorithm.episode
 
     @staticmethod
     def weights_path(folder):
