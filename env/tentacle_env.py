@@ -1,23 +1,21 @@
 import numpy as np
-from gym import utils
 from mujoco_py import glfw
 
 from core.context import Context
 from env.zoo_mujoco_env import ZooMujocoEnv
 
 
-class TentacleEnv(ZooMujocoEnv, utils.EzPickle):
+class TentacleEnv(ZooMujocoEnv):
     def __init__(self):
         self.target_range = [1.5, 1.0]
         ZooMujocoEnv.__init__(self, frame_skip=2)
-        utils.EzPickle.__init__(self)
 
     def _step(self, action):
         self.do_simulation(action, self.frame_skip)
         ob = self._get_obs()
 
-        d = self.site_dist('head', 'target')
-        r = self.make_reward(d)
+        d = self._site_dist('head', 'target')
+        r = self._make_reward(d)
 
         done = False
 
@@ -57,7 +55,7 @@ class TentacleEnv(ZooMujocoEnv, utils.EzPickle):
         v.cam.lookat[2] = v.model.stat.center[2] - 2
 
     @staticmethod
-    def make_reward(target_dist):
+    def _make_reward(target_dist):
         touch_radius = 0.05
         rw_touch = + 100. * ((touch_radius / max(target_dist, touch_radius)) ** 3)
         rw_dist = - 10. * (target_dist ** 2)

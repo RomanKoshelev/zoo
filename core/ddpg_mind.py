@@ -8,7 +8,7 @@ from utils.string_tools import tab
 from utils.os_tools import provide_dir
 
 MODEL_PATH = "model/weights.ckpt"
-TRAIN_STATE_PATH = "state/train.pickle"
+TRAIN_STATE_PATH = "train/state.pickle"
 
 
 class DdpgMind:

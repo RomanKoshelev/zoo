@@ -15,9 +15,14 @@ def train_mujoco_tentacle_world():
     Context.config = {
         'episodes': 10000,
         'steps': 75,
+
+        'view.height': 800,
+        'view.width': 1200,
+
         'env.model_dir': "out/tmp/",
         'world.model_path': "env/assets/tentacle_world.xml",
         'agent.model_path': "env/assets/tentacle_agent.xml",
+
         'mind.save_every_episodes': 10,
         'alg.batch_size': 640,
         'alg.buffer_size': 1e5,
