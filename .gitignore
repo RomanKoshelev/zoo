@@ -3,7 +3,7 @@
 .links/
 
 # ML
-output/
+out/tmp
 
 # Native build outputs
 *.slo
