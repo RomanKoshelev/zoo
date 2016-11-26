@@ -11,10 +11,12 @@ from core.tentacle_world import TentacleWorld
 
 def train_mujoco_tentacle_world():
     Context.config = {
-        'episodes': 1000,
-        'steps': 100,
+        'episodes': 10000,
+        'steps': 75,
+        'env.model_dir': "out/tmp/",
+        'world.model_path': "env/assets/tentacle_world.xml",
+        'agent.model_path': "env/assets/tentacle_agent.xml",
     }
-
     train_proc = DemoProc(TensorflowPlatform, TentacleWorld, TentacleAgent, DdpgMind)
     experiment = Experiment("003.demo", train_proc, ini_from="003")
 

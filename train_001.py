@@ -13,7 +13,7 @@ import os
 
 def train_mujoco_tentacle_world():
     Context.config = {
-        'episodes': 100,
+        'episodes': 10000,
         'steps': 75,
         'env.model_dir': "out/tmp/",
         'world.model_path': "env/assets/tentacle_world.xml",
