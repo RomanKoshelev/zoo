@@ -8,9 +8,8 @@ from env.zoo_mujoco_env import ZooMujocoEnv
 
 class TentacleEnv(ZooMujocoEnv, utils.EzPickle):
     def __init__(self):
-        self.agent = Context.world.agent
         self.target_range = [1.5, 1.0]
-        ZooMujocoEnv.__init__(self, model_path=self.agent.model_path, frame_skip=2)
+        ZooMujocoEnv.__init__(self, frame_skip=2)
         utils.EzPickle.__init__(self)
 
     def _step(self, action):

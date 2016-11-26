@@ -1,20 +1,20 @@
 import os
+import uuid
 
 import six
 import mujoco_py
 from gym.envs.mujoco.mujoco_env import MujocoEnv
 import numpy as np
 
+from core.context import Context
+from utils.os_tools import provide_dir
+
 
 class ZooMujocoEnv(MujocoEnv):
-    def __init__(self, model_path, frame_skip):
-        if model_path.startswith("/"):
-            fullpath = model_path
-        else:
-            fullpath = os.path.join(os.path.dirname(__file__), "assets", model_path)
-        if not os.path.exists(fullpath):
-            raise IOError("File does not exist: [%s]" % fullpath)
-        MujocoEnv.__init__(self, fullpath, frame_skip)
+    def __init__(self, frame_skip):
+        self.world = Context.world
+        self.agent = Context.world.agent
+        MujocoEnv.__init__(self, model_path=self.complile_model(), frame_skip=frame_skip)
 
     def reset_model(self):
         raise NotImplemented
@@ -38,3 +38,17 @@ class ZooMujocoEnv(MujocoEnv):
         v1 = self.site_pos(site_name_1)
         v2 = self.site_pos(site_name_2)
         return np.linalg.norm(v1 - v2)
+
+    def complile_model(self):
+        world_model = self.world.read_model() if self.world is not None else ""
+        agent_model = self.agent.read_model() if self.agent is not None else ""
+        env_model = world_model.replace('{{agent}}', agent_model)
+
+        env_path = os.path.join(Context.config['env.model_dir'], "env_" + str(uuid.uuid4()) + ".xml")
+        env_path = os.path.abspath(env_path)
+        provide_dir(env_path)
+
+        with open(env_path, 'w') as f:
+            f.write(env_model)
+
+        return env_path

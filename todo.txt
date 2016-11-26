@@ -1,14 +1,15 @@
 TODO:
 
-
-- print experiment sumamry every 100 episodes
-- print params every 100 episodes
+- print time estimation
+- print experiment summary every 100 episodes
+- print mini-report every 100 episodes
 - save params to out_path/params.txt
-- run demo experiments
-- use pickle to save/restore algorithm state: episodes, replay buffer
+- move to python 3.4
+
++ run demo experiments
++ use pickle to save/restore algorithm state: episodes, replay buffer
     http://stackoverflow.com/questions/6568007/how-do-i-save-and-restore-multiple-variables-in-python
     http://python.about.com/od/pythonstandardlibrary/a/pickle_intro.htm
     https://www.safaribooksonline.com/library/view/head-first-python/9781449397524/ch04.html
-- add experiment name to the mujoco window title
-- run experiment with training the tentacle
-- move to python 3.4
++ add experiment name to the mujoco window title
++ run experiment with training the tentacle

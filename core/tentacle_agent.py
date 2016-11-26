@@ -1,9 +1,6 @@
-class TentacleAgent:
-    def __init__(self):
-        self.model_path = 'tentacle.xml'
+from core.mujoco_agent import MujocoAgent
 
-    def __str__(self):
-        return "%s:\n\t%s" % (
-            self.__class__.__name__,
-            "model_path: %s" % self.model_path,
-        )
+
+class TentacleAgent(MujocoAgent):
+    def __init__(self):
+        MujocoAgent.__init__(self)

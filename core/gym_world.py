@@ -3,6 +3,8 @@ import gym
 from core.context import Context
 import numpy as np
 
+from utils.string_tools import tab
+
 
 class GymWorld:
 
@@ -12,6 +14,13 @@ class GymWorld:
         self.state = None
         self._env = None
         self._env_id = env_id
+
+    def __str__(self):
+        return "%s:\n\t%s\n\t%s" % (
+            self.__class__.__name__,
+            "id: " + self.id,
+            "agent: " + tab(self.agent),
+        )
 
     def __enter__(self):
         self._env = gym.make(self._env_id)

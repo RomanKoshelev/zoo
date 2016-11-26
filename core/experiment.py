@@ -13,7 +13,7 @@ class Experiment:
         self._update_title()
 
     def start(self):
-        self._proc.start(self.work_path)
+        self._proc.start(self.init_path, self.work_path)
 
     def proceed(self):
         self._proc.proceed(self.init_path, self.work_path)

@@ -14,11 +14,9 @@ class DemoProc(Procedure):
 
         platform, world, mind = self._make_instances()
 
-        w_ini_path = os.path.join(init_path, "weights.ckpt")
-
         with platform, world, mind:
             print(world.summary)
-            mind.restore_weights(w_ini_path)
+            mind.restore_weights(init_path)
             for ep in xrange(episodes):
                 s = world.reset()
                 reward = 0

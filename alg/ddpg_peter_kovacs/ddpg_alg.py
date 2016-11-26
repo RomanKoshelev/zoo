@@ -30,7 +30,7 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
         self._initialize_variables()
 
     def __str__(self):
-        return "%s:\n\t%s\n\t%s\n\t%s" % (
+        return "%s\n\t%s\n\t%s\n\t%s" % (
             self.__class__.__name__,
             "world: " + tab(self.world),
             "buffer: " + tab(self.buffer),
@@ -117,19 +117,19 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
         self.critic.target_train()
 
     def _get_batch(self):
-        batch = self.buffer.get_batch(Context.config['train.batch_size'])
+        batch = self.buffer.get_batch(Context.config['alg.batch_size'])
         s, a, r, s2, done = zip(*batch)
         return s, a, r, s2, done
 
     def _create_exploration(self):
         return OUNoise(self.world.act_dim, mu=0,
-                       sigma=Context.config['train.noise_sigma'],
-                       theta=Context.config['train.noise_theta'])
+                       sigma=Context.config['alg.noise_sigma'],
+                       theta=Context.config['alg.noise_theta'])
 
     @staticmethod
     def _get_noise_rate(episode, episodes):
-        return Context.config['train.noise_rate_method'](episode / float(episodes))
+        return Context.config['alg.noise_rate_method'](episode / float(episodes))
 
     @staticmethod
     def _create_buffer():
-        return ReplayBuffer(Context.config['train.buffer_size'])
+        return ReplayBuffer(Context.config['alg.buffer_size'])

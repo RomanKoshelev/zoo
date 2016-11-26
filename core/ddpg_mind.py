@@ -5,7 +5,7 @@ import os
 from alg.ddpg_peter_kovacs.ddpg_alg import DDPG_PeterKovacs
 from core.context import Context
 from utils.string_tools import tab
-from utils.os_tools import provide_folder
+from utils.os_tools import provide_dir
 
 MODEL_PATH = "model/weights.ckpt"
 TRAIN_STATE_PATH = "state/train.pickle"
@@ -47,8 +47,8 @@ class DdpgMind:
 
         def save_results(ep):
             eps = Context.config['episodes']
-            sve = Context.config['train.save_every_episodes']
-            if (ep > self._saved_episode and ep % sve == 0) or (ep == eps):
+            sve = Context.config['mind.save_every_episodes']
+            if (ep > self._saved_episode and (ep + 1) % sve == 0) or (ep == eps):
                 print("\nSaving [%s] ...\n" % work_path)
                 self._saved_episode = ep
                 self.save(work_path)
@@ -72,12 +72,12 @@ class DdpgMind:
         self._algorithm.restore_weights(self.weights_path(folder))
 
     def save_weights(self, folder):
-        self._algorithm.save_weights(provide_folder(self.weights_path(folder)))
+        self._algorithm.save_weights(provide_dir(self.weights_path(folder)))
 
     def save_train_state(self, folder):
         import pickle
         path = self.train_state_path(folder)
-        provide_folder(path)
+        provide_dir(path)
         with open(path, 'w') as f:
             pickle.dump([
                 self._algorithm.episode,
