@@ -9,6 +9,8 @@ SUMMARY_EVERY_EPISODES = 10
 WORK_DIR = "report/"
 
 
+# todo: save/restore sate: history, last_saved_duration
+
 class Reporter:
     def __init__(self, base_path):
         self._episodes = Context.config['episodes']
@@ -19,6 +21,8 @@ class Reporter:
         self._history = []
 
     def __str__(self):
+        # todo: last_saved_duration
+        # todo: history
         return self.__class__.__name__
 
     def on_start(self):
