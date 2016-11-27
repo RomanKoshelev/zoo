@@ -12,9 +12,10 @@ TRAIN_STATE_PATH = "train/state.pickle"
 
 
 class DdpgMind:
-    def __init__(self, platform, world):
+    def __init__(self, platform, world, reporter):
         self.platform = platform
         self.world = world
+        self._reporter = reporter
         self._algorithm = None
         self._saved_episode = None
 
@@ -26,10 +27,8 @@ class DdpgMind:
         pass
 
     def __str__(self):
-        return "%s\n\t%s\n\t%s\n\t%s\n" % (
+        return "%s:\n\t%s" % (
             self.__class__.__name__,
-            "platform: " + tab(self.platform),
-            "world: " + tab(self.world),
             "algorithm: " + tab(self._algorithm),
         )
 
@@ -38,25 +37,11 @@ class DdpgMind:
         return self.world.scale_action(a)
 
     def train(self, work_path):
-        def log_episode(e, n, r, q):
-            print("Ep: %3d  |  NR: %.2f  |  Reward: %+7.0f  |  Qmax: %+8.1f" % (e, n, r, q))
-
-        def update_title(e, n, r, q):
-            eps = Context.config['episodes']
-            Context.window_title['episode'] = "|  %d/%d: N = %.2f, R = %+.0f, Q = %+.0f" % (e, eps, n, r, q)
-
-        def save_results(ep):
-            eps = Context.config['episodes']
-            sve = Context.config['mind.save_every_episodes']
-            if (ep > self._saved_episode and (ep + 1) % sve == 0) or (ep == eps):
-                print("\nSaving [%s] ...\n" % work_path)
-                self._saved_episode = ep
-                self.save(work_path)
-
         def on_episod(ep, reward, nr, maxq):
-            log_episode(ep, nr, reward, maxq)
-            save_results(ep)
-            update_title(ep, nr, reward, maxq)
+            self._reporter.on_episode(ep, nr, reward, maxq)
+            self._save_results_if_need(work_path, ep,
+                                       Context.config['episodes'],
+                                       Context.config['mind.save_every_episodes'])
 
         return self._algorithm.train(Context.config['episodes'], Context.config['steps'], on_episod)
 
@@ -93,6 +78,13 @@ class DdpgMind:
                 self._algorithm.buffer,
             ] = pickle.load(f)
         self._saved_episode = self._algorithm.episode
+
+    def _save_results_if_need(self, path, ep, eps, sve):
+        if (ep > self._saved_episode and (ep + 1) % sve == 0) or (ep == eps):
+            self._reporter.on_save_start(path)
+            self._saved_episode = ep
+            self.save(path)
+            self._reporter.on_save_done(path)
 
     @staticmethod
     def weights_path(folder):

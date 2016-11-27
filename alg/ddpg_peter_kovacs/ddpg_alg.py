@@ -30,9 +30,8 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
         self._initialize_variables()
 
     def __str__(self):
-        return "%s\n\t%s\n\t%s\n\t%s" % (
+        return "%s\n\t%s\n\t%s" % (
             self.__class__.__name__,
-            "world: " + tab(self.world),
             "buffer: " + tab(self.buffer),
             "episode: " + str(self.episode),
         )

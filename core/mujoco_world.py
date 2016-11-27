@@ -1,7 +1,6 @@
 from core.context import Context
 
 from core.gym_world import GymWorld
-from utils.string_tools import tab
 
 
 class MujocoWorld(GymWorld):
@@ -10,11 +9,10 @@ class MujocoWorld(GymWorld):
         self.model_path = Context.config['env.world_path']
 
     def __str__(self):
-        return "%s:\n\t%s\n\t%s\n\t%s" % (
+        return "%s:\n\t%s\n\t%s" % (
             self.__class__.__name__,
             "id: " + self.id,
             "model_path: %s" % self.model_path,
-            "agent: " + tab(self.agent),
         )
 
     def read_model(self):

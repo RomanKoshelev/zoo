@@ -9,6 +9,7 @@ class DemoProc(Procedure):
 
     # noinspection PyUnusedLocal
     def start(self, init_path, work_path):
+        Context.mode = 'demo'
         episodes = Context.config['episodes']
         steps = Context.config['steps']
 
@@ -17,6 +18,7 @@ class DemoProc(Procedure):
         with platform, world, mind:
             print(world.summary)
             mind.restore_weights(init_path)
+            print(str(self).replace('\t', "  "))
             for ep in xrange(episodes):
                 s = world.reset()
                 reward = 0

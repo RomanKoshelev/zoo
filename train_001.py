@@ -8,7 +8,7 @@ from core.tensorflow_platform import TensorflowPlatform
 from core.train_procedure import TrainProc
 from env.tentacle_world import TentacleWorld
 from env.tentacle_reward import default_reward
-from env.tentacle_target import target_random_uniform
+from env.tentacle_target import random_target
 from utils.noise_tools import staircase_5
 import os
 
@@ -21,7 +21,7 @@ def train_mujoco_tentacle_world():
         'env.model_dir': "out/tmp/",
         'env.world_path': "env/assets/tentacle_world.xml",
         'env.agent_path': "env/assets/tentacle_agent.xml",
-        'env.target_location_method': target_random_uniform,
+        'env.target_location_method': random_target,
         'env.reward_method': default_reward,
 
         'mind.save_every_episodes': 100,
@@ -33,7 +33,6 @@ def train_mujoco_tentacle_world():
         'alg.noise_rate_method': staircase_5,
     }
 
-    Context.mode = 'train'
     train_proc = TrainProc(TensorflowPlatform, TentacleWorld, MujocoAgent, DdpgMind)
     experiment = Experiment("001", train_proc)
 
