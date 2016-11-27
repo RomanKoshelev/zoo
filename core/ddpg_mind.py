@@ -43,7 +43,7 @@ class DdpgMind:
 
         def update_title(e, n, r, q):
             eps = Context.config['episodes']
-            Context.window_title['episod'] = "|  %d/%d: N = %.2f, R = %+.0f, Q = %+.0f" % (e, eps, n, r, q)
+            Context.window_title['episode'] = "|  %d/%d: N = %.2f, R = %+.0f, Q = %+.0f" % (e, eps, n, r, q)
 
         def save_results(ep):
             eps = Context.config['episodes']

@@ -3,8 +3,9 @@ import uuid
 
 import six
 import mujoco_py
-from gym.envs.mujoco.mujoco_env import MujocoEnv
 import numpy as np
+from mujoco_py import glfw
+from gym.envs.mujoco.mujoco_env import MujocoEnv
 
 from core.context import Context
 from utils.os_tools import provide_dir
@@ -30,7 +31,7 @@ class ZooMujocoEnv(MujocoEnv):
 
     def _site_pos(self, site_name):
         idx = self.model.site_names.index(six.b(site_name))
-        return np.asarray (self.model.data.site_xpos[idx])
+        return np.asarray(self.model.data.site_xpos[idx])
 
     def _site_dist(self, site_name_1, site_name_2):
         v1 = self._site_pos(site_name_1)
@@ -50,3 +51,12 @@ class ZooMujocoEnv(MujocoEnv):
             f.write(env_model)
 
         return env_path
+
+    def _update_window_title(self):
+        viewer = self._get_viewer()
+        window = viewer.window
+        # mx, my = glfw.get_cursor_pos(window)
+        t = Context.window_title
+        d = "  "
+        title = t['app'] + d + t['exp'] + d + t['episode'] + d + t['step'] + d + t['info']
+        glfw.set_window_title(window, title)

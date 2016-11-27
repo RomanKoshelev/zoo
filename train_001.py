@@ -13,6 +13,7 @@ import os
 
 def train_mujoco_tentacle_world():
     Context.config = {
+        'mode': 'train',
         'episodes': 10000,
         'steps': 75,
 
