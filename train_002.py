@@ -20,8 +20,8 @@ def train_mujoco_tentacle_world():
         'steps': 75,
         'save_every_episodes': 100,
 
-        'report.write_every_episodes': 10,
-        'report.summary_every_episodes': 5,
+        'report.write_every_episodes': 20,
+        'report.summary_every_episodes': 10,
 
         'env.model_dir': "out/tmp/",
         'env.world_path': "env/assets/tentacle_world.xml",
