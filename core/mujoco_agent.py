@@ -3,7 +3,7 @@ from core.context import Context
 
 class MujocoAgent:
     def __init__(self):
-        self.model_path = Context.config['agent.model_path']
+        self.model_path = Context.config['env.agent_path']
 
     def __str__(self):
         return "%s:\n\t%s" % (

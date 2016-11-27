@@ -9,9 +9,9 @@ from utils.string_tools import tab
 
 class MujocoWorld(GymWorld):
 
-    def __init__(self, env_id, agent):
-        GymWorld.__init__(self, env_id, agent)
-        self.model_path = Context.config['world.model_path']
+    def __init__(self, agent):
+        GymWorld.__init__(self, Context.config['env.id'], agent)
+        self.model_path = Context.config['env.world_path']
 
     def __str__(self):
         return "%s:\n\t%s\n\t%s\n\t%s" % (
