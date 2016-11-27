@@ -1,10 +1,13 @@
 TODO:
 
+- reporter
 - print time estimation
 - print experiment summary every 100 episodes
 - print mini-report every 100 episodes
 - save params to out_path/params.txt
+
 - move to python 3.4
+- use mouse to control target # mx, my = glfw.get_cursor_pos(window)
 
 + run demo experiments
 + use pickle to save/restore algorithm state: episodes, replay buffer

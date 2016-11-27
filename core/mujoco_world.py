@@ -1,16 +1,12 @@
-import gym
-
 from core.context import Context
-import numpy as np
 
 from core.gym_world import GymWorld
 from utils.string_tools import tab
 
 
 class MujocoWorld(GymWorld):
-
-    def __init__(self, agent):
-        GymWorld.__init__(self, Context.config['env.id'], agent)
+    def __init__(self, env_id, agent):
+        GymWorld.__init__(self, env_id, agent)
         self.model_path = Context.config['env.world_path']
 
     def __str__(self):

@@ -16,7 +16,7 @@ def demo_mujoco_tentacle_world():
     }
 
     demo = DemoProc(TensorflowPlatform, TentacleWorld, TentacleAgent, DdpgMind)
-    exp = Experiment("002.demo", demo, ini_from="002")
+    exp = Experiment("002.demo", demo, init_from="002")
     exp()
 
 if __name__ == '__main__':

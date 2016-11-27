@@ -30,7 +30,7 @@ class TentacleEnv(ZooMujocoEnv):
     def reset_model(self):
         self._resets_num += 1
 
-        if Context.config['mode'] == 'train' and self._resets_num % INIT_EVERY_RESETS == 0:
+        if Context.mode == 'train' and self._resets_num % INIT_EVERY_RESETS == 0:
             qpos = self.init_qpos
             qvel = self.init_qvel
         else:

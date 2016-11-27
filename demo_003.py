@@ -18,7 +18,7 @@ def train_mujoco_tentacle_world():
         'agent.model_path': "env/assets/tentacle_agent.xml",
     }
     train_proc = DemoProc(TensorflowPlatform, TentacleWorld, TentacleAgent, DdpgMind)
-    experiment = Experiment("003.demo", train_proc, ini_from="003")
+    experiment = Experiment("003.demo", train_proc, init_from="003")
 
     experiment.start()
 

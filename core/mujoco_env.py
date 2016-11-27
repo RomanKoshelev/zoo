@@ -10,6 +10,8 @@ from gym.envs.mujoco.mujoco_env import MujocoEnv
 from core.context import Context
 from utils.os_tools import provide_dir
 
+AGENT_PLACEHOLDER = '{{agent}}'
+
 
 # noinspection PyAbstractClass
 class ZooMujocoEnv(MujocoEnv):
@@ -30,8 +32,8 @@ class ZooMujocoEnv(MujocoEnv):
     def _get_viewer(self):
         if self.viewer is None:
             self.viewer = mujoco_py.MjViewer(
-                init_height=Context.config['view.height'],
-                init_width=Context.config['view.width']
+                init_height=Context.config.get('view.height', 800),
+                init_width=Context.config.get('view.width', 1200)
             )
             self.viewer.start()
             self.viewer.set_model(self.model)
@@ -41,7 +43,7 @@ class ZooMujocoEnv(MujocoEnv):
     def _complile_model(self):
         world_model = self.world.read_model()
         agent_model = self.agent.read_model()
-        env_model = world_model.replace('{{agent}}', agent_model)
+        env_model = world_model.replace(AGENT_PLACEHOLDER, agent_model)
 
         env_path = os.path.join(Context.config['env.model_dir'], "env_" + str(uuid.uuid4()) + ".xml")
         env_path = os.path.abspath(env_path)
@@ -55,7 +57,6 @@ class ZooMujocoEnv(MujocoEnv):
     def _update_window_title(self):
         viewer = self._get_viewer()
         window = viewer.window
-        # mx, my = glfw.get_cursor_pos(window)
         t = Context.window_title
         d = "  "
         title = t['app'] + d + t['exp'] + d + t['episode'] + d + t['step'] + d + t['info']
