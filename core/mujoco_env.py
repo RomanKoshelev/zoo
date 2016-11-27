@@ -8,7 +8,7 @@ from mujoco_py import glfw
 from gym.envs.mujoco.mujoco_env import MujocoEnv
 
 from core.context import Context
-from utils.os_tools import provide_dir
+from utils.os_tools import make_dir_if_not_exists
 
 AGENT_PLACEHOLDER = '{{agent}}'
 
@@ -47,7 +47,7 @@ class ZooMujocoEnv(MujocoEnv):
 
         env_path = os.path.join(Context.config['env.model_dir'], "env_" + str(uuid.uuid4()) + ".xml")
         env_path = os.path.abspath(env_path)
-        provide_dir(env_path)
+        make_dir_if_not_exists(env_path)
 
         with open(env_path, 'w') as f:
             f.write(env_model)

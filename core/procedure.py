@@ -19,10 +19,9 @@ class Procedure(object):
             "reporter: " + tab(self.reporter),
         )
 
-    def _make_instances(self):
-        self.reporter = self.reporter_class()
+    def _make_instances(self, work_path):
+        self.reporter = self.reporter_class(work_path)
         self.platform = self.platform_class()
         self.agent = self.agent_class()
         self.world = self.world_class(self.agent)
         self.mind = self.mind_class(self.platform, self.world, self.reporter)
-        return self.platform, self.world, self.mind

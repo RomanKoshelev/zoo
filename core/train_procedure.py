@@ -9,20 +9,22 @@ class TrainProc(Procedure):
     # noinspection PyUnusedLocal
     def start(self, init_path, work_path):
         Context.mode = 'train'
-        platform, world, mind = self._make_instances()
+        self._make_instances(work_path)
 
-        with platform, world, mind:
-            print(world.summary)
-            mind.train(work_path)
+        with self.platform, self.world, self.mind:
+            print(self.world.summary)
+            self.reporter.on_start()
+            self.mind.train(work_path)
 
     def proceed(self, init_path, work_path):
         Context.mode = 'train'
-        platform, world, mind = self._make_instances()
+        self._make_instances(work_path)
 
-        with platform, world, mind:
+        with self.platform, self.world, self.mind:
             print(Context.config)
-            print(world.summary)
+            print(self.world.summary)
             print("\nRestoring [%s] ...\n" % init_path)
-            mind.restore(init_path)
+            self.mind.restore(init_path)
             print(str(self).replace('\t', "  "))
-            mind.train(work_path)
+            self.reporter.on_start()
+            self.mind.train(work_path)

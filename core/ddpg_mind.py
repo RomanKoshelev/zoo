@@ -5,7 +5,7 @@ import os
 from alg.ddpg_peter_kovacs.ddpg_alg import DDPG_PeterKovacs
 from core.context import Context
 from utils.string_tools import tab
-from utils.os_tools import provide_dir
+from utils.os_tools import make_dir_if_not_exists
 
 MODEL_PATH = "model/weights.ckpt"
 TRAIN_STATE_PATH = "train/state.pickle"
@@ -41,7 +41,7 @@ class DdpgMind:
             self._reporter.on_episode(ep, nr, reward, maxq)
             self._save_results_if_need(work_path, ep,
                                        Context.config['episodes'],
-                                       Context.config['mind.save_every_episodes'])
+                                       Context.config['save_every_episodes'])
 
         return self._algorithm.train(Context.config['episodes'], Context.config['steps'], on_episod)
 
@@ -57,12 +57,12 @@ class DdpgMind:
         self._algorithm.restore_weights(self.weights_path(folder))
 
     def save_weights(self, folder):
-        self._algorithm.save_weights(provide_dir(self.weights_path(folder)))
+        self._algorithm.save_weights(make_dir_if_not_exists(self.weights_path(folder)))
 
     def save_train_state(self, folder):
         import pickle
         path = self.train_state_path(folder)
-        provide_dir(path)
+        make_dir_if_not_exists(path)
         with open(path, 'w') as f:
             pickle.dump([
                 self._algorithm.episode,
@@ -81,10 +81,10 @@ class DdpgMind:
 
     def _save_results_if_need(self, path, ep, eps, sve):
         if (ep > self._saved_episode and (ep + 1) % sve == 0) or (ep == eps):
-            self._reporter.on_save_start(path)
+            self._reporter.on_save_start(self.__class__.__name__, path)
             self._saved_episode = ep
             self.save(path)
-            self._reporter.on_save_done(path)
+            self._reporter.on_save_done(self.__class__.__name__, path)
 
     @staticmethod
     def weights_path(folder):
