@@ -25,6 +25,7 @@ class TrainProc(Procedure):
             print(self.world.summary)
             print("\nRestoring [%s] ...\n" % init_path)
             self.mind.restore(init_path)
+            self.reporter.restore()
             print(str(self).replace('\t', "  "))
             self.reporter.on_start()
             self.mind.train(work_path)
