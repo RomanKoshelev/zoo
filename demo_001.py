@@ -5,6 +5,7 @@ from core.ddpg_mind import DdpgMind
 from core.demo_procedure import DemoProc
 from core.experiment import Experiment
 from core.mujoco_agent import MujocoAgent
+from core.reporter import Reporter
 from core.tensorflow_platform import TensorflowPlatform
 from env.tentacle_world import TentacleWorld
 from env.tentacle_reward import default_reward
@@ -23,7 +24,7 @@ def train_mujoco_tentacle_world():
         'env.reward_method': default_reward,
     }
 
-    demo_proc = DemoProc(TensorflowPlatform, TentacleWorld, MujocoAgent, DdpgMind)
+    demo_proc = DemoProc(TensorflowPlatform, TentacleWorld, MujocoAgent, DdpgMind, Reporter)
     experiment = Experiment("001.demo", demo_proc, init_from="001")
     experiment.start()
 

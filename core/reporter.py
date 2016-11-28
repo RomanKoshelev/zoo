@@ -66,9 +66,7 @@ class Reporter:
     def _log_summary(self):
         line = '========================================================================='
         self._log(line + ('\n' * 3))
-
         self._log_summary_time()
-
         self._log(('\n' * 3) + line)
 
     # noinspection PyStringFormat

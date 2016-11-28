@@ -16,12 +16,9 @@ import os
 
 def train_mujoco_tentacle_world():
     Context.config = {
-        'episodes': 30000,
+        'episodes': 10000,
         'steps': 75,
         'save_every_episodes': 100,
-
-        'report.write_every_episodes': 20,
-        'report.summary_every_episodes': 10,
 
         'env.model_dir': "out/tmp/",
         'env.world_path': "env/assets/tentacle_world.xml",
@@ -29,11 +26,14 @@ def train_mujoco_tentacle_world():
         'env.target_location_method': random_target,
         'env.reward_method': default_reward,
 
-        'alg.batch_size': 256,
+        'alg.batch_size': 640,
         'alg.buffer_size': 1e5,
         'alg.noise_sigma': .1,
         'alg.noise_theta': .01,
         'alg.noise_rate_method': staircase_5,
+
+        'report.write_every_episodes': 20,
+        'report.summary_every_episodes': 10,
     }
 
     train_proc = TrainProc(TensorflowPlatform, TentacleWorld, MujocoAgent, DdpgMind, Reporter)

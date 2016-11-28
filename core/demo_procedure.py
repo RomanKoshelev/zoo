@@ -1,11 +1,10 @@
 from core.context import Context
 from core.procedure import Procedure
-import os
 
 
 class DemoProc(Procedure):
-    def __init__(self, platform_class, world_class, agent_class, mind_class):
-        super(self.__class__, self).__init__(platform_class, world_class, agent_class, mind_class)
+    def __init__(self, platform_class, world_class, agent_class, mind_class, reporter_class):
+        super(self.__class__, self).__init__(platform_class, world_class, agent_class, mind_class, reporter_class)
 
     # noinspection PyUnusedLocal
     def start(self, init_path, work_path):
@@ -13,19 +12,19 @@ class DemoProc(Procedure):
         episodes = Context.config['episodes']
         steps = Context.config['steps']
 
-        platform, world, mind = self._make_instances()
+        self._make_instances(work_path)
 
-        with platform, world, mind:
-            print(world.summary)
-            mind.restore_weights(init_path)
+        with self.platform, self.world, self.mind:
+            print(self.world.summary)
+            self.mind.restore_weights(init_path)
             print(str(self).replace('\t', "  "))
             for ep in xrange(episodes):
-                s = world.reset()
+                s = self.world.reset()
                 reward = 0
                 for t in xrange(steps):
-                    world.render()
-                    a = mind.predict(s)
-                    s, r, done, _ = world.step(a)
+                    self.world.render()
+                    a = self.mind.predict(s)
+                    s, r, done, _ = self.world.step(a)
                     reward += r
                 print("%3d  Reward = %+7.0f" % (ep, reward))
                 self.update_title(ep, reward)
