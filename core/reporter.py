@@ -101,6 +101,7 @@ class Reporter:
 
     def _save_state(self):
         with open(self._state_path, 'w') as f:
+            self._saved_time = self.total_time_elapsed
             pickle.dump([
                 self._saved_time,
                 self._train_history,
