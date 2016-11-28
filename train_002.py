@@ -18,11 +18,10 @@ def train_mujoco_tentacle_world():
     Context.config = {
         'episodes': 10000,
         'steps': 75,
-        'save_every_episodes': 100,
+        'save_every_episodes': 1000,
 
         'exp.base_path': "./out/experiments",
 
-        'env.model_dir': "out/tmp/",
         'env.world_path': "env/assets/tentacle_world.xml",
         'env.agent_path': "env/assets/tentacle_agent.xml",
         'env.target_location_method': random_target,

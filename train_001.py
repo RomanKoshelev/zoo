@@ -18,31 +18,35 @@ def train_mujoco_tentacle_world():
     Context.config = {
         'episodes': 10000,
         'steps': 75,
-        'save_every_episodes': 100,
+        'save_every_episodes': 1000,
 
-        'env.model_dir': "out/tmp/",
+        'exp.base_path': "./out/experiments",
+
         'env.world_path': "env/assets/tentacle_world.xml",
         'env.agent_path': "env/assets/tentacle_agent.xml",
         'env.target_location_method': random_target,
         'env.reward_method': default_reward,
 
-        'alg.batch_size': 640,
+        'alg.batch_size': 256,
         'alg.buffer_size': 1e5,
         'alg.noise_sigma': .1,
         'alg.noise_theta': .01,
         'alg.noise_rate_method': staircase_5,
 
-        'report.write_every_episodes': 20,
-        'report.summary_every_episodes': 10,
+        'mind.evaluate_every_episodes': 10,
+        'report.write_every_episodes': 5,
+        'report.summary_every_episodes': 30,
     }
 
     train_proc = TrainProc(TensorflowPlatform, TentacleWorld, MujocoAgent, DdpgMind, Reporter)
     experiment = Experiment("001", train_proc)
 
-    if os.path.exists(experiment.work_path):
-        experiment.proceed()
-    else:
+    from_scratch = False
+
+    if from_scratch or not os.path.exists(experiment.work_path):
         experiment.start()
+    else:
+        experiment.proceed()
 
 if __name__ == '__main__':
     train_mujoco_tentacle_world()

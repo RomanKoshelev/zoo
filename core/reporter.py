@@ -62,33 +62,31 @@ class Reporter(Logger):
         report += "<h2>Diagramms</h2>\n"
         diagramms = self._write_diagramms()
         for d in diagramms:
-            report += "<image width=300 src='%s'>" % (os.path.basename(d[1]))
+            report += "<image width=500 src='%s'>" % (os.path.basename(d[1]))
 
         report += "</BODY></HTML>\n"
         html_path = os.path.join(self._work_dir, "report.html")
         with open(html_path, 'w') as f:
             f.write(report)
 
-    def _write_diagramms(self):
+    def _write_diagramms(self, x_idx=0):
         diagramms = []
         if len(self._eval_history_etr) > 0:
-            # diagramms.append(self._write_diagramm('eval_episode', self._eval_history_etr, 0))
-            # diagramms.append(self._write_diagramm('eval_time', self._eval_history_etr, 1))
-            diagramms.append(self._write_diagramm('eval_reward', self._eval_history_etr, 2))
+            diagramms.append(self._write_diagramm('eval_reward', self._eval_history_etr, x_idx, 2))
         if len(self._train_history_etnrq) > 0:
-            diagramms.append(self._write_diagramm('train_reward', self._train_history_etnrq, 3))
-            diagramms.append(self._write_diagramm('train_noise', self._train_history_etnrq, 2))
-            diagramms.append(self._write_diagramm('train_qmax', self._train_history_etnrq, 4))
-            # diagramms.append(self._write_diagramm('train_episode', self._train_history_etnrq, 0))
-            # diagramms.append(self._write_diagramm('train_time', self._train_history_etnrq, 1))
+            diagramms.append(self._write_diagramm('train_reward', self._train_history_etnrq, x_idx, 3))
+            diagramms.append(self._write_diagramm('train_noise', self._train_history_etnrq, x_idx, 2))
+            diagramms.append(self._write_diagramm('train_qmax', self._train_history_etnrq, x_idx, 4))
         return diagramms
 
-    def _write_diagramm(self, name, arr, idx):
+    def _write_diagramm(self, name, arr, x_idx, y_idx):
         path = os.path.join(self._work_dir, name + ".png")
-        data = np.asarray(arr)[:, idx]
+        x = np.asarray(arr)[:, x_idx]
+        y = np.asarray(arr)[:, y_idx]
         plt.clf()
-        plt.plot(data)
+        plt.plot(x, y)
         plt.title(name)
+        plt.xlabel(['episodes', 'time'][x_idx])
         plt.savefig(path)
         return [name, path]
 
