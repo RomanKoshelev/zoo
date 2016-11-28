@@ -18,7 +18,7 @@ def train_mujoco_tentacle_world():
     Context.config = {
         'episodes': 10000,
         'steps': 75,
-        'save_every_episodes': 20,
+        'save_every_episodes': 100,
 
         'exp.base_path': "./out/experiments",
 
@@ -43,10 +43,12 @@ def train_mujoco_tentacle_world():
     train_proc = TrainProc(TensorflowPlatform, TentacleWorld, MujocoAgent, DdpgMind, Reporter)
     experiment = Experiment("002", train_proc)
 
-    if os.path.exists(experiment.work_path):
-        experiment.proceed()
-    else:
+    force_start = True
+
+    if force_start or not os.path.exists(experiment.work_path):
         experiment.start()
+    else:
+        experiment.proceed()
 
 if __name__ == '__main__':
     train_mujoco_tentacle_world()
