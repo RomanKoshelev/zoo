@@ -18,7 +18,7 @@ def train_mujoco_tentacle_world():
     Context.config = {
         'episodes': 10000,
         'steps': 75,
-        'save_every_episodes': 300,
+        'save_every_episodes': 200,
 
         'exp.base_path': "./out/experiments",
 
@@ -28,7 +28,7 @@ def train_mujoco_tentacle_world():
         'env.target_location_method': random_target,
         'env.reward_method': default_reward,
 
-        'mind.mind.evaluate_every_episodes': 10,
+        'mind.evaluate_every_episodes': 10,
 
         'alg.batch_size': 640,
         'alg.buffer_size': 1e5,

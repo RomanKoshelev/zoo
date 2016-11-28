@@ -19,7 +19,8 @@ class Reporter:
         self._work_dir = os.path.join(base_path, WORK_DIR)
         self._sw = Stopwatch()
         make_dir_if_not_exists(self._work_dir)
-        self._history = []
+        self._train_history = []
+        self._evaluation_history = []
 
     def __str__(self):
         # todo: last_saved_duration
@@ -29,9 +30,10 @@ class Reporter:
     def on_start(self):
         self._sw.start()
 
-    def on_episode(self, e, n, r, q):
+    def on_train_episode(self, e, n, r, q):
+        # episode, noise_rate, reward, q_max
         self._episode = e
-        self._history.append([e, n, r, q])
+        self._train_history.append([e, n, r, q])
         self._log_episode(e, n, r, q)
         self._update_title(e, n, r, q)
 
@@ -40,6 +42,15 @@ class Reporter:
 
         if (e + 1) % Context.config['report.summary_every_episodes'] == 0:
             self._log_summary()
+
+    def on_evaluiation_start(self):
+        self._log("Evaluating...")
+        Context.window_title['episode'] = "|  Evaluating ..."
+
+    def on_evaluiation_end(self, e, r):
+        self._log("Evaluation done with reward = %.0f" % r)
+        Context.window_title['episode'] = "|  Evaluation reward: %.0f" % r
+        self._evaluation_history.append([e, r])
 
     def on_save_start(self, what, path):
         self._log("Saving %s to '%s' ..." % (what, path))

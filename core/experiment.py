@@ -26,6 +26,7 @@ class Experiment:
     def init_path(self):
         return os.path.join(self._base_path, self.init_id)
 
+    # todo: use reporter
     def _update_title(self):
         Context.window_title['exp'] = "|  %s #%s" % (self._proc.__class__.__name__, self.id)
         if self.id != self.init_id:

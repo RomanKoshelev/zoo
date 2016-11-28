@@ -38,7 +38,7 @@ class DdpgMind:
 
     def train(self, work_path):
         def on_episod(ep, reward, nr, maxq):
-            self._reporter.on_episode(ep, nr, reward, maxq)
+            self._reporter.on_train_episode(ep, nr, reward, maxq)
             self._save_results_if_need(work_path, ep,
                                        Context.config['episodes'],
                                        Context.config['save_every_episodes'])
@@ -49,7 +49,7 @@ class DdpgMind:
         return self._algorithm.train(Context.config['episodes'], Context.config['steps'], on_episod)
 
     def _evaluate_if_need(self, ep, evs, steps):
-        if ep % evs == 0:
+        if (ep + 1) % evs == 0:
             self._reporter.on_evaluiation_start()
             reward = self.run_episode(steps)
             self._reporter.on_evaluiation_end(ep, reward)
