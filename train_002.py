@@ -28,24 +28,23 @@ def train_mujoco_tentacle_world():
         'env.target_location_method': random_target,
         'env.reward_method': default_reward,
 
-        'mind.evaluate_every_episodes': 10,
-
         'alg.batch_size': 640,
         'alg.buffer_size': 1e5,
         'alg.noise_sigma': .1,
         'alg.noise_theta': .01,
         'alg.noise_rate_method': staircase_5,
 
-        'report.write_every_episodes': 20,
-        'report.summary_every_episodes': 10,
+        'mind.evaluate_every_episodes': 10,
+        'report.write_every_episodes': 5,
+        'report.summary_every_episodes': 30,
     }
 
     train_proc = TrainProc(TensorflowPlatform, TentacleWorld, MujocoAgent, DdpgMind, Reporter)
     experiment = Experiment("002", train_proc)
 
-    force_start = True
+    from_scratch = False
 
-    if force_start or not os.path.exists(experiment.work_path):
+    if from_scratch or not os.path.exists(experiment.work_path):
         experiment.start()
     else:
         experiment.proceed()

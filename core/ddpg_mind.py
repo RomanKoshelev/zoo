@@ -65,6 +65,7 @@ class DdpgMind:
         return reward
 
     def save(self, folder):
+        self._reporter.log('Saving weights and algorithm state...')
         self.save_weights(folder)
         self.save_algorithm_state(folder)
 
@@ -100,10 +101,8 @@ class DdpgMind:
 
     def _save_results_if_need(self, path, ep, eps, sve):
         if (ep > self._saved_episode and (ep + 1) % sve == 0) or (ep == eps):
-            self._reporter.on_save_start(self.__class__.__name__, path)
             self._saved_episode = ep
             self.save(path)
-            self._reporter.on_save_done(self.__class__.__name__, path)
 
     @staticmethod
     def network_weights_path(folder):

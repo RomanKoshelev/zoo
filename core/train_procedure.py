@@ -21,11 +21,16 @@ class TrainProc(Procedure):
         self._make_instances(work_path)
 
         with self.platform, self.world, self.mind:
+            print("--------------------------------------------------------")
             print(Context.config)
             print(self.world.summary)
             print("\nRestoring [%s] ...\n" % init_path)
+            print("--------------------------------------------------------")
+
             self.mind.restore(init_path)
             self.reporter.restore()
-            print(str(self).replace('\t', "  "))
+            print(str(self).replace('\t', "  ") + '\n')
+            print("--------------------------------------------------------" + '\n')
+
             self.reporter.on_start()
             self.mind.train(work_path)

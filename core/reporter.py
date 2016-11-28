@@ -19,7 +19,6 @@ class Reporter(Logger):
     def __init__(self, base_path):
         Logger.__init__(self)
         self._episodes = Context.config['episodes']
-        self._episode = 0
         self._work_dir = os.path.join(base_path, WORK_DIR)
         self._sw = Stopwatch()
         self._saved_time = 0.
@@ -40,9 +39,7 @@ class Reporter(Logger):
 
     def on_train_episode(self, e, n, r, q):
         # episode, noise_rate, reward, q_max
-        assert e == 0 or e == self._episode + 1
         t = self.total_time_elapsed
-        self._episode = e
         self._train_history_etnrq.append([e, t, n, r, q])
         self._log_training_episode(e, n, r, q)
         self._update_training_title(self._episodes, e, n, r, q)
@@ -61,32 +58,40 @@ class Reporter(Logger):
         self._eval_history_etr.append([e, self.total_time_elapsed, r])
 
     def _write_html_report(self):
-        report = "<HTML><BODY><H1>REPORT</H1></BODY></HTML>"
+        report = "<HTML><BODY><H1>Report</H1>\n"
+        report += "<h2>Diagramms</h2>\n"
+        diagramms = self._write_diagramms()
+        for d in diagramms:
+            report += "<image width=300 src='%s'>" % (os.path.basename(d[1]))
+
+        report += "</BODY></HTML>\n"
         html_path = os.path.join(self._work_dir, "report.html")
         with open(html_path, 'w') as f:
             f.write(report)
-        self._write_diagramms()
-        self._log("Report is wrote to '%s'" % html_path)
 
     def _write_diagramms(self):
+        diagramms = []
         if len(self._train_history_etnrq) > 0:
-            self._write_diagramm('train_episode', self._train_history_etnrq, 0)
-            self._write_diagramm('train_time', self._train_history_etnrq, 1)
-            self._write_diagramm('train_noise', self._train_history_etnrq, 2)
-            self._write_diagramm('train_reward', self._train_history_etnrq, 3)
-            self._write_diagramm('train_qmax', self._train_history_etnrq, 4)
+            diagramms.append(self._write_diagramm('train_qmax', self._train_history_etnrq, 4))
+            diagramms.append(self._write_diagramm('train_reward', self._train_history_etnrq, 3))
+            diagramms.append(self._write_diagramm('train_noise', self._train_history_etnrq, 2))
+            # diagramms.append(self._write_diagramm('train_episode', self._train_history_etnrq, 0))
+            # diagramms.append(self._write_diagramm('train_time', self._train_history_etnrq, 1))
 
         if len(self._eval_history_etr) > 0:
-            self._write_diagramm('eval_episode', self._eval_history_etr, 0)
-            self._write_diagramm('eval_time', self._eval_history_etr, 1)
-            self._write_diagramm('eval_reward', self._eval_history_etr, 2)
+            # diagramms.append(self._write_diagramm('eval_episode', self._eval_history_etr, 0))
+            # diagramms.append(self._write_diagramm('eval_time', self._eval_history_etr, 1))
+            diagramms.append(self._write_diagramm('eval_reward', self._eval_history_etr, 2))
+        return diagramms
 
     def _write_diagramm(self, name, arr, idx):
+        path = os.path.join(self._work_dir, name + ".png")
         data = np.asarray(arr)[:, idx]
         plt.clf()
         plt.plot(data)
-        path = os.path.join(self._work_dir, name + ".png")
+        plt.title(name)
         plt.savefig(path)
+        return [name, path]
 
     @property
     def total_time_elapsed(self):
@@ -98,13 +103,11 @@ class Reporter(Logger):
 
     def _save_state(self):
         with open(self._state_path, 'w') as f:
-            self._saved_time = self.total_time_elapsed
             pickle.dump([
-                self._saved_time,
+                self.total_time_elapsed,
                 self._train_history_etnrq,
                 self._eval_history_etr
             ], f, protocol=pickle.HIGHEST_PROTOCOL)
-        self.on_save_done(self, self._state_path)
 
     def restore(self):
         with open(self._state_path, 'r') as f:
@@ -113,4 +116,3 @@ class Reporter(Logger):
                 self._train_history_etnrq,
                 self._eval_history_etr
             ] = pickle.load(f)
-        self.on_restore_done(self, self._state_path)
