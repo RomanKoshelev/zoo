@@ -9,6 +9,7 @@ SUMMARY_EVERY_EPISODES = 10
 WORK_DIR = "report/"
 
 
+# todo: draw diagramm for Qmax and Rewards depended of Episodes and Time
 # todo: save/restore sate: history, last_saved_duration
 
 class Reporter:

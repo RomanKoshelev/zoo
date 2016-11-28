@@ -14,21 +14,19 @@ class DemoProc(Procedure):
 
         self._make_instances(work_path)
 
+        # todo: use reporter instead of print and title
+
         with self.platform, self.world, self.mind:
-            print(self.world.summary)
             self.mind.restore_weights(init_path)
+
+            print(self.world.summary)
             print(str(self).replace('\t', "  "))
+
             for ep in xrange(episodes):
-                s = self.world.reset()
-                reward = 0
-                for t in xrange(steps):
-                    self.world.render()
-                    a = self.mind.predict(s)
-                    s, r, done, _ = self.world.step(a)
-                    reward += r
-                print("%3d  Reward = %+7.0f" % (ep, reward))
+                reward = self.mind.run_episode(steps)
                 self.update_title(ep, reward)
+                print("%3d  Reward = %+7.0f" % (ep, reward))
 
     @staticmethod
     def update_title(ep, reward):
-        Context.window_title['episod'] = "|  %d: R = %+.0f" % (ep, reward)
+        Context.window_title['episode'] = "|  %d: R = %+.0f" % (ep, reward)

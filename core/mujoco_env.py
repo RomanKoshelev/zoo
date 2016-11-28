@@ -1,5 +1,4 @@
 import os
-import uuid
 
 import six
 import mujoco_py
@@ -11,11 +10,13 @@ from core.context import Context
 from utils.os_tools import make_dir_if_not_exists
 
 AGENT_PLACEHOLDER = '{{agent}}'
+ENV_BASE_DIR = 'environment/'
 
 
 # noinspection PyAbstractClass
 class ZooMujocoEnv(MujocoEnv):
     def __init__(self, frame_skip):
+        self.work_path = Context.work_path
         self.world = Context.world
         self.agent = Context.world.agent
         MujocoEnv.__init__(self, model_path=self._complile_model(), frame_skip=frame_skip)
@@ -45,7 +46,7 @@ class ZooMujocoEnv(MujocoEnv):
         agent_model = self.agent.read_model()
         env_model = world_model.replace(AGENT_PLACEHOLDER, agent_model)
 
-        env_path = os.path.join(Context.config['env.model_dir'], "env_" + str(uuid.uuid4()) + ".xml")
+        env_path = os.path.join(Context.work_path, ENV_BASE_DIR, "env_model.xml")
         env_path = os.path.abspath(env_path)
         make_dir_if_not_exists(env_path)
 

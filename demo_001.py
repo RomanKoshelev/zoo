@@ -17,6 +17,8 @@ def train_mujoco_tentacle_world():
         'episodes': 10000,
         'steps': 75,
 
+        'exp.base_path': "./out/experiments",
+
         'env.model_dir': "out/tmp/",
         'env.world_path': "env/assets/tentacle_world.xml",
         'env.agent_path': "env/assets/tentacle_agent.xml",

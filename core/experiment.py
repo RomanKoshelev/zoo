@@ -2,14 +2,14 @@ import os
 
 from core.context import Context
 
-BASE_PATH = "./out/experiments"
-
 
 class Experiment:
     def __init__(self, exp_id, proc, init_from=None):
         self.id = exp_id
         self.init_id = init_from if init_from is not None else exp_id
         self._proc = proc
+        self._base_path = Context.config['exp.base_path']
+        Context.work_path = self.work_path
         self._update_title()
 
     def start(self):
@@ -20,11 +20,11 @@ class Experiment:
 
     @property
     def work_path(self):
-        return os.path.join(BASE_PATH, self.id)
+        return os.path.join(self._base_path, self.id)
 
     @property
     def init_path(self):
-        return os.path.join(BASE_PATH, self.init_id)
+        return os.path.join(self._base_path, self.init_id)
 
     def _update_title(self):
         Context.window_title['exp'] = "|  %s #%s" % (self._proc.__class__.__name__, self.id)
