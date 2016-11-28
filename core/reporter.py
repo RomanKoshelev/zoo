@@ -71,17 +71,16 @@ class Reporter(Logger):
 
     def _write_diagramms(self):
         diagramms = []
-        if len(self._train_history_etnrq) > 0:
-            diagramms.append(self._write_diagramm('train_qmax', self._train_history_etnrq, 4))
-            diagramms.append(self._write_diagramm('train_reward', self._train_history_etnrq, 3))
-            diagramms.append(self._write_diagramm('train_noise', self._train_history_etnrq, 2))
-            # diagramms.append(self._write_diagramm('train_episode', self._train_history_etnrq, 0))
-            # diagramms.append(self._write_diagramm('train_time', self._train_history_etnrq, 1))
-
         if len(self._eval_history_etr) > 0:
             # diagramms.append(self._write_diagramm('eval_episode', self._eval_history_etr, 0))
             # diagramms.append(self._write_diagramm('eval_time', self._eval_history_etr, 1))
             diagramms.append(self._write_diagramm('eval_reward', self._eval_history_etr, 2))
+        if len(self._train_history_etnrq) > 0:
+            diagramms.append(self._write_diagramm('train_reward', self._train_history_etnrq, 3))
+            diagramms.append(self._write_diagramm('train_noise', self._train_history_etnrq, 2))
+            diagramms.append(self._write_diagramm('train_qmax', self._train_history_etnrq, 4))
+            # diagramms.append(self._write_diagramm('train_episode', self._train_history_etnrq, 0))
+            # diagramms.append(self._write_diagramm('train_time', self._train_history_etnrq, 1))
         return diagramms
 
     def _write_diagramm(self, name, arr, idx):

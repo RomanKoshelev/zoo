@@ -1,12 +1,13 @@
 TODO:
-- draw diagramm for Noise, Qmax and Rewards (w/o noise) depended on Episodes and Time
-- save params to out_path/params.txt
+- make the 'rider' algorithm
 
 LATER:
-- move to python 3.4
+- save params to out_path/params.txt
 - use mouse to control target # mx, my = glfw.get_cursor_pos(window)
+- move to python 3.4
 
 DONE:
++ draw diagramm for Noise, Qmax and Rewards (w/o noise) depended on Episodes and Time
 + reporter
 + print time estimation
 + print experiment summary every 100 episodes
