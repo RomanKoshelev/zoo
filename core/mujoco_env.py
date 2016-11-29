@@ -33,8 +33,8 @@ class ZooMujocoEnv(MujocoEnv):
     def _get_viewer(self):
         if self.viewer is None:
             self.viewer = mujoco_py.MjViewer(
-                init_height=Context.config.get('view.height', 800),
-                init_width=Context.config.get('view.width', 1200)
+                init_height=Context.config.get('view.height', 400),
+                init_width=Context.config.get('view.width', 600)
             )
             self.viewer.start()
             self.viewer.set_model(self.model)
