@@ -28,7 +28,7 @@ def train_mujoco_tentacle_world():
         'env.reward_method': default_reward,
 
         'alg.batch_size': 640,
-        'alg.buffer_size': 3e5,
+        'alg.buffer_size': 1e5,
         'alg.noise_sigma': .1,
         'alg.noise_theta': .01,
         'alg.noise_rate_method': staircase_5,

@@ -5,6 +5,7 @@ from core.ddpg_mind import DdpgMind
 from core.demo_procedure import DemoProc
 from core.experiment import Experiment
 from core.mujoco_agent import MujocoAgent
+from core.reporter import Reporter
 from core.tensorflow_platform import TensorflowPlatform
 from env.tentacle_world import TentacleWorld
 from env.tentacle_reward import default_reward
@@ -16,14 +17,15 @@ def train_mujoco_tentacle_world():
         'episodes': 10000,
         'steps': 75,
 
-        'env.model_dir': "out/tmp/",
+        'exp.base_path': "./out/experiments",
+
         'env.world_path': "env/assets/tentacle_world.xml",
         'env.agent_path': "env/assets/tentacle_agent.xml",
         'env.target_location_method': random_target,
         'env.reward_method': default_reward,
     }
 
-    demo_proc = DemoProc(TensorflowPlatform, TentacleWorld, MujocoAgent, DdpgMind)
+    demo_proc = DemoProc(TensorflowPlatform, TentacleWorld, MujocoAgent, DdpgMind, Reporter)
     experiment = Experiment("002.demo", demo_proc, init_from="002")
     experiment.start()
 
