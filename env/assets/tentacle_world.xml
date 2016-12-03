@@ -40,8 +40,9 @@
 
     <!-- Target -->
     <body name="target" pos="0 3 1.5">
-      <joint type="slide" axis="1 0 0" range="-3 +3" damping="0" frictionloss="1e10" frictional="true" />
-      <joint type="slide" axis="0 0 1" range="-1 +1" damping="0" frictionloss="1e10" frictional="true" />
+      <joint name="target_x" type="slide" axis="1 0 0" range="-3 +3" damping="0" frictionloss="1e10" frictional="true" />
+      <joint name="target_y" type="slide" axis="0 1 0" range="-3 +3" damping="0" frictionloss="1e10" frictional="true" />
+      <joint name="target_z" type="slide" axis="0 0 1" range="-1 +1" damping="0" frictionloss="1e10" frictional="true" />
 
       <geom type="sphere" conaffinity="0" contype="0" rgba="1. 0. 0. 1." size=".05" mass="2e3"/>
       <site name="target" pos="0 0 0.025"/>

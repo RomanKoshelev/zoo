@@ -1,6 +1,6 @@
 import numpy as np
 
 
-def random_target(tentacle_env):
-    x, z = np.random.uniform(+1, +1, 2) * tentacle_env.target_range
-    return np.array([x, z])
+def random_target(target_range):
+    x, y, z = np.random.uniform(low=-1, high=+1, size=3) * target_range
+    return np.array([x, y, z])

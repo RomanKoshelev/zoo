@@ -1,17 +1,17 @@
-import numpy as np
+from __future__ import print_function
 
 from core.context import Context
 from core.mujoco_env import ZooMujocoEnv
 
+FRAME_SKIP = 2
+TARGET_RANGE = [1.5, 0., 1.0]
 INIT_EVERY_RESETS = 10
-TARGET_RANGE_XZ = [1.5, 1.0]
 
 
 class TentacleEnv(ZooMujocoEnv):
     def __init__(self):
         self._resets_num = 0
-        self.target_range = TARGET_RANGE_XZ
-        ZooMujocoEnv.__init__(self, frame_skip=2)
+        ZooMujocoEnv.__init__(self, frame_skip=FRAME_SKIP)
 
     def _step(self, action):
         self.do_simulation(action, self.frame_skip)
@@ -37,8 +37,7 @@ class TentacleEnv(ZooMujocoEnv):
             qpos = self.model.data.qpos.ravel().copy()
             qvel = self.model.data.qvel.ravel().copy()
 
-        qpos[-2:] = Context.config['env.target_location_method'](self)
-        qvel[-2:] = np.array([0, 0])
+        qpos, qvel = self._set_target(qpos, qvel)
 
         self.set_state(qpos, qvel)
 
@@ -54,3 +53,14 @@ class TentacleEnv(ZooMujocoEnv):
         v.cam.azimuth = -90
         v.cam.distance = 5.5
         v.cam.elevation = -16
+
+    def _set_target(self, qpos, qvel):
+        tpos = Context.config['env.target_location_method'](TARGET_RANGE)
+        joints = ["target_x", "target_y", "target_z"]
+
+        for i, j in enumerate(joints):
+            qposadr, qveladr, _ = self.model.joint_adr(j)
+            qpos[qposadr] = tpos[i]
+            qvel[qveladr] = 0.
+
+        return qpos, qvel

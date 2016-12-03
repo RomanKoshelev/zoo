@@ -11,7 +11,6 @@ from env.tentacle_world import TentacleWorld
 from env.tentacle_reward import default_reward
 from env.tentacle_target import random_target
 from utils.noise_tools import staircase_4
-import os
 
 
 def train_mujoco_tentacle_world():
@@ -36,6 +35,9 @@ def train_mujoco_tentacle_world():
         'mind.evaluate_every_episodes': 10,
         'report.write_every_episodes': 5,
         'report.summary_every_episodes': 30,
+
+        'view.width': 1200,
+        'view.height': 800,
     }
 
     train_proc = TrainProc(TensorflowPlatform, TentacleWorld, MujocoAgent, DdpgMind, Reporter)
