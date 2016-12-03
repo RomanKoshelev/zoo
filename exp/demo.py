@@ -1,5 +1,4 @@
 from __future__ import print_function
-import os
 
 from core.context import Context
 from core.ddpg_mind import DdpgMind
@@ -26,6 +25,7 @@ def train_mujoco_tentacle_world():
         'env.agent_path': "../env/assets/tentacle_agent.xml",
         'env.target_location_method': random_target,
         'env.reward_method': default_reward,
+        'env.target_mouse_control': True,
     }
 
     demo_proc = DemoProc(TensorflowPlatform, TentacleWorld, MujocoAgent, DdpgMind, Reporter)

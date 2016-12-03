@@ -25,6 +25,7 @@ def train_mujoco_tentacle_world():
         'env.agent_path': "../env/assets/tentacle_agent.xml",
         'env.target_location_method': random_target,
         'env.reward_method': default_reward,
+        'env.target_mouse_control': True,
 
         'alg.batch_size': 640,
         'alg.buffer_size': 2e5,

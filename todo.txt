@@ -1,9 +1,9 @@
 TODO:
+- use mouse to control target # mx, my = glfw.get_cursor_pos(window)
 - make the 'rider' algorithm
 
 LATER:
 - save params to out_path/params.txt
-- use mouse to control target # mx, my = glfw.get_cursor_pos(window)
 - move to python 3.4
 
 DONE:
