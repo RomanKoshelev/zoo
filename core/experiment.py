@@ -18,6 +18,9 @@ class Experiment:
     def proceed(self):
         self._proc.proceed(self.init_path, self.work_path)
 
+    def can_proceed(self):
+        return os.path.exists(os.path.join(self.work_path, 'network'))
+
     @property
     def work_path(self):
         return os.path.join(self._base_path, self.id)

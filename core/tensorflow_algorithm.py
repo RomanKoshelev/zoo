@@ -1,4 +1,5 @@
 import tensorflow as tf
+import os
 
 
 class TensorflowAlgorithm(object):
@@ -24,4 +25,6 @@ class TensorflowAlgorithm(object):
 
     def restore_weights(self, path):
         saver = tf.train.Saver(self._variables)
+        if not os.path.exists(path):
+            raise ValueError("File not found: '%s'" % path)
         saver.restore(self.sess, path)
