@@ -58,28 +58,33 @@ class Reporter(Logger):
         self._eval_history_etr.append([e, self.total_time_elapsed, r])
 
     def _write_html_report(self):
-        report = "<HTML><BODY><H1>Report</H1>\n"
-        report += "<h2>Diagramms</h2>\n"
-        diagramms = self._write_diagramms()
-        for d in diagramms:
-            report += "<image width=500 src='%s'>" % (os.path.basename(d[1]))
+        title = "Experiment %s" % Context.experiment.id
+        report = "<HTML><HEAD><TITLE>%s</TITLE></HEAD><BODY><H1>%s</H1>\n" % (title, title)
+
+        report += self._diagrams()
 
         report += "</BODY></HTML>\n"
         html_path = os.path.join(self._work_dir, "report.html")
         with open(html_path, 'w') as f:
             f.write(report)
 
-    def _write_diagramms(self, x_idx=0):
-        diagramms = []
-        if len(self._eval_history_etr) > 0:
-            diagramms.append(self._write_diagramm('eval_reward', self._eval_history_etr, x_idx, 2))
-        if len(self._train_history_etnrq) > 0:
-            diagramms.append(self._write_diagramm('train_reward', self._train_history_etnrq, x_idx, 3))
-            diagramms.append(self._write_diagramm('train_noise', self._train_history_etnrq, x_idx, 2))
-            diagramms.append(self._write_diagramm('train_qmax', self._train_history_etnrq, x_idx, 4))
-        return diagramms
+    def _diagrams(self):
+        txt = "<h2>Diagrams</h2>\n"
+        for d in self._create_all_diagrams():
+            txt += "<img src='%s' width=500>\n" % (os.path.basename(d[1]))
+        return txt
 
-    def _write_diagramm(self, name, arr, x_idx, y_idx):
+    def _create_all_diagrams(self, x_idx=0):
+        diagrams = []
+        if len(self._eval_history_etr) > 0:
+            diagrams.append(self._create_diagram('eval_reward', self._eval_history_etr, x_idx, 2))
+        if len(self._train_history_etnrq) > 0:
+            diagrams.append(self._create_diagram('train_reward', self._train_history_etnrq, x_idx, 3))
+            diagrams.append(self._create_diagram('train_noise', self._train_history_etnrq, x_idx, 2))
+            diagrams.append(self._create_diagram('train_qmax', self._train_history_etnrq, x_idx, 4))
+        return diagrams
+
+    def _create_diagram(self, name, arr, x_idx, y_idx):
         path = os.path.join(self._work_dir, name + ".png")
         x = np.asarray(arr)[:, x_idx]
         y = np.asarray(arr)[:, y_idx]

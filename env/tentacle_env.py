@@ -6,7 +6,6 @@ from core.context import Context
 from core.mujoco_env import ZooMujocoEnv
 
 FRAME_SKIP = 2
-TARGET_RANGE_XZ = [1.1, 1.0]
 INIT_EVERY_RESETS = 10
 
 
@@ -40,7 +39,7 @@ class TentacleEnv(ZooMujocoEnv):
 
         self.set_state(qpos, qvel)
 
-        self._target_pos = Context.config['env.target_location_method'](TARGET_RANGE_XZ)
+        self._target_pos = Context.config['env.target_location_method']()
 
         return self._get_obs()
 

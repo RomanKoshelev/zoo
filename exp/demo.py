@@ -21,15 +21,17 @@ def train_mujoco_tentacle_world():
         'view.height': 800,
 
         'exp.base_path': "../out/experiments",
+
         'env.world_path': "../env/assets/tentacle_world.xml",
         'env.agent_path': "../env/assets/tentacle_agent.xml",
-        'env.target_location_method': random_target,
         'env.reward_method': default_reward,
+        'env.target_location_method': random_target,
+        'env.target_range_xz': [1.1, 1.0],
         'env.target_mouse_control': True,
     }
 
     demo_proc = DemoProc(TensorflowPlatform, TentacleWorld, MujocoAgent, DdpgMind, Reporter)
-    experiment = Experiment("demo", demo_proc, init_from="006")
+    experiment = Experiment("demo", demo_proc, init_from="007")
     experiment.start()
 
 if __name__ == '__main__':

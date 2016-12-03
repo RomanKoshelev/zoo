@@ -5,6 +5,7 @@ from core.context import Context
 
 class Experiment:
     def __init__(self, exp_id, proc, init_from=None):
+        Context.experiment = self
         self.id = exp_id
         self.init_id = init_from if init_from is not None else exp_id
         self._proc = proc
