@@ -167,10 +167,12 @@ class Reporter(Logger):
 
     @staticmethod
     def _get_last_mean(arr, idx):
-        r = np.asarray(arr)[:, idx]
-        l = len(r)
-        f = Context.config['report.diagram_mean_frame']
-        return np.mean(r[max(0, l - f):l])
+        if len(arr) > 0:
+            r = np.asarray(arr)[:, idx]
+            l = len(r)
+            f = Context.config['report.diagram_mean_frame']
+            return np.mean(r[max(0, l - f):l])
+        return 0
 
     def _report_diagrams(self):
         txt = "<h2>Diagrams</h2>\n"

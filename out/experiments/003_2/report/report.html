@@ -1,0 +1,79 @@
+<HTML><HEAD><meta http-equiv='refresh' content='30'><TITLE>Exp #003_2</TITLE></HEAD><BODY><H1>Experiment #003_2</H1>
+<pre>
+  Report time:   2016-12-04 20:23:30
+  Host name:     bernard
+</pre>
+<h2>Configuration</h2>
+<pre>
+<b>  Experiment:</b>
+    exp.base_path:                   ../out/experiments
+    exp.episodes:                    20000
+    exp.save_every_episodes:         200
+    exp.steps:                       75
+<b>  Algorithm:</b>
+    alg.batch_size:                  1024
+    alg.buffer_size:                 50000
+    alg.noise_rate_method:           staircase_5
+    alg.noise_sigma:                 0.1
+    alg.noise_theta:                 0.01
+<b>  Mind:</b>
+    mind.evaluate_every_episodes:    10
+<b>  Environment:</b>
+    env.model_agent_path:            ../env/assets/tentacle_agent.xml
+    env.model_world_path:            ../env/assets/tentacle_world.xml
+    env.reward_method:               default_reward
+    env.target_location_method:      random_target
+    env.target_mouse_control:        False
+    env.target_range_xz:             [1.5, 1.0]
+<b>  Reporting:</b>
+    report.diagram_mean_frame:       50
+    report.refrech_html_every_secs:  30
+    report.summary_every_episodes:   20
+    report.write_every_episodes:     5
+</pre>
+<h2>Instances</h2>
+<pre>
+Experiment:
+  id: 003_2
+  init_id: 003_2
+  proc: TrainProc:
+    platform: TensorflowPlatform
+    world: TentacleWorld:
+      id: Zoo:Mujoco:Tentacle-v1
+      model_path: ../env/assets/tentacle_world.xml
+      obs_dim: 10
+      act_box: [-200. -150.  -50.]
+               [ 200.  150.   50.]
+    agent: MujocoAgent:
+      model_path: ../env/assets/tentacle_agent.xml
+    mind: DdpgMind:
+      algorithm: DDPG_PeterKovacs
+        buffer: ReplayBuffer:
+          buffer_size: 50000
+          num_experiences: 1500
+        episode: 19
+    reporter: Reporter:
+      saved_time: 00:00:00
+      train_history: 20
+      evaluation_history: 1</pre>
+<h2>Progress</h2>
+<pre>
+  Episodes:      20
+  Steps:         1500
+  Total time:    11:21:22
+    spent:       00:00:40 (0%)
+    left:        11:20:42
+  Finish:        07:44:12 2016-12-05
+  Performance:   0.49 per sec
+</pre>
+<h2>Results</h2>
+<pre>
+  Train reward:      -2253.57
+  Eval reward:       -1080.53
+</pre>
+<h2>Diagrams</h2>
+<img src='eval_reward.png' width=500>
+<img src='train_reward.png' width=500>
+<img src='train_noise.png' width=500>
+<img src='train_qmax.png' width=500>
+</BODY></HTML>
