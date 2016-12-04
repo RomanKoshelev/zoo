@@ -9,8 +9,8 @@ class DemoProc(Procedure):
     # noinspection PyUnusedLocal
     def start(self, init_path, work_path):
         Context.mode = 'demo'
-        episodes = Context.config['episodes']
-        steps = Context.config['steps']
+        episodes = Context.config['exp.episodes']
+        steps = Context.config['exp.steps']
 
         self._make_instances(work_path)
 

@@ -2,6 +2,7 @@ from __future__ import print_function
 
 import os
 import pickle
+import types
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -13,12 +14,21 @@ from utils.stopwatch import Stopwatch, hms
 
 SUMMARY_EVERY_EPISODES = 10
 WORK_DIR = "report/"
+GROUPS = ['exp', 'alg', 'mind', 'env', '-report', '-view']
+GROUP_NAMES = {
+    'exp': "Experiment",
+    'env': "Environment",
+    'mind': "Mind",
+    'alg': "Algorithm",
+    'report': "Reporting",
+    'view': "Viewing"
+}
 
 
 class Reporter(Logger):
     def __init__(self, base_path):
         Logger.__init__(self)
-        self._episodes = Context.config['episodes']
+        self._episodes = Context.config['exp.episodes']
         self._work_dir = os.path.join(base_path, WORK_DIR)
         self._sw = Stopwatch()
         self._saved_time = 0.
@@ -50,7 +60,7 @@ class Reporter(Logger):
         if (e + 1) % Context.config['report.summary_every_episodes'] == 0:
             self._log_summary(e, self._episodes, self.total_time_elapsed)
 
-        if (e + 1) % Context.config['save_every_episodes'] == 0:
+        if (e + 1) % Context.config['exp.save_every_episodes'] == 0:
             self._save_state()
 
     def on_evaluiation_end(self, e, r):
@@ -61,14 +71,33 @@ class Reporter(Logger):
         title = "Experiment %s" % Context.experiment.id
         report = "<HTML><HEAD><TITLE>%s</TITLE></HEAD><BODY><H1>%s</H1>\n" % (title, title)
 
-        report += self._diagrams()
+        report += self._report_config()
+        report += self._report_diagrams()
 
         report += "</BODY></HTML>\n"
         html_path = os.path.join(self._work_dir, "report.html")
         with open(html_path, 'w') as f:
             f.write(report)
 
-    def _diagrams(self):
+    @staticmethod
+    def _report_config():
+        def to_str(item):
+            if isinstance(item, types.FunctionType):
+                return item.__name__
+            else:
+                return str(item)
+
+        txt = "<h2>Config</h2>\n"
+        txt += "<pre>\n"
+        for g in GROUPS:
+            txt += "<b>%s:</b>\n" % GROUP_NAMES[g]
+            for k, v in iter(sorted(Context.config.iteritems())):
+                if k.startswith(g + '.'):
+                    txt += "  %-32s %s\n" % (k + ":", to_str(v))
+        txt += "</pre>\n"
+        return txt
+
+    def _report_diagrams(self):
         txt = "<h2>Diagrams</h2>\n"
         for d in self._create_all_diagrams():
             txt += "<img src='%s' width=500>\n" % (os.path.basename(d[1]))

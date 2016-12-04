@@ -6,7 +6,7 @@ from core.gym_world import GymWorld
 class MujocoWorld(GymWorld):
     def __init__(self, env_id, agent):
         GymWorld.__init__(self, env_id, agent)
-        self.model_path = Context.config['env.world_path']
+        self.model_path = Context.config['env.model_world_path']
 
     def __str__(self):
         return "%s:\n\t%s\n\t%s" % (

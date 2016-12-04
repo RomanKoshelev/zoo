@@ -10,31 +10,30 @@ from core.train_procedure import TrainProc
 from env.tentacle_world import TentacleWorld
 from env.tentacle_reward import default_reward
 from env.tentacle_target import random_target
-from utils.noise_tools import staircase_4
+from utils.noise_tools import staircase_5
 
 
 def train_mujoco_tentacle_world():
     Context.config = {
-        'episodes': 30000,
-        'steps': 75,
-        'save_every_episodes': 200,
-
+        'exp.episodes': 10000,
+        'exp.steps': 75,
+        'exp.save_every_episodes': 200,
         'exp.base_path': "../out/experiments",
 
-        'env.world_path': "../env/assets/tentacle_world.xml",
-        'env.agent_path': "../env/assets/tentacle_agent.xml",
+        'env.model_world_path': "../env/assets/tentacle_world.xml",
+        'env.model_agent_path': "../env/assets/tentacle_agent.xml",
         'env.reward_method': default_reward,
-        'env.target_location_method': random_target,
-        'env.target_range_xz': [1.5, 1.2],
         'env.target_mouse_control': False,
+        'env.target_range_xz': [1.5, 1.0],
+        'env.target_location_method': random_target,
 
         'mind.evaluate_every_episodes': 10,
 
-        'alg.batch_size': 640,
-        'alg.buffer_size': 2e5,
+        'alg.buffer_size': 100 * 1000,
+        'alg.batch_size': 512,
         'alg.noise_sigma': .1,
         'alg.noise_theta': .01,
-        'alg.noise_rate_method': staircase_4,
+        'alg.noise_rate_method': staircase_5,
 
         'report.write_every_episodes': 5,
         'report.summary_every_episodes': 20,
