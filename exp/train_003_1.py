@@ -11,7 +11,6 @@ from env.tentacle_world import TentacleWorld
 from env.tentacle_reward import default_reward
 from env.tentacle_target import random_target
 from utils.noise_tools import staircase_5
-import os
 
 
 def train_mujoco_tentacle_world():
@@ -45,7 +44,7 @@ def train_mujoco_tentacle_world():
 
     from_scratch = False
 
-    if from_scratch or not os.path.exists(experiment.work_path):
+    if from_scratch or not experiment.can_proceed():
         experiment.start()
     else:
         experiment.proceed()
