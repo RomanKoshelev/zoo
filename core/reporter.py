@@ -39,6 +39,7 @@ class Reporter(Logger):
         make_dir_if_not_exists(self._work_dir)
         self._train_history_etnrq = []
         self._eval_history_etr = []
+        self.html_path = os.path.abspath(os.path.join(self._work_dir, "report.html"))
 
     def __str__(self):
         return "%s:\n\t%s\n\t%s\n\t%s" % (
@@ -73,7 +74,7 @@ class Reporter(Logger):
 
     def write_html_report(self):
         report = "<HTML><HEAD>%s<TITLE>%s</TITLE></HEAD><BODY><H1>%s</H1>\n" % (
-            "<meta http-equiv='refresh' content='60'>",
+            "<meta http-equiv='refresh' content='%d'>" % Context.config['report.refrech_html_every_secs'],
             "Exp #%s" % Context.experiment.id,
             "Experiment #%s" % Context.experiment.id,
         )
@@ -82,11 +83,11 @@ class Reporter(Logger):
         report += self._report_config()
         report += self._report_instances()
         report += self._report_progress()
+        report += self._report_results()
         report += self._report_diagrams()
 
         report += "</BODY></HTML>\n"
-        html_path = os.path.join(self._work_dir, "report.html")
-        with open(html_path, 'w') as f:
+        with open(self.html_path, 'w') as f:
             f.write(report)
 
     def _report_progress(self):
@@ -109,8 +110,19 @@ class Reporter(Logger):
         html += field('  left', hms(left))
         html += field('Finish', "%s %s" % (datetime_after_secs(left).time(), datetime_after_secs(left).date()))
         html += field('Performance', "%.2f per sec" % (ep / float(spent),))
-        html += field('Train reward', '%.2f' % self._get_last_mean(self._train_history_etnrq, 3))
-        html += field('Eval reward', '%.2f' % self._get_last_mean(self._eval_history_etr, 2))
+
+        html += "</pre>\n"
+        return html
+
+    def _report_results(self):
+        html = "<h2>Results</h2>\n"
+        html += "<pre>\n"
+
+        def field(n, v):
+            return "  %-14s %s\n" % (n + ':', v)
+
+        html += field('Train reward', '%+12.2f' % self._get_last_mean(self._train_history_etnrq, 3))
+        html += field('Eval reward', '%+12.2f' % self._get_last_mean(self._eval_history_etr, 2))
 
         html += "</pre>\n"
         return html
@@ -149,7 +161,7 @@ class Reporter(Logger):
             html += "<b>  %s:</b>\n" % GROUP_NAMES[g]
             for k, v in iter(sorted(Context.config.iteritems())):
                 if k.startswith(g + '.'):
-                    html += "    %-30s %s\n" % (k + ":", to_str(v))
+                    html += "    %-32s %s\n" % (k + ":", to_str(v))
         html += "</pre>\n"
         return html
 
@@ -224,4 +236,3 @@ class Reporter(Logger):
                 self._train_history_etnrq,
                 self._eval_history_etr
             ] = pickle.load(f)
-

@@ -1,34 +1,35 @@
-<HTML><HEAD><meta http-equiv='refresh' content='60'><TITLE>Exp #003_1</TITLE></HEAD><BODY><H1>Experiment #003_1</H1>
+<HTML><HEAD><meta http-equiv='refresh' content='30'><TITLE>Exp #003_1</TITLE></HEAD><BODY><H1>Experiment #003_1</H1>
 <pre>
-  Report time:   2016-12-04 19:23:07
+  Report time:   2016-12-04 20:05:37
   Host name:     bernard
 </pre>
 <h2>Configuration</h2>
 <pre>
 <b>  Experiment:</b>
-    exp.base_path:                 ../out/experiments
-    exp.episodes:                  20000
-    exp.save_every_episodes:       200
-    exp.steps:                     75
+    exp.base_path:                   ../out/experiments
+    exp.episodes:                    20000
+    exp.save_every_episodes:         200
+    exp.steps:                       75
 <b>  Algorithm:</b>
-    alg.batch_size:                1024
-    alg.buffer_size:               100000
-    alg.noise_rate_method:         staircase_5
-    alg.noise_sigma:               0.1
-    alg.noise_theta:               0.01
+    alg.batch_size:                  1024
+    alg.buffer_size:                 100000
+    alg.noise_rate_method:           staircase_5
+    alg.noise_sigma:                 0.1
+    alg.noise_theta:                 0.01
 <b>  Mind:</b>
-    mind.evaluate_every_episodes:  10
+    mind.evaluate_every_episodes:    10
 <b>  Environment:</b>
-    env.model_agent_path:          ../env/assets/tentacle_agent.xml
-    env.model_world_path:          ../env/assets/tentacle_world.xml
-    env.reward_method:             default_reward
-    env.target_location_method:    random_target
-    env.target_mouse_control:      False
-    env.target_range_xz:           [1.5, 1.0]
+    env.model_agent_path:            ../env/assets/tentacle_agent.xml
+    env.model_world_path:            ../env/assets/tentacle_world.xml
+    env.reward_method:               default_reward
+    env.target_location_method:      random_target
+    env.target_mouse_control:        False
+    env.target_range_xz:             [1.5, 1.0]
 <b>  Reporting:</b>
-    report.diagram_mean_frame:     50
-    report.summary_every_episodes: 20
-    report.write_every_episodes:   5
+    report.diagram_mean_frame:       50
+    report.refrech_html_every_secs:  30
+    report.summary_every_episodes:   20
+    report.write_every_episodes:     5
 </pre>
 <h2>Instances</h2>
 <pre>
@@ -40,6 +41,9 @@ Experiment:
     world: TentacleWorld:
       id: Zoo:Mujoco:Tentacle-v1
       model_path: ../env/assets/tentacle_world.xml
+      obs_dim: 10
+      act_box: [-200. -150.  -50.]
+               [ 200.  150.   50.]
     agent: MujocoAgent:
       model_path: ../env/assets/tentacle_agent.xml
     mind: DdpgMind:
@@ -47,22 +51,25 @@ Experiment:
         buffer: ReplayBuffer:
           buffer_size: 100000
           num_experiences: 100000
-        episode: 4024
+        episode: 4589
     reporter: Reporter:
-      saved_time: 02:53:35
-      train_history: 4025
-      evaluation_history: 399</pre>
+      saved_time: 03:11:22
+      train_history: 4590
+      evaluation_history: 454</pre>
 <h2>Progress</h2>
 <pre>
-  Episodes:      4025
-  Steps:         301875
-  Total time:    14:27:55
-    spent:       02:54:40 (20%)
-    left:        11:33:15
-  Finish:        06:56:22 2016-12-05
+  Episodes:      4590
+  Steps:         344250
+  Total time:    14:27:19
+    spent:       03:19:03 (22%)
+    left:        11:08:16
+  Finish:        07:13:53 2016-12-05
   Performance:   0.38 per sec
-  Train reward:  -1050.67
-  Eval reward:   -606.62
+</pre>
+<h2>Results</h2>
+<pre>
+  Train reward:      -1003.01
+  Eval reward:        -651.23
 </pre>
 <h2>Diagrams</h2>
 <img src='eval_reward.png' width=500>

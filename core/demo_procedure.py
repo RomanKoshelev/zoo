@@ -14,14 +14,8 @@ class DemoProc(Procedure):
 
         self._make_instances(work_path)
 
-        # todo: use reporter instead of print and title
-
         with self.platform, self.world, self.mind:
             self.mind.restore_weights(init_path)
-
-            print(self.world.summary)
-            print(str(self).replace('\t', "  "))
-
             for ep in xrange(episodes):
                 reward = self.mind.run_episode(steps)
                 self.update_title(ep, reward)

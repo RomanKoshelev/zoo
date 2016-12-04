@@ -10,28 +10,18 @@ class TrainProc(Procedure):
     def start(self, init_path, work_path):
         Context.mode = 'train'
         self._make_instances(work_path)
-
         with self.platform, self.world, self.mind:
-            print(self.world.summary)
             self.reporter.on_start()
             self.mind.train(work_path)
 
     def proceed(self, init_path, work_path):
         Context.mode = 'train'
         self._make_instances(work_path)
-
         with self.platform, self.world, self.mind:
-            print("--------------------------------------------------------")
-            print(Context.config)
-            print(self.world.summary)
-            print("\nRestoring [%s] ...\n" % init_path)
-            print("--------------------------------------------------------")
-
+            print("Restoring [%s] ..." % init_path)
             self.mind.restore(init_path)
             self.reporter.restore()
-            print(str(self).replace('\t', "  ") + '\n')
-            print("--------------------------------------------------------" + '\n')
-
             self.reporter.on_start()
             self.reporter.write_html_report()
+            print("See report for details: %s\n" % self.reporter.html_path)
             self.mind.train(work_path)
