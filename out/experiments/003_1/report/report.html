@@ -6,6 +6,14 @@
   exp.episodes:                    20000
   exp.save_every_episodes:         1000
   exp.steps:                       75
+<b>Algorithm:</b>
+  alg.batch_size:                  1024
+  alg.buffer_size:                 100000
+  alg.noise_rate_method:           staircase_5
+  alg.noise_sigma:                 0.1
+  alg.noise_theta:                 0.01
+<b>Mind:</b>
+  mind.evaluate_every_episodes:    10
 <b>Environment:</b>
   env.model_agent_path:            ../env/assets/tentacle_agent.xml
   env.model_world_path:            ../env/assets/tentacle_world.xml
@@ -13,18 +21,6 @@
   env.target_location_method:      random_target
   env.target_mouse_control:        False
   env.target_range_xz:             [1.5, 1.0]
-<b>Mind:</b>
-  mind.evaluate_every_episodes:    10
-<b>Algorithm:</b>
-  alg.batch_size:                  1024
-  alg.buffer_size:                 100000
-  alg.noise_rate_method:           staircase_5
-  alg.noise_sigma:                 0.1
-  alg.noise_theta:                 0.01
-<b>Reporting:</b>
-  report.summary_every_episodes:   20
-  report.write_every_episodes:     5
-<b>Viewing:</b>
 </pre>
 <h2>Diagrams</h2>
 <img src='eval_reward.png' width=500>

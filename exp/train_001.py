@@ -37,6 +37,7 @@ def train_mujoco_tentacle_world():
 
         'report.write_every_episodes': 5,
         'report.summary_every_episodes': 20,
+        'report.diagram_mean_frame': 50,
 
         'view.width': 1200,
         'view.height': 800,

@@ -81,9 +81,3 @@ class Stopwatch(object):
 
     def __str__(self):
         return "%.2f" % self.time_elapsed
-
-
-def hms(seconds):
-    m, s = divmod(seconds, 60)
-    h, m = divmod(m, 60)
-    return h, m, s

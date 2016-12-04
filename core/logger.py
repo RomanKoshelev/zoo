@@ -1,7 +1,7 @@
 from __future__ import print_function
 
 from core.context import Context
-from utils.stopwatch import hms
+from utils.string_tools import hms
 
 
 class Logger:
@@ -29,9 +29,9 @@ class Logger:
     def _log_summary_time(self, ep, eps, spent):
         progress = ep / float(eps)
         left = (spent * (1 - progress) / progress) if progress != 0 else 0
-        self.log("Time spent:  %02d:%02d:%02d | " % hms(spent), end='')
+        self.log("Time spent:  %s | " % hms(spent), end='')
         self.log("%.0f%% " % (progress * 100,), end='')
-        self.log("+ %02d:%02d:%02d = %02d:%02d:%02d, " % (hms(left) + hms(spent + left)), end='')
+        self.log("+ %s = %s, " % (hms(left), hms(spent + left)), end='')
         self.log("%.1f per sec" % (ep / float(spent),))
 
     @staticmethod

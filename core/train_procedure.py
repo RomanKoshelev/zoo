@@ -33,4 +33,5 @@ class TrainProc(Procedure):
             print("--------------------------------------------------------" + '\n')
 
             self.reporter.on_start()
+            self.reporter.write_html_report()
             self.mind.train(work_path)
