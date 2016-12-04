@@ -2,6 +2,7 @@ from __future__ import print_function
 
 import os
 import pickle
+import socket
 import types
 
 import matplotlib.pyplot as plt
@@ -71,11 +72,16 @@ class Reporter(Logger):
         self._eval_history_etr.append([e, self.total_time_elapsed, r])
 
     def write_html_report(self):
-        title = "Experiment %s" % Context.experiment.id
-        report = "<HTML><HEAD><TITLE>%s</TITLE></HEAD><BODY><H1>%s</H1>\n" % (title, title)
+        report = "<HTML><HEAD>%s<TITLE>%s</TITLE></HEAD><BODY><H1>%s</H1>\n" % (
+            "<meta http-equiv='refresh' content='60'>",
+            "Exp #%s" % Context.experiment.id,
+            "Experiment #%s" % Context.experiment.id,
+        )
 
-        report += self._report_progress()
+        report += self._report_passport()
         report += self._report_config()
+        report += self._report_instances()
+        report += self._report_progress()
         report += self._report_diagrams()
 
         report += "</BODY></HTML>\n"
@@ -96,12 +102,36 @@ class Reporter(Logger):
         def field(n, v):
             return "  %-14s %s\n" % (n + ':', v)
 
+        html += field('Episodes', ep)
+        html += field('Steps', ep * Context.config['exp.steps'])
         html += field('Total time', hms(spent + left))
         html += field('  spent', "%s (%s)" % (hms(spent), str(int(progress * 100)) + '%'))
         html += field('  left', hms(left))
         html += field('Finish', "%s %s" % (datetime_after_secs(left).time(), datetime_after_secs(left).date()))
-        html += field('Performance', "%.1f per sec" % (ep / float(spent),))
+        html += field('Performance', "%.2f per sec" % (ep / float(spent),))
+        html += field('Train reward', '%.2f' % self._get_last_mean(self._train_history_etnrq, 3))
+        html += field('Eval reward', '%.2f' % self._get_last_mean(self._eval_history_etr, 2))
 
+        html += "</pre>\n"
+        return html
+
+    @staticmethod
+    def _report_passport():
+        def field(n, v):
+            return "  %-14s %s\n" % (n + ':', v)
+
+        dt = datetime_after_secs(0)
+        html = "<pre>\n"
+        html += field('Report time', dt)
+        html += field('Host name', socket.gethostname())
+        html += "</pre>\n"
+        return html
+
+    @staticmethod
+    def _report_instances():
+        html = "<h2>Instances</h2>\n"
+        html += "<pre>\n"
+        html += str(Context.experiment).replace('\t', '  ')
         html += "</pre>\n"
         return html
 
@@ -122,6 +152,13 @@ class Reporter(Logger):
                     html += "    %-30s %s\n" % (k + ":", to_str(v))
         html += "</pre>\n"
         return html
+
+    @staticmethod
+    def _get_last_mean(arr, idx):
+        r = np.asarray(arr)[:, idx]
+        l = len(r)
+        f = Context.config['report.diagram_mean_frame']
+        return np.mean(r[max(0, l - f):l])
 
     def _report_diagrams(self):
         txt = "<h2>Diagrams</h2>\n"
@@ -144,6 +181,7 @@ class Reporter(Logger):
         x = np.asarray(arr)[:, x_idx]
         y = np.asarray(arr)[:, y_idx]
         plt.clf()
+        plt.grid(True)
         plt.plot(x, y)
         plt.title(name)
         plt.xlabel(['episodes', 'time'][x_idx])
@@ -156,6 +194,7 @@ class Reporter(Logger):
         y = np.asarray(arr)[:, y_idx]
         m = running_mean(y, Context.config['report.diagram_mean_frame'])
         plt.clf()
+        plt.grid(True)
         plt.plot(x, y, 'c-', x, m, 'b-')
         plt.title(name)
         plt.xlabel(['episodes', 'time'][x_idx])
@@ -185,3 +224,4 @@ class Reporter(Logger):
                 self._train_history_etnrq,
                 self._eval_history_etr
             ] = pickle.load(f)
+

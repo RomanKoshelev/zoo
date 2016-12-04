@@ -17,7 +17,7 @@ def train_mujoco_tentacle_world():
     Context.config = {
         'exp.episodes': 20000,
         'exp.steps': 75,
-        'exp.save_every_episodes': 1000,
+        'exp.save_every_episodes': 200,
         'exp.base_path': "../out/experiments",
 
         'env.model_world_path': "../env/assets/tentacle_world.xml",
@@ -37,7 +37,7 @@ def train_mujoco_tentacle_world():
 
         'report.write_every_episodes': 5,
         'report.summary_every_episodes': 20,
-        'report.diagram_mean_win': 100,
+        'report.diagram_mean_frame': 50,
     }
 
     train_proc = TrainProc(TensorflowPlatform, TentacleWorld, MujocoAgent, DdpgMind, Reporter)

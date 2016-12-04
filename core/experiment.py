@@ -1,6 +1,7 @@
 import os
 
 from core.context import Context
+from utils.string_tools import tab
 
 
 class Experiment:
@@ -12,6 +13,14 @@ class Experiment:
         self._base_path = Context.config['exp.base_path']
         Context.work_path = self.work_path
         self._update_title()
+
+    def __str__(self):
+        return "%s:\n\t%s\n\t%s\n\t%s" % (
+            self.__class__.__name__,
+            "id: " + tab(self.id),
+            "init_id: " + tab(self.init_id),
+            "proc: " + tab(self._proc),
+        )
 
     def start(self):
         self._proc.start(self.init_path, self.work_path)

@@ -39,8 +39,8 @@ def train_mujoco_tentacle_world():
         'report.summary_every_episodes': 20,
         'report.diagram_mean_frame': 50,
 
-        'view.width': 1200,
-        'view.height': 800,
+        # 'view.width': 1200,
+        # 'view.height': 800,
     }
 
     train_proc = TrainProc(TensorflowPlatform, TentacleWorld, MujocoAgent, DdpgMind, Reporter)

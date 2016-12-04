@@ -1,11 +1,7 @@
-<HTML><HEAD><TITLE>Experiment 001</TITLE></HEAD><BODY><H1>Experiment 001</H1>
-<h2>Progress</h2>
+<HTML><HEAD><meta http-equiv='refresh' content='60'><TITLE>Exp #001</TITLE></HEAD><BODY><H1>Experiment #001</H1>
 <pre>
-  Total time:    05:14:19
-    spent:       04:12:15 (80%)
-    left:        01:02:04
-  Finish:        19:23:58 2016-12-04
-  Performance:   0.5 per sec
+  Report time:   2016-12-04 19:23:07
+  Host name:     bernard
 </pre>
 <h2>Configuration</h2>
 <pre>
@@ -33,6 +29,40 @@
     report.diagram_mean_frame:     50
     report.summary_every_episodes: 20
     report.write_every_episodes:   5
+</pre>
+<h2>Instances</h2>
+<pre>
+Experiment:
+  id: 001
+  init_id: 001
+  proc: TrainProc:
+    platform: TensorflowPlatform
+    world: TentacleWorld:
+      id: Zoo:Mujoco:Tentacle-v1
+      model_path: ../env/assets/tentacle_world.xml
+    agent: MujocoAgent:
+      model_path: ../env/assets/tentacle_agent.xml
+    mind: DdpgMind:
+      algorithm: DDPG_PeterKovacs
+        buffer: ReplayBuffer:
+          buffer_size: 100000
+          num_experiences: 100000
+        episode: 9264
+    reporter: Reporter:
+      saved_time: 04:51:36
+      train_history: 9265
+      evaluation_history: 915</pre>
+<h2>Progress</h2>
+<pre>
+  Episodes:      9265
+  Steps:         694875
+  Total time:    05:17:02
+    spent:       04:53:44 (92%)
+    left:        00:23:18
+  Finish:        19:46:25 2016-12-04
+  Performance:   0.53 per sec
+  Train reward:  2255.40
+  Eval reward:   1810.88
 </pre>
 <h2>Diagrams</h2>
 <img src='eval_reward.png' width=500>
