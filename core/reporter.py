@@ -79,6 +79,7 @@ class Reporter(Logger):
             "Experiment #%s" % Context.experiment.id,
         )
 
+        report += self._report_urgent()
         report += self._report_passport()
         report += self._report_config()
         report += self._report_instances()
@@ -114,6 +115,36 @@ class Reporter(Logger):
         html += "</pre>\n"
         return html
 
+    @property
+    def episode(self):
+        return len(self._train_history_etnrq)
+
+    @property
+    def average_eval_reward(self):
+        return self._get_last_mean(self._eval_history_etr, 2)
+
+    @property
+    def average_qmax(self):
+        return self._get_last_mean(self._train_history_etnrq, 4)
+
+    @property
+    def time_left(self):
+        return int((self.total_time_elapsed * (1 - self.progress) / self.progress) if self.progress != 0 else 0)
+
+    @property
+    def progress(self):
+        return self.episode / float(self._episodes)
+
+    def _report_urgent(self):
+        def field(n, v):
+            return "  %-10s %s\n" % (n + ':', v)
+        html = "<font color=red><pre>\n"
+        html += field('Reward', '%.0f' % self.average_eval_reward)
+        html += field('Qmax', '%.0f' % self.average_qmax)
+        html += field('Left', "%s (%.0f%%)" % (hms(self.time_left), self.progress*100))
+        html += "</pre></font>\n"
+        return html
+
     def _report_results(self):
         html = "<h2>Results</h2>\n"
         html += "<pre>\n"
@@ -133,10 +164,10 @@ class Reporter(Logger):
             return "  %-14s %s\n" % (n + ':', v)
 
         dt = datetime_after_secs(0)
-        html = "<pre>\n"
+        html = "<font color=#AAAAAA><pre>\n"
         html += field('Report time', dt)
         html += field('Host name', socket.gethostname())
-        html += "</pre>\n"
+        html += "</pre></font>\n"
         return html
 
     @staticmethod
