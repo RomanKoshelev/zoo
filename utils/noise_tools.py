@@ -33,9 +33,13 @@ def staircase_5(progress):
     return nr
 
 
-def linear_2(progress):
+def linear_05_00(progress):
+    return _linear(progress, .5, .0)
+
+
+def _linear(progress, l, r):
     assert 0. <= progress <= 1.
-    return 2 * (1 - progress)
+    return l + (r - l) * progress
 
 
 # noinspection PyUnusedLocal
@@ -44,10 +48,11 @@ def const_01(progress):
 
 
 if __name__ == '__main__':
+    f = linear_05_00
     states = []
     N = 100
     for i in range(N):
-        states.append(staircase_5(i / float(N)))
+        states.append(f(i / float(N)))
     import matplotlib.pyplot as plt
 
     plt.plot(states)

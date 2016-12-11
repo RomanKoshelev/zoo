@@ -4,7 +4,7 @@ from core.context import Context
 from core.ddpg_mind import DdpgMind
 from core.experiment import Experiment
 from core.mujoco_agent import MujocoAgent
-from core.reporter import Reporter
+from core.reporter import Logger
 from core.tensorflow_platform import TensorflowPlatform
 from core.train_procedure import TrainProc
 from env.tentacle_world import TentacleWorld
@@ -38,7 +38,7 @@ def train_mujoco_tentacle_world():
         'report.summary_every_episodes': 30,
     }
 
-    train_proc = TrainProc(TensorflowPlatform, TentacleWorld, MujocoAgent, DdpgMind, Reporter)
+    train_proc = TrainProc(TensorflowPlatform, TentacleWorld, MujocoAgent, DdpgMind, Logger)
     experiment = Experiment("006", train_proc)
 
     from_scratch = False

@@ -59,6 +59,6 @@ class ZooMujocoEnv(MujocoEnv):
         viewer = self._get_viewer()
         window = viewer.window
         t = Context.window_title
-        d = "  "
+        d = " "
         title = t['app'] + d + t['exp'] + d + t['episode'] + d + t['step'] + d + t['info']
         glfw.set_window_title(window, title)

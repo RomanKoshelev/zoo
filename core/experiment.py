@@ -9,9 +9,8 @@ class Experiment:
         Context.config = config
         Context.experiment = self
         self.id = config['exp.id']
-        self._make_instances()
         Context.work_path = self.work_path
-        Context.window_title['exp'] = "|  %s #%s" % (Context.mode, self.id)
+        self._make_instances()
 
     def __str__(self):
         return "%s:\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s" % (
@@ -27,6 +26,7 @@ class Experiment:
 
     def train(self):
         Context.mode = 'train'
+        self._update_title()
         with self._platform, self._world, self._mind:
             if self._mind.can_restore():
                 self._mind.restore()
@@ -37,6 +37,7 @@ class Experiment:
 
     def demo(self):
         Context.mode = 'demo'
+        self._update_title()
         episodes = Context.config['exp.episodes']
         steps = Context.config['exp.steps']
 
@@ -48,7 +49,7 @@ class Experiment:
                 print("%3d  Reward = %+7.0f" % (ep, reward))
 
     def _make_instances(self):
-        self._logger = Context.config['exp.logger_class'](self.work_path)
+        self._logger = Context.config['exp.logger_class']()
         self._platform = Context.config['exp.platform_class']()
         self._agent = Context.config['exp.agent_class']()
         self._world = Context.config['exp.world_class'](self._agent)
@@ -57,3 +58,6 @@ class Experiment:
     @property
     def work_path(self):
         return os.path.join(Context.config['exp.base_path'], self.id)
+
+    def _update_title(self):
+        Context.window_title['exp'] = "| %s #%s" % (Context.mode, self.id)

@@ -1,6 +1,6 @@
 from core.ddpg_mind import DdpgMind
 from core.mujoco_agent import MujocoAgent
-from core.reporter import Reporter
+from core.logger import Logger
 from core.tensorflow_platform import TensorflowPlatform
 from env.tentacle_reward import default_reward
 from env.tentacle_target import random_target
@@ -18,7 +18,7 @@ SCORPION_CONFIG = {
     'exp.world_class': TentacleWorld,
     'exp.agent_class': MujocoAgent,
     'exp.mind_class': DdpgMind,
-    'exp.logger_class': Reporter,
+    'exp.logger_class': Logger,
 
     'env.model_world_path': "../../env/assets/scorpion_world.xml",
     'env.model_agent_path': "../../env/assets/scorpion_agent.xml",
