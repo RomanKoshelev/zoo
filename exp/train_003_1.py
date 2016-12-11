@@ -38,7 +38,7 @@ def train_mujoco_tentacle_world():
         'report.write_every_episodes': 5,
         'report.summary_every_episodes': 20,
         'report.diagram_mean_frame': 50,
-        'report.refrech_html_every_secs': 30,
+        'report.refresh_html_every_secs': 30,
     }
 
     train_proc = TrainProc(TensorflowPlatform, TentacleWorld, MujocoAgent, DdpgMind, Reporter)

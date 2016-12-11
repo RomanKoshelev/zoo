@@ -38,7 +38,7 @@ def train_mujoco_tentacle_world():
     }
 
     demo_proc = DemoProc(TensorflowPlatform, TentacleWorld, MujocoAgent, DdpgMind, Reporter)
-    experiment = Experiment("demo", demo_proc, init_from="001")
+    experiment = Experiment("demo", demo_proc, init_from="007")
     experiment.start()
 
 if __name__ == '__main__':

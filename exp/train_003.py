@@ -18,7 +18,7 @@ def train_mujoco_tentacle_world():
     Context.config = {
         'episodes': 20000,
         'steps': 75,
-        'save_every_episodes': 1000,
+        'save_every_episodes': 200,
 
         'exp.base_path': "../out/experiments",
 

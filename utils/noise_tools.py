@@ -43,7 +43,7 @@ if __name__ == '__main__':
     states = []
     N = 100
     for i in range(N):
-        states.append(staircase_4(i / float(N)))
+        states.append(staircase_5(i / float(N)))
     import matplotlib.pyplot as plt
 
     plt.plot(states)

@@ -74,7 +74,7 @@ class Reporter(Logger):
 
     def write_html_report(self):
         report = "<HTML><HEAD>%s<TITLE>%s</TITLE></HEAD><BODY><H1>%s</H1>\n" % (
-            "<meta http-equiv='refresh' content='%d'>" % Context.config['report.refrech_html_every_secs'],
+            "<meta http-equiv='refresh' content='%d'>" % Context.config['report.refresh_html_every_secs'],
             "Exp #%s" % Context.experiment.id,
             "Experiment #%s" % Context.experiment.id,
         )

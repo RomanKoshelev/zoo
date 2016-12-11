@@ -1,11 +1,11 @@
 <HTML><HEAD><meta http-equiv='refresh' content='30'><TITLE>Exp #003_1</TITLE></HEAD><BODY><H1>Experiment #003_1</H1>
 <font color=red><pre>
-  Reward:    -502
-  Qmax:      +1679
-  Left:      10:45:20 (26%)
+  Reward:    -1407
+  Qmax:      514
+  Left:      12:11:22 (3%)
 </pre></font>
 <font color=#AAAAAA><pre>
-  Report time:   2016-12-04 20:49:14
+  Report time:   2016-12-10 23:10:24
   Host name:     bernard
 </pre></font>
 <h2>Configuration</h2>
@@ -32,7 +32,7 @@
     env.target_range_xz:             [1.5, 1.0]
 <b>  Reporting:</b>
     report.diagram_mean_frame:       50
-    report.refrech_html_every_secs:  30
+    report.refresh_html_every_secs:  30
     report.summary_every_episodes:   20
     report.write_every_episodes:     5
 </pre>
@@ -55,26 +55,26 @@ Experiment:
       algorithm: DDPG_PeterKovacs
         buffer: ReplayBuffer:
           buffer_size: 100000
-          num_experiences: 100000
-        episode: 5259
+          num_experiences: 40125
+        episode: 534
     reporter: Reporter:
-      saved_time: 03:47:17
-      train_history: 5260
-      evaluation_history: 520</pre>
+      saved_time: 00:00:00
+      train_history: 535
+      evaluation_history: 53</pre>
 <h2>Progress</h2>
 <pre>
-  Episodes:      5260
-  Steps:         394500
-  Total time:    14:35:37
-    spent:       03:50:17 (26%)
-    left:        10:45:20
-  Finish:        07:34:34 2016-12-05
-  Performance:   0.38 per sec
+  Episodes:      535
+  Steps:         40125
+  Total time:    12:31:28
+    spent:       00:20:06 (2%)
+    left:        12:11:22
+  Finish:        11:21:46 2016-12-11
+  Performance:   0.44 per sec
 </pre>
 <h2>Results</h2>
 <pre>
-  Train reward:      -1053.41
-  Eval reward:        -502.20
+  Train reward:      -1527.84
+  Eval reward:       -1406.89
 </pre>
 <h2>Diagrams</h2>
 <img src='eval_reward.png' width=500>
