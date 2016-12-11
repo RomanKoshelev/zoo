@@ -8,12 +8,12 @@ from utils.string_tools import tab
 
 class GymWorld:
 
-    def __init__(self, env_id, agent=None):
+    def __init__(self, agent=None):
         Context.world = self
         self.agent = agent
         self.state = None
         self._env = None
-        self._env_id = env_id
+        self._env_id = Context.config['env.id']
 
     def __str__(self):
         return "%s:\n\t%s\n\t%s" % (
@@ -63,19 +63,6 @@ class GymWorld:
         return self.state
 
     def scale_action(self, a):
-        # assume -1 <= a <= +1
         k = (a + 1.) / 2.
         a = self.act_box[0] + (self.act_box[1] - self.act_box[0]) * k  # type: np.ndarray
         return np.clip(a, self.act_box[0], self.act_box[1])
-
-    @property
-    def summary(self):
-        r = "\n==============================================================================\n"
-        r += ("obs_dim: %d\n" % self.obs_dim)
-        r += ("obs_box: %s\n" % self.obs_box[0])
-        r += ("         %s\n" % self.obs_box[1])
-        r += ("act_dim: %d\n" % self.act_dim)
-        r += ("act_box: %s\n" % self.act_box[0])
-        r += ("         %s\n" % self.act_box[1])
-        r += "==============================================================================\n\n"
-        return r

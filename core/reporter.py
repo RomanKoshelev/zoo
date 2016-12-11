@@ -30,6 +30,12 @@ class Reporter:
         self._work_path = os.path.join(Context.work_path, WORK_DIR)
         self.html_path = os.path.abspath(os.path.join(self._work_path, REPORT_FILE))
 
+    def __str__(self):
+        return "%s:\n\t%s" % (
+            self.__class__.__name__,
+            "html_path: %s" % self.html_path,
+        )
+
     def write_html_report(self, info):
         s = "<HTML><HEAD>%s<TITLE>%s</TITLE></HEAD><BODY><H1>%s</H1>\n" % (
             "<meta http-equiv='refresh' content='%d'>" % Context.config['report.refresh_html_every_secs'],
@@ -157,7 +163,7 @@ class Reporter:
         plt.plot(x, y)
         plt.title(name)
         plt.xlabel(['episodes', 'time'][x_idx])
-        plt.savefig(path)
+        plt.savefig(make_dir_if_not_exists(path))
         return [name, path]
 
     def _create_mean_diagram(self, name, arr, x_idx, y_idx):
@@ -170,5 +176,5 @@ class Reporter:
         plt.plot(x, y, 'c-', x, m, 'b-')
         plt.title(name)
         plt.xlabel(['episodes', 'time'][x_idx])
-        plt.savefig(path)
+        plt.savefig(make_dir_if_not_exists(path))
         return [name, path]

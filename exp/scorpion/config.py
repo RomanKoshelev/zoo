@@ -1,10 +1,10 @@
-from core.ddpg_mind import DdpgMind
+from core.tensorflow_mind import TensorflowMind
 from core.mujoco_agent import MujocoAgent
 from core.logger import Logger
 from core.tensorflow_platform import TensorflowPlatform
-from env.tentacle_reward import default_reward
-from env.tentacle_target import random_target
-from env.tentacle_world import TentacleWorld
+from env.tentacle.tentacle_reward import default_reward
+from env.tentacle.tentacle_target import random_target
+from env.tentacle.tentacle_world import TentacleWorld
 from utils.noise_tools import staircase_5
 
 SCORPION_CONFIG = {
@@ -17,7 +17,7 @@ SCORPION_CONFIG = {
     'exp.platform_class': TensorflowPlatform,
     'exp.world_class': TentacleWorld,
     'exp.agent_class': MujocoAgent,
-    'exp.mind_class': DdpgMind,
+    'exp.mind_class': TensorflowMind,
     'exp.logger_class': Logger,
 
     'env.model_world_path': "../../env/assets/scorpion_world.xml",
@@ -25,6 +25,7 @@ SCORPION_CONFIG = {
     'env.reward_method': default_reward,
     'env.target_mouse_control': False,
     'env.target_range_xz': [1.0, 1.0],
+    'env.init_every_resets': 30,
     'env.target_location_method': random_target,
 
     'mind.evaluate_every_episodes': 10,
@@ -35,7 +36,7 @@ SCORPION_CONFIG = {
     'alg.noise_theta': .01,
     'alg.noise_rate_method': staircase_5,
 
-    'report.write_every_episodes': 5,
+    'report.write_every_episodes': 15,
     'report.summary_every_episodes': 20,
     'report.diagram_mean_frame': 50,
     'report.refresh_html_every_secs': 30,

@@ -31,7 +31,7 @@ class Experiment:
             if self._mind.can_restore():
                 self._mind.restore()
                 self._logger.restore()
-            print(str(self))
+            self._print_instances()
             self._logger.on_start()
             self._mind.train()
 
@@ -43,6 +43,7 @@ class Experiment:
 
         with self._platform, self._world, self._mind:
             self._mind.restore_weights()
+            self._print_instances()
             for ep in xrange(episodes):
                 reward = self._mind.run_episode(steps)
                 Context.window_title['episode'] = "|  %d: R = %+.0f" % (ep, reward)
@@ -61,3 +62,6 @@ class Experiment:
 
     def _update_title(self):
         Context.window_title['exp'] = "| %s #%s" % (Context.mode, self.id)
+
+    def _print_instances(self):
+        print(str(self).replace('\t', '  '))

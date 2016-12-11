@@ -7,7 +7,7 @@ from core.context import Context
 from core.reporter import Reporter
 from utils.os_tools import make_dir_if_not_exists
 from utils.stopwatch import Stopwatch
-from utils.string_tools import hms
+from utils.string_tools import hms, tab
 
 WORK_DIR = "logger/"
 
@@ -23,11 +23,12 @@ class Logger:
         self._reporter = Reporter()
 
     def __str__(self):
-        return "%s:\n\t%s\n\t%s\n\t%s" % (
+        return "%s:\n\t%s\n\t%s\n\t%s\n\t%s" % (
             self.__class__.__name__,
             "saved_time: %s" % hms(self._saved_time),
             "train_history: %d" % len(self._train_history),
             "eval_history: %d" % len(self._eval_history),
+            "reporter: %s" % tab(self._reporter),
         )
 
     def on_start(self):

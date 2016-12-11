@@ -4,8 +4,8 @@ from core.experiment import Experiment
 
 config = SCORPION_CONFIG
 
-config['exp.id'] = "scorpion_001"
-config['env.target_range_xz'] = [1.5, 0.5]
+config['exp.id'] = "scorpion_002"
+config['env.target_range_xz'] = [1.0, 0.5]
 config['view.width'] = 1200
 config['view.height'] = 800
 

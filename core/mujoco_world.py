@@ -4,8 +4,8 @@ from core.gym_world import GymWorld
 
 
 class MujocoWorld(GymWorld):
-    def __init__(self, env_id, agent):
-        GymWorld.__init__(self, env_id, agent)
+    def __init__(self, agent):
+        GymWorld.__init__(self, agent)
         self.model_path = Context.config['env.model_world_path']
 
     def __str__(self):
