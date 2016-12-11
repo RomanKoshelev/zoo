@@ -5,42 +5,53 @@ from utils.string_tools import tab
 
 
 class Experiment:
-    def __init__(self, exp_id, proc, init_from=None):
+    def __init__(self, config):
+        Context.config = config
         Context.experiment = self
-        self.id = exp_id
-        self.init_id = init_from if init_from is not None else exp_id
-        self._proc = proc
-        self._base_path = Context.config['exp.base_path']
+        self.id = config['exp.id']
+        self._make_instances()
         Context.work_path = self.work_path
-        self._update_title()
+        Context.window_title['exp'] = "|  %s #%s" % (Context.mode, self.id)
 
     def __str__(self):
-        return "%s:\n\t%s\n\t%s\n\t%s" % (
+        return "%s:\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s" % (
             self.__class__.__name__,
             "id: " + tab(self.id),
-            "init_id: " + tab(self.init_id),
-            "proc: " + tab(self._proc),
+            "platform: " + tab(self._platform),
+            "world: " + tab(self._world),
+            "agent: " + tab(self._agent),
+            "mind: " + tab(self._mind),
+            "logger: " + tab(self._logger),
         )
 
-    def start(self):
-        self._proc.start(self.init_path, self.work_path)
+    def train(self):
+        Context.mode = 'train'
+        with self._platform, self._world, self._mind:
+            if self._mind.can_restore():
+                self._mind.restore()
+                self._logger.restore()
+            self._logger.on_start()
+            self._mind.train(self.work_path)
 
-    def proceed(self):
-        self._proc.proceed(self.init_path, self.work_path)
+    def demo(self):
+        Context.mode = 'demo'
+        episodes = Context.config['exp.episodes']
+        steps = Context.config['exp.steps']
 
-    def can_proceed(self):
-        return os.path.exists(os.path.join(self.work_path, 'network'))
+        with self._platform, self._world, self._mind:
+            self._mind.restore_weights()
+            for ep in xrange(episodes):
+                reward = self._mind.run_episode(steps)
+                Context.window_title['episode'] = "|  %d: R = %+.0f" % (ep, reward)
+                print("%3d  Reward = %+7.0f" % (ep, reward))
+
+    def _make_instances(self):
+        self._logger = Context.config['exp.logger_class'](self.work_path)
+        self._platform = Context.config['exp.platform_class']()
+        self._agent = Context.config['exp.agent_class']()
+        self._world = Context.config['exp.world_class'](self._agent)
+        self._mind = Context.config['exp.mind_class'](self._platform, self._world, self._logger)
 
     @property
     def work_path(self):
-        return os.path.join(self._base_path, self.id)
-
-    @property
-    def init_path(self):
-        return os.path.join(self._base_path, self.init_id)
-
-    # todo: use reporter
-    def _update_title(self):
-        Context.window_title['exp'] = "|  %s #%s" % (self._proc.__class__.__name__, self.id)
-        if self.id != self.init_id:
-            Context.window_title['exp'] += "[%s]" % self.init_id
+        return os.path.join(Context.config['exp.base_path'], self.id)

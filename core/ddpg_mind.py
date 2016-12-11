@@ -6,6 +6,7 @@ from alg.ddpg_peter_kovacs.ddpg_alg import DDPG_PeterKovacs
 from core.context import Context
 from utils.string_tools import tab
 from utils.os_tools import make_dir_if_not_exists
+import pickle
 
 NETWORK_WEIGHTS_PATH = "network/weights.ckpt"
 ALGORITHM_STATE_PATH = "algorithm/state.pickle"
@@ -36,10 +37,10 @@ class DdpgMind:
         a = self._algorithm.predict(state)
         return self.world.scale_action(a)
 
-    def train(self, work_path):
+    def train(self):
         def on_episod(ep, reward, nr, maxq):
             self._reporter.on_train_episode(ep, nr, reward, maxq)
-            self._save_results_if_need(work_path, ep,
+            self._save_results_if_need(ep,
                                        Context.config['exp.episodes'],
                                        Context.config['exp.save_every_episodes'])
             self._evaluate_if_need(ep,
@@ -64,50 +65,49 @@ class DdpgMind:
             reward += r
         return reward
 
-    def save(self, folder):
+    def save(self):
         self._reporter.log('Saving weights and algorithm state...')
-        self.save_weights(folder)
-        self.save_algorithm_state(folder)
+        self.save_weights()
+        self.save_algorithm_state()
 
-    def restore(self, folder):
-        self.restore_weights(folder)
-        self.restore_algorithm_state(folder)
+    def can_restore(self):
+        return os.path.exists(self.network_weights_path)
 
-    def restore_weights(self, folder):
-        self._algorithm.restore_weights(self.network_weights_path(folder))
+    def restore(self):
+        self._reporter.log('Restoring weights and algorithm state...')
+        self.restore_weights()
+        self.restore_algorithm_state()
 
-    def save_weights(self, folder):
-        self._algorithm.save_weights(make_dir_if_not_exists(self.network_weights_path(folder)))
+    def restore_weights(self):
+        self._algorithm.restore_weights(self.network_weights_path)
 
-    def save_algorithm_state(self, folder):
-        import pickle
-        path = self.algorithm_state_path(folder)
-        make_dir_if_not_exists(path)
-        with open(path, 'w') as f:
+    def save_weights(self):
+        self._algorithm.save_weights(make_dir_if_not_exists(self.network_weights_path))
+
+    def save_algorithm_state(self):
+        with open(make_dir_if_not_exists(self.algorithm_state_path), 'w') as f:
             pickle.dump([
                 self._algorithm.episode,
                 self._algorithm.buffer,
             ], f, protocol=pickle.HIGHEST_PROTOCOL)
 
-    def restore_algorithm_state(self, folder):
-        import pickle
-        path = self.algorithm_state_path(folder)
-        with open(path, 'r') as f:
+    def restore_algorithm_state(self):
+        with open(self.algorithm_state_path, 'r') as f:
             [
                 self._algorithm.episode,
                 self._algorithm.buffer,
             ] = pickle.load(f)
         self._saved_episode = self._algorithm.episode
 
-    def _save_results_if_need(self, path, ep, eps, sve):
+    def _save_results_if_need(self, ep, eps, sve):
         if (ep > self._saved_episode and (ep + 1) % sve == 0) or (ep == eps):
             self._saved_episode = ep
-            self.save(path)
+            self.save()
 
-    @staticmethod
-    def network_weights_path(folder):
-        return os.path.join(folder, NETWORK_WEIGHTS_PATH)
+    @property
+    def network_weights_path(self):
+        return os.path.join(Context.work_path, NETWORK_WEIGHTS_PATH)
 
-    @staticmethod
-    def algorithm_state_path(folder):
-        return os.path.join(folder, ALGORITHM_STATE_PATH)
+    @property
+    def algorithm_state_path(self):
+        return os.path.join(Context.work_path, ALGORITHM_STATE_PATH)

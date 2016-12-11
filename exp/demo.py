@@ -23,7 +23,7 @@ def train_mujoco_tentacle_world():
         'env.model_agent_path': "../env/assets/tentacle_agent.xml",
         'env.reward_method': default_reward,
         'env.target_mouse_control': False,
-        'env.target_range_xz': [1.1, 0.9],
+        'env.target_range_xz': [1.0, 1.0],
         'env.target_location_method': random_target,
 
         'mind.evaluate_every_episodes': 10,
