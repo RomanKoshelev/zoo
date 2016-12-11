@@ -35,8 +35,12 @@ def staircase_5(progress):
 
 def linear_2(progress):
     assert 0. <= progress <= 1.
-
     return 2 * (1 - progress)
+
+
+# noinspection PyUnusedLocal
+def const_01(progress):
+    return .1
 
 
 if __name__ == '__main__':

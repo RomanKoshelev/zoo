@@ -14,9 +14,10 @@ class Experiment:
         Context.window_title['exp'] = "|  %s #%s" % (Context.mode, self.id)
 
     def __str__(self):
-        return "%s:\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s" % (
+        return "%s:\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s" % (
             self.__class__.__name__,
             "id: " + tab(self.id),
+            "work_path: " + tab(self.work_path),
             "platform: " + tab(self._platform),
             "world: " + tab(self._world),
             "agent: " + tab(self._agent),
@@ -30,8 +31,9 @@ class Experiment:
             if self._mind.can_restore():
                 self._mind.restore()
                 self._logger.restore()
+            print(str(self))
             self._logger.on_start()
-            self._mind.train(self.work_path)
+            self._mind.train()
 
     def demo(self):
         Context.mode = 'demo'

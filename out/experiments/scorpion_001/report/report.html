@@ -1,3 +1,89 @@
-<HTML><BODY><H1>Report</H1>
-<h2>Diagramms</h2>
-<image width=500 src='eval_reward.png'><image width=500 src='train_reward.png'><image width=500 src='train_noise.png'><image width=500 src='train_qmax.png'></BODY></HTML>
+<HTML><HEAD><meta http-equiv='refresh' content='30'><TITLE>Exp #scorpion_001</TITLE></HEAD><BODY><H1>Experiment #scorpion_001</H1>
+<font color=red><pre>
+  Reward:    1963
+  Qmax:      8889
+  Left:      02:43:37 (86%)
+</pre></font>
+<font color=#AAAAAA><pre>
+  Report time:   2016-12-11 16:48:13
+  Host name:     bernard
+</pre></font>
+<h2>Configuration</h2>
+<pre>
+<b>  Experiment:</b>
+    exp.agent_class:                 core.mujoco_agent.MujocoAgent
+    exp.base_path:                   ../../out/experiments
+    exp.episodes:                    35000
+    exp.id:                          scorpion_001
+    exp.logger_class:                core.reporter.Reporter
+    exp.mind_class:                  core.ddpg_mind.DdpgMind
+    exp.platform_class:              core.tensorflow_platform.TensorflowPlatform
+    exp.save_every_episodes:         200
+    exp.steps:                       75
+    exp.world_class:                 env.tentacle_world.TentacleWorld
+<b>  Algorithm:</b>
+    alg.batch_size:                  512
+    alg.buffer_size:                 100000
+    alg.noise_rate_method:           const_01
+    alg.noise_sigma:                 0.1
+    alg.noise_theta:                 0.01
+<b>  Mind:</b>
+    mind.evaluate_every_episodes:    10
+<b>  Environment:</b>
+    env.model_agent_path:            ../../env/assets/scorpion_agent.xml
+    env.model_world_path:            ../../env/assets/scorpion_world.xml
+    env.reward_method:               default_reward
+    env.target_location_method:      random_target
+    env.target_mouse_control:        False
+    env.target_range_xz:             [1.0, 1.0]
+<b>  Reporting:</b>
+    report.diagram_mean_frame:       50
+    report.refresh_html_every_secs:  30
+    report.summary_every_episodes:   20
+    report.write_every_episodes:     5
+</pre>
+<h2>Instances</h2>
+<pre>
+Experiment:
+  id: scorpion_001
+  work_path: ../../out/experiments/scorpion_001
+  platform: TensorflowPlatform
+  world: TentacleWorld:
+    id: Zoo:Mujoco:Tentacle-v1
+    model_path: ../../env/assets/scorpion_world.xml
+    obs_dim: 10
+    act_box: [-200. -150.  -50.]
+             [ 200.  150.   50.]
+  agent: MujocoAgent:
+    model_path: ../../env/assets/scorpion_agent.xml
+  mind: DdpgMind:
+    algorithm: DDPG_PeterKovacs
+      buffer: ReplayBuffer:
+        buffer_size: 100000
+        num_experiences: 100000
+      episode: 30054
+  logger: Reporter:
+    saved_time: 16:32:31
+    train_history: 30054
+    evaluation_history: 3003</pre>
+<h2>Progress</h2>
+<pre>
+  Episodes:      30054
+  Steps:         2254050
+  Total time:    19:17:49
+    spent:       16:34:12 (85%)
+    left:        02:43:37
+  Finish:        19:31:50 2016-12-11
+  Performance:   0.50 per sec
+</pre>
+<h2>Results</h2>
+<pre>
+  Train reward:      +2953.15
+  Eval reward:       +1962.58
+</pre>
+<h2>Diagrams</h2>
+<img src='eval_reward.png' width=500>
+<img src='train_reward.png' width=500>
+<img src='train_noise.png' width=500>
+<img src='train_qmax.png' width=500>
+</BODY></HTML>
