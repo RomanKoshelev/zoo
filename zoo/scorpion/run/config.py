@@ -1,4 +1,4 @@
-from alg.ddpg_peter_kovacs.ddpg_alg import DDPG_PeterKovacs
+from alg.random_alg import RandomAlgorithm
 from core.tensorflow_mind import TensorflowMind
 from core.mujoco_agent import MujocoAgent
 from core.logger import Logger
@@ -23,7 +23,7 @@ config = {
 
     'env.id': "Zoo:Mujoco:Scorpion-v1",
     'env.model_world_path': "../assets/world.xml",
-    'env.model_agent_path': "../assets/agent.xml",
+    'env.model_agent_path': "../assets/scorpion.xml",
     'env.reward_method': default_reward,
     'env.target_mouse_control': False,
     'env.target_range_xz': [1.0, 1.0],
@@ -31,7 +31,7 @@ config = {
     'env.target_location_method': random_target,
 
     'mind.evaluate_every_episodes': 10,
-    'mind.algorithm_class': DDPG_PeterKovacs,
+    'mind.algorithm_class': RandomAlgorithm,
 
     'alg.buffer_size': 100 * 1000,
     'alg.batch_size': 512,

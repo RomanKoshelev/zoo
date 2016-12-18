@@ -13,4 +13,6 @@ class MujocoAgent:
 
     def read_model(self):
         with open(self.model_path, 'r') as f:
-            return f.read()
+            xml = f.read()
+            i = xml.find("<actuator>")
+            return xml[:i], xml[i:]

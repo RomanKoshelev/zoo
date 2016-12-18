@@ -52,16 +52,10 @@
       <joint name="hinge_2" range=' -120 +120'/>
       <geom fromto="0 0 0 0 0 .7" size="0.06"/>
 
-      <!-- segment 3 -->
-      <body name="segment_3" pos="0 0 .75">
-        <joint name="hinge_3" range=' -150 +150'/>
-        <geom fromto="0 0 0 0 0 .5" size="0.05"/>
-
-        <!-- head -->
-        <body name="head" pos="0 0 .5">
-          <geom type='cylinder' fromto='0 0 0  0 0 .06' rgba="1.2 1.2 0. 1" size='.06'/>
-          <site name="head" pos="0 0 0.06" rgba=".2 .2 1.5 0.5" size='.06'/>
-        </body>
+      <!-- head -->
+      <body name="head" pos="0 0 .5">
+        <geom type='cylinder' fromto='0 0 0  0 0 .06' rgba="1.2 1.2 0. 1" size='.06'/>
+        <site name="head" pos="0 0 0.06" rgba=".2 .2 1.5 0.5" size='.06'/>
       </body>
     </body>
   </body>

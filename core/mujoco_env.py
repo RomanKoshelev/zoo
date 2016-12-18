@@ -10,6 +10,7 @@ from core.context import Context
 from utils.os_tools import make_dir_if_not_exists
 
 AGENT_PLACEHOLDER = '{{agent}}'
+ACTUATORS_PLACEHOLDER = '{{actuators}}'
 ENV_BASE_DIR = 'environment/'
 
 
@@ -43,8 +44,10 @@ class ZooMujocoEnv(MujocoEnv):
 
     def _complile_model(self):
         world_model = self.world.read_model()
-        agent_model = self.agent.read_model()
-        env_model = world_model.replace(AGENT_PLACEHOLDER, agent_model)
+        agent_body, agent_actuators = self.agent.read_model()
+        env_model = world_model.\
+            replace(AGENT_PLACEHOLDER, agent_body).\
+            replace(ACTUATORS_PLACEHOLDER, agent_actuators)
 
         env_path = os.path.join(Context.work_path, ENV_BASE_DIR, "env_model.xml")
         env_path = os.path.abspath(env_path)
