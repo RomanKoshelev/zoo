@@ -4,7 +4,7 @@ from core.experiment import Experiment
 from utils.noise_tools import linear_05_00
 
 
-config['exp.id'] = "002"
+config['exp.id'] = "007"
 config['exp.episodes'] = 30000
 config['exp.steps'] = 30
 config['exp.save_every_episodes'] = 200

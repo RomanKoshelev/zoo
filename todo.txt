@@ -1,5 +1,5 @@
 TODO:
-- use mouse to control target # mx, my = glfw.get_cursor_pos(window)
+- run the scorpion
 - make the 'rider' algorithm
 
 LATER:
@@ -7,6 +7,7 @@ LATER:
 - move to python 3.4
 
 DONE:
++ use mouse to control target # mx, my = glfw.get_cursor_pos(window)
 + draw diagramm for Noise, Qmax and Rewards (w/o noise) depended on Episodes and Time
 + reporter
 + print time estimation

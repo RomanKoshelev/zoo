@@ -8,8 +8,8 @@ from actor import ActorNetwork
 from core.tensorflow_algorithm import TensorflowAlgorithm
 from buffer import ReplayBuffer
 from critic import CriticNetwork
-from noise import OUNoise
 from core.context import Context
+from utils.ou_noise import OUNoise
 from utils.string_tools import tab
 
 

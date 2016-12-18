@@ -12,10 +12,10 @@ ALGORITHM_STATE_PATH = "algorithm/state.pickle"
 
 
 class TensorflowMind:
-    def __init__(self, platform, world, reporter):
+    def __init__(self, platform, world, logger):
         self.platform = platform
         self.world = world
-        self._reporter = reporter
+        self._logger = logger
         self._algorithm = None
         self._saved_episode = None
 
@@ -38,7 +38,7 @@ class TensorflowMind:
 
     def train(self):
         def on_episod(ep, reward, nr, maxq):
-            self._reporter.on_train_episode(ep, nr, reward, maxq)
+            self._logger.on_train_episode(ep, nr, reward, maxq)
             self._save_results_if_need(ep,
                                        Context.config['exp.episodes'],
                                        Context.config['exp.save_every_episodes'])
@@ -50,9 +50,9 @@ class TensorflowMind:
 
     def _evaluate_if_need(self, ep, evs, steps):
         if (ep + 1) % evs == 0:
-            self._reporter.on_evaluiation_start()
+            self._logger.on_evaluiation_start()
             reward = self.run_episode(steps)
-            self._reporter.on_evaluiation_end(ep, reward)
+            self._logger.on_evaluiation_end(ep, reward)
 
     def run_episode(self, steps):
         s = self.world.reset()
@@ -65,7 +65,7 @@ class TensorflowMind:
         return reward
 
     def save(self):
-        self._reporter.log('Saving weights and algorithm state...')
+        self._logger.log('Saving weights and algorithm state...')
         self.save_weights()
         self.save_algorithm_state()
 
@@ -73,7 +73,7 @@ class TensorflowMind:
         return os.path.exists(self.network_weights_path)
 
     def restore(self):
-        self._reporter.log('Restoring weights and algorithm state...')
+        self._logger.log('Restoring weights and algorithm state...')
         self.restore_weights()
         self.restore_algorithm_state()
 
