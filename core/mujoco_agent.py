@@ -2,8 +2,8 @@ from core.context import Context
 
 
 class MujocoAgent:
-    def __init__(self):
-        self.model_path = Context.config['env.model_agent_path']
+    def __init__(self, key='env.model_agent_path'):
+        self.model_path = Context.config[key]
 
     def __str__(self):
         return "%s:\n\t%s" % (
@@ -15,4 +15,4 @@ class MujocoAgent:
         with open(self.model_path, 'r') as f:
             xml = f.read()
             i = xml.find("<actuator>")
-            return xml[:i], xml[i:]
+            return xml[:i], xml[i:]  # body, actuator

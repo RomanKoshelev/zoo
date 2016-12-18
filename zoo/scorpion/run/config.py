@@ -1,10 +1,10 @@
 from alg.random_alg import RandomAlgorithm
 from core.tensorflow_mind import TensorflowMind
-from core.mujoco_agent import MujocoAgent
 from core.logger import Logger
 from core.mujoco_world import MujocoWorld
 from core.tensorflow_platform import TensorflowPlatform
 from zoo.scorpion.reward import default_reward
+from zoo.scorpion.scorpion_agent import ScorpionAgent
 from zoo.scorpion.target import random_target
 from utils.noise_tools import staircase_5
 
@@ -18,12 +18,13 @@ config = {
     'exp.platform_class': TensorflowPlatform,
     'exp.mind_class': TensorflowMind,
     'exp.world_class': MujocoWorld,
-    'exp.agent_class': MujocoAgent,
+    'exp.agent_class': ScorpionAgent,
     'exp.logger_class': Logger,
 
     'env.id': "Zoo:Mujoco:Scorpion-v1",
     'env.model_world_path': "../assets/world.xml",
-    'env.model_agent_path': "../assets/scorpion.xml",
+    'env.model_agent_path.scorpion': "../assets/scorpion.xml",
+    'env.model_agent_path.tentacle': "../assets/tentacle.xml",
     'env.reward_method': default_reward,
     'env.target_mouse_control': False,
     'env.target_range_xz': [1.0, 1.0],

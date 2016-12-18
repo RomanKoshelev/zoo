@@ -1,36 +1,16 @@
-<body name="agent" pos="0 3 0">
+<body name="scorpion" pos="0 0 0">
 
-  <!-- base -->
-  <geom name='base' type='cylinder' fromto='0 0 0  0 0 .15' size='.5' rgba=".4 .4 .0 1"/>
-  <geom fromto="0 0 .1 0 0 .15" size="0.1"/>
-
-  <!-- segment 1 -->
-  <body name="segment_1" pos="0 0 0.25">
-    <joint name="hinge_1" range=' -70 +70'/>
-    <geom fromto="0 0 0 0 0 .9" size="0.075"/>
-
-    <!-- segment 2 -->
-    <body name="segment_2" pos="0 0 .95">
-      <joint name="hinge_2" range=' -120 +120'/>
-      <geom fromto="0 0 0 0 0 .7" size="0.06"/>
-
-      <!-- segment 3 -->
-      <body name="segment_3" pos="0 0 .75">
-        <joint name="hinge_3" range=' -150 +150'/>
-        <geom fromto="0 0 0 0 0 .5" size="0.05"/>
-
-        <!-- head -->
-        <body name="head" pos="0 0 .5">
-          <geom type='cylinder' fromto='0 0 0  0 0 .06' rgba="1.2 1.2 0. 1" size='.06'/>
-          <site name="head" pos="0 0 0.06" rgba=".2 .2 1.5 0.5" size='.06'/>
-        </body>
-      </body>
+  <!-- cart -->
+  <body name="cart" pos="0 0 0">
+    <geom type='box' pos="0 0 0.1" size='.5 .5 .1' rgba=".2 .2 .0 1"/>
+    <body name="cart.head"  pos="0 0 0">
+      <joint name="cart.head.a" axis="0 0 1" range='-45 +45'/>
+      <geom type='cylinder' fromto='0 0 .2  0 0 0.25' size='.15' rgba="1 1 0 1"/>
+      {{tentacle}}
     </body>
   </body>
 </body>
 
 <actuator>
-  <motor name="hinge_1" ctrlrange="-200 +200" joint="hinge_1"/>
-  <motor name="hinge_2" ctrlrange="-150 +150" joint="hinge_2"/>
-  <motor name="hinge_3" ctrlrange=" -50  +50" joint="hinge_3"/>
+  <motor name="cart.head.motor.1" ctrlrange="-10. +10." joint="cart.head.a"/>
 </actuator>
