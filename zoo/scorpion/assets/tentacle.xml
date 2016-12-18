@@ -1,31 +1,26 @@
-<body name="tentacle" pos="0 0 .25">
-  <!-- base -->
-  <geom type='box' pos="0 0 0.1" size='.4 .4 .1' rgba="0.6 0.6 0 1"/>
-  <geom fromto="0 0 .1 0 0 .15" size="0.1"/>
-  <!-- segment 1 -->
-  <body name="tentacle.segment_1" pos="0 0 0.25">
-    <joint name="tentacle.hinge_1" range=' -70 +70'/>
+<body name="tentacle" pos="0 0 .2">
+  <geom type='box' pos="0 0 0.1" size='.3 .3 .05' rgba="0.6 0.6 0 1"/>
+  <geom type='sphere' pos="0 0 .1" size="0.12"/>
+  <body name="tentacle.s1" pos="0 0 0.17">
+    <joint name="tentacle.s1.a" range=' -70 +70'/>
     <geom fromto="0 0 0 0 0 .9" size="0.075"/>
-    <!-- segment 2 -->
-    <body name="tentacle.segment_2" pos="0 0 .95">
-      <joint name="tentacle.hinge_2" range=' -120 +120'/>
+    <body name="tentacle.s2" pos="0 0 .95">
+      <joint name="tentacle.s2.a" range=' -120 +120'/>
       <geom fromto="0 0 0 0 0 .7" size="0.06"/>
-      <!-- segment 3 -->
-      <body name="tentacle.segment_3" pos="0 0 .75">
-        <joint name="tentacle.hinge_3" range=' -150 +150'/>
+      <body name="tentacle.s3" pos="0 0 .75">
+        <joint name="tentacle.s3.a" range=' -150 +150'/>
         <geom fromto="0 0 0 0 0 .5" size="0.05"/>
-        <!-- head -->
         <body name="tentacle.head" pos="0 0 .5">
           <geom type='cylinder' fromto='0 0 0  0 0 .06' rgba="1.2 1.2 0. 1" size='.06'/>
           <site name="tentacle.head" pos="0 0 0.06" rgba=".2 .2 1.5 0.5" size='.06'/>
-        </body> <!-- head -->
-      </body> <!-- segment 3 -->
-    </body> <!-- segment 2 -->
-  </body> <!-- segment 1 -->
-</body> <!-- tentacle -->
+        </body>
+      </body>
+    </body>
+  </body>
+</body>
 
 <actuator>
-  <motor name="tentacle.act.1" ctrlrange="-200 +200" joint="tentacle.hinge_1"/>
-  <motor name="tentacle.act.2" ctrlrange="-150 +150" joint="tentacle.hinge_2"/>
-  <motor name="tentacle.act.3" ctrlrange=" -50  +50" joint="tentacle.hinge_3"/>
+  <motor name="tentacle.m.1" ctrlrange="-200 +200" joint="tentacle.s1.a"/>
+  <motor name="tentacle.m.2" ctrlrange="-150 +150" joint="tentacle.s1.a"/>
+  <motor name="tentacle.m.3" ctrlrange=" -50  +50" joint="tentacle.s3.a"/>
 </actuator>

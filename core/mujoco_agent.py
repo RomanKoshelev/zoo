@@ -15,4 +15,7 @@ class MujocoAgent:
         with open(self.model_path, 'r') as f:
             xml = f.read()
             i = xml.find("<actuator>")
-            return xml[:i], xml[i:]  # body, actuator
+            if i == -1:
+                return xml, ""
+            else:
+                return xml[:i], xml[i:]  # body, actuator

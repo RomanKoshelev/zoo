@@ -25,6 +25,7 @@ config = {
     'env.model_world_path': "../assets/world.xml",
     'env.model_agent_path.scorpion': "../assets/scorpion.xml",
     'env.model_agent_path.tentacle': "../assets/tentacle.xml",
+    'env.model_agent_path.target': "../assets/target.xml",
     'env.reward_method': default_reward,
     'env.target_mouse_control': False,
     'env.target_range_xz': [1.0, 1.0],

@@ -1,16 +1,15 @@
 <body name="scorpion" pos="0 0 0">
-
-  <!-- cart -->
-  <body name="cart" pos="0 0 0">
+  <body name="scorpion.cart" pos="0 0 0">
     <geom type='box' pos="0 0 0.1" size='.5 .5 .1' rgba=".2 .2 .0 1"/>
-    <body name="cart.head"  pos="0 0 0">
-      <joint name="cart.head.a" axis="0 0 1" range='-45 +45'/>
-      <geom type='cylinder' fromto='0 0 .2  0 0 0.25' size='.15' rgba="1 1 0 1"/>
+    <body name="scorpion.cart.head"  pos="0 0 0">
+      <joint name="scorpion.cart.head.a" axis="0 0 1" range='-90 +90'/>
+      <geom type='cylinder' fromto='0 0 .2  0 0 0.25' size='.15' rgba="1.5 1.5 0 1"/>
       {{tentacle}}
+      {{target}}
     </body>
   </body>
 </body>
 
 <actuator>
-  <motor name="cart.head.motor.1" ctrlrange="-10. +10." joint="cart.head.a"/>
+  <motor name="scorpion.cart.m.1" ctrlrange="-1. +1." joint="scorpion.cart.head.a"/>
 </actuator>
