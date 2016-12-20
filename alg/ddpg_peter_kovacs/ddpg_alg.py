@@ -15,7 +15,7 @@ from utils.string_tools import tab
 
 class DDPG_PeterKovacs(TensorflowAlgorithm):
     def __init__(self, sess, world):
-        super(self.__class__, self).__init__(sess, world.id)
+        super(self.__class__, self).__init__(sess, world.env_id)
 
         self.world = world
         self.buffer = None

@@ -9,18 +9,13 @@ from gym.envs.mujoco.mujoco_env import MujocoEnv
 from core.context import Context
 from utils.os_tools import make_dir_if_not_exists
 
-AGENT_PLACEHOLDER = '{{agent}}'
-ACTUATORS_PLACEHOLDER = '{{actuators}}'
-ENV_BASE_DIR = 'environment/'
-
 
 # noinspection PyAbstractClass
 class ZooMujocoEnv(MujocoEnv):
     def __init__(self, frame_skip):
         self.work_path = Context.work_path
         self.world = Context.world
-        self.agent = Context.world.agent
-        MujocoEnv.__init__(self, model_path=self._complile_model(), frame_skip=frame_skip)
+        MujocoEnv.__init__(self, model_path=self._compile_model(), frame_skip=frame_skip)
 
     def site_pos(self, site_name):
         idx = self.model.site_names.index(six.b(site_name))
@@ -42,19 +37,19 @@ class ZooMujocoEnv(MujocoEnv):
             self.viewer_setup()
         return self.viewer
 
-    def _complile_model(self):
-        world_model = self.world.read_model()
-        agent_body, agent_actuators = self.agent.read_model()
-        env_model = world_model.\
-            replace(AGENT_PLACEHOLDER, agent_body).\
-            replace(ACTUATORS_PLACEHOLDER, agent_actuators)
+    def _compile_model(self):
+        with open(os.path.join(Context.config['env.assets'], 'env.xml'), 'r') as f:
+            model = f.read()
 
-        env_path = os.path.join(Context.work_path, ENV_BASE_DIR, "env_model.xml")
+        world, actuators = self.world.read_model()
+        model = model.replace('{{world}}', world).replace("{{actuators}}", actuators)
+
+        env_path = os.path.join(Context.work_path, 'environment/env_model.xml')
         env_path = os.path.abspath(env_path)
         make_dir_if_not_exists(env_path)
 
         with open(env_path, 'w') as f:
-            f.write(env_model)
+            f.write(model)
 
         return env_path
 

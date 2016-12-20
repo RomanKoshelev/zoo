@@ -7,7 +7,7 @@ from utils.ou_noise import OUNoise
 
 class RandomAlgorithm(TensorflowAlgorithm):
     def __init__(self, sess, world):
-        super(self.__class__, self).__init__(sess, world.id)
+        super(self.__class__, self).__init__(sess, world.env_id)
 
         self.world = world
         self._initialize_variables()

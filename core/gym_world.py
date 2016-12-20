@@ -3,27 +3,24 @@ import gym
 from core.context import Context
 import numpy as np
 
-from utils.string_tools import tab
-
 
 class GymWorld:
 
-    def __init__(self, agent=None):
+    def __init__(self):
         Context.world = self
-        self.agent = agent
         self.state = None
         self._env = None
-        self._env_id = Context.config['env.id']
+        self.env_id = Context.config['env.id']
 
     def __str__(self):
-        return "%s:\n\t%s\n\t%s" % (
+        return "%s:\n\t%s" % (
             self.__class__.__name__,
-            "id: " + self.id,
-            "agent: " + tab(self.agent),
+            "id: " + self.env_id,
         )
 
     def __enter__(self):
-        self._env = gym.make(self._env_id)
+        self._env = gym.make(self.env_id)
+        assert self.env_id == self._env.spec.id
         self.reset()
         return self
 
@@ -53,10 +50,6 @@ class GymWorld:
     @property
     def act_dim(self):
         return self._env.action_space.shape[0]
-
-    @property
-    def id(self):
-        return self._env.spec.id
 
     def reset(self):
         self.state = self._env.reset()

@@ -57,7 +57,7 @@ class ScorpionEnv(ZooMujocoEnv):
         return self.state_vector()
 
     def _set_target(self, tpos, qpos, qvel):
-        for i, j in enumerate(["target.x", "target.z"]):
+        for i, j in enumerate(["target.coords.x", "target.coords.z"]):
             qposadr, qveladr, _ = self.model.joint_adr(j)
             qpos[qposadr] = tpos[i]
             qvel[qveladr] = 0.

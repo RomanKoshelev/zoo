@@ -13,13 +13,12 @@ class Experiment:
         self._make_instances()
 
     def __str__(self):
-        return "%s:\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s" % (
+        return "%s:\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s" % (
             self.__class__.__name__,
             "id: " + tab(self.id),
             "work_path: " + tab(self.work_path),
             "platform: " + tab(self._platform),
             "world: " + tab(self._world),
-            "agent: " + tab(self._agent),
             "mind: " + tab(self._mind),
             "logger: " + tab(self._logger),
         )
@@ -52,8 +51,7 @@ class Experiment:
     def _make_instances(self):
         self._logger = Context.config['exp.logger_class']()
         self._platform = Context.config['exp.platform_class']()
-        self._agent = Context.config['exp.agent_class']()
-        self._world = Context.config['exp.world_class'](self._agent)
+        self._world = Context.config['exp.world_class']()
         self._mind = Context.config['exp.mind_class'](self._platform, self._world, self._logger)
 
     @property
