@@ -1,5 +1,5 @@
 <worldbody>
-  <light diffuse='.5 .5 .5' pos='0 30 30' dir='0 -1 -1'/>
+  <light diffuse='.6 .6 .6' pos='0 30 30' dir='0 -1 -1'/>
   <geom name='floor' size='10 10 0.125' type='plane' material='MatPlane'/>
   {{scorpion}}
   {{ball}}

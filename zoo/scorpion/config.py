@@ -1,5 +1,4 @@
 from alg.random_alg import RandomAlgorithm
-from core.mujoco_agent import MujocoAgent
 from core.tensorflow_mind import TensorflowMind
 from core.logger import Logger
 from core.mujoco_world import MujocoWorld

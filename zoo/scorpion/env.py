@@ -49,9 +49,9 @@ class ScorpionEnv(ZooMujocoEnv):
     def viewer_setup(self):
         v = self.viewer
         v.cam.trackbodyid = -1
-        v.cam.azimuth = -90
-        v.cam.distance = 5.5
-        v.cam.elevation = -16
+        v.cam.azimuth = -45
+        v.cam.distance = 6.5
+        v.cam.elevation = -10
 
     def _get_obs(self):
         return self.state_vector()

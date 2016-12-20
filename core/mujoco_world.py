@@ -8,7 +8,7 @@ class MujocoWorld(GymWorld, MujocoAgent):
         MujocoAgent.__init__(self, agent_id='world', super_agent=None)
 
     def __str__(self):
-        return "%s:\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s" % (
+        return "%s:\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s%s" % (
             self.__class__.__name__,
             "env_id: " + self.env_id,
             "obs_dim: %s" % self.obs_dim,

@@ -14,7 +14,7 @@ class MujocoAgent:
             self.subagents.append(MujocoAgent(s, self))
 
     def __str__(self):
-        return "%s:\n\t%s\n\t%s" % (
+        return "%s:\n\t%s%s" % (
             self.__class__.__name__,
             "model_path: %s" % self.model_path,
             self._str_agents(),
