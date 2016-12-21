@@ -16,13 +16,55 @@ class ZooMujocoEnv(MujocoEnv):
     def __init__(self):
         self.work_path = Context.work_path
         self.world = Context.world
+        self.step_num = 0
+        self.episod_num = 0
+        self._episod_jpos = {}
         MujocoEnv.__init__(self, model_path=self._compile_model(), frame_skip=FRAME_SKIP)
 
     def _step(self, action):
-        pass
+        self.do_simulation(action, self.frame_skip)
+
+        ob = self._get_obs()
+        r = Context.config['env.reward_method'](self)
+        done = False
+
+        self._update_joints(self._episod_jpos)
+        self._update_joints(Context.config.get('env.step_jpos_method', lambda: {})())
+        self._update_title()
+
+        self.step_num += 1
+        return ob, r, done, {}
 
     def reset_model(self):
-        pass
+        self._reset_if_need()
+        self._episod_jpos = Context.config.get('env.episod_jpos_method', lambda: {})()
+        self._update_joints(self._episod_jpos)
+        self.episod_num += 1
+        return self._get_obs()
+
+    def _reset_if_need(self):
+        if self.episod_num % Context.config['env.init_every_episods'] == 0:
+            qpos = self.init_qpos
+            qvel = self.init_qvel
+        else:
+            qpos = self.model.data.qpos.ravel().copy()
+            qvel = self.model.data.qvel.ravel().copy()
+        self.set_state(qpos, qvel)
+
+    def _reset(self):
+        self.reset_model()
+        return self._get_obs()
+
+    def _update_joints(self, jpos):
+        qpos = self.model.data.qpos.ravel().copy()
+        qvel = self.model.data.qvel.ravel().copy()
+
+        for j, pos in jpos.iteritems():
+            qposadr, qveladr, _ = self.model.joint_adr(j)
+            qpos[qposadr] = pos
+            qvel[qveladr] = 0.
+
+        self.set_state(qpos, qvel)
 
     def site_pos(self, site_name):
         idx = self.model.site_names.index(six.b(site_name))
@@ -70,7 +112,7 @@ class ZooMujocoEnv(MujocoEnv):
 
         return env_path
 
-    def _update_window_title(self):
+    def _update_title(self):
         viewer = self._get_viewer()
         window = viewer.window
         t = Context.window_title

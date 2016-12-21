@@ -25,9 +25,9 @@ config = {
     'env.world.scorpion': ['tentacle', 'target'],
 
     'env.reward_method': default_reward,
+    'env.episod_jpos_method': random_target,
     'env.target_range_xz': [[.0, .0], [.0, .0]],
-    'env.init_every_resets': 30,
-    'env.target_location_method': random_target,
+    'env.init_every_episods': 10,
 
     'mind.evaluate_every_episodes': 10,
     'mind.algorithm_class': RandomAlgorithm,

@@ -23,7 +23,7 @@ class TentacleEnv(ZooMujocoEnv):
         done = False
 
         self._update_target_pos()
-        self._update_window_title()
+        self._update_title()
         return ob, r, done, {}
 
     def reset_model(self):
