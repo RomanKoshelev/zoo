@@ -1,18 +1,14 @@
 from __future__ import print_function
 
-from mujoco_py import glfw
-
 from core.context import Context
 from core.mujoco_env import ZooMujocoEnv
-
-FRAME_SKIP = 2
 
 
 class ScorpionEnv(ZooMujocoEnv):
     def __init__(self):
         self._resets_num = 0
         self._target_pos = None
-        ZooMujocoEnv.__init__(self, frame_skip=FRAME_SKIP)
+        ZooMujocoEnv.__init__(self)
 
     def _step(self, action):
         self.do_simulation(action, self.frame_skip)
@@ -22,7 +18,7 @@ class ScorpionEnv(ZooMujocoEnv):
 
         done = False
 
-        self._update_target_pos()
+        self._update_qpos_qvel()
         self._update_window_title()
         return ob, r, done, {}
 
@@ -46,16 +42,6 @@ class ScorpionEnv(ZooMujocoEnv):
         self.reset_model()
         return self._get_obs()
 
-    def viewer_setup(self):
-        v = self.viewer
-        v.cam.trackbodyid = -1
-        v.cam.azimuth = -45
-        v.cam.distance = 7
-        v.cam.elevation = 3
-
-    def _get_obs(self):
-        return self.state_vector()
-
     def _set_target(self, tpos, qpos, qvel):
         for i, j in enumerate(["target.coords.x", "target.coords.z"]):
             qposadr, qveladr, _ = self.model.joint_adr(j)
@@ -63,23 +49,12 @@ class ScorpionEnv(ZooMujocoEnv):
             qvel[qveladr] = 0.
         return qpos, qvel
 
-    def _update_target_pos(self):
+    def _update_qpos_qvel(self):
         if self._target_pos is not None:
             qpos = self.model.data.qpos.ravel().copy()
             qvel = self.model.data.qvel.ravel().copy()
 
-            if Context.config['env.target_mouse_control']:
-                tpos = self._target_from_mouse_pos()
-            else:
-                tpos = self._target_pos
+            tpos = self._target_pos
 
             qpos, qvel = self._set_target(tpos, qpos, qvel)
             self.set_state(qpos, qvel)
-
-    def _target_from_mouse_pos(self):
-        mx, my = glfw.get_cursor_pos(self.viewer.window)
-        w = self.viewer.get_rect().width
-        h = self.viewer.get_rect().height
-        x = 4.7 * (0.5 - mx / w)
-        z = 3.0 * (0.4 - my / h)
-        return [x, z]

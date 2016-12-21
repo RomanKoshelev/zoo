@@ -9,13 +9,20 @@ from gym.envs.mujoco.mujoco_env import MujocoEnv
 from core.context import Context
 from utils.os_tools import make_dir_if_not_exists
 
+FRAME_SKIP = 2
 
-# noinspection PyAbstractClass
+
 class ZooMujocoEnv(MujocoEnv):
-    def __init__(self, frame_skip):
+    def __init__(self):
         self.work_path = Context.work_path
         self.world = Context.world
-        MujocoEnv.__init__(self, model_path=self._compile_model(), frame_skip=frame_skip)
+        MujocoEnv.__init__(self, model_path=self._compile_model(), frame_skip=FRAME_SKIP)
+
+    def _step(self, action):
+        pass
+
+    def reset_model(self):
+        pass
 
     def site_pos(self, site_name):
         idx = self.model.site_names.index(six.b(site_name))
@@ -25,6 +32,16 @@ class ZooMujocoEnv(MujocoEnv):
         v1 = self.site_pos(site_name_1)
         v2 = self.site_pos(site_name_2)
         return np.linalg.norm(v1 - v2)
+
+    def viewer_setup(self):
+        v = self.viewer
+        v.cam.trackbodyid = -1
+        v.cam.azimuth = Context.config.get('view.cam_azimuth', -45)
+        v.cam.distance = Context.config.get('view.cam_distance', 7)
+        v.cam.elevation = Context.config.get('view.cam_elevation', 3)
+
+    def _get_obs(self):
+        return self.state_vector()
 
     def _get_viewer(self):
         if self.viewer is None:

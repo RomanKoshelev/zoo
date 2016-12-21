@@ -25,7 +25,6 @@ config = {
     'env.world.scorpion': ['tentacle', 'target'],
 
     'env.reward_method': default_reward,
-    'env.target_mouse_control': False,
     'env.target_range_xz': [[.0, .0], [.0, .0]],
     'env.init_every_resets': 30,
     'env.target_location_method': random_target,
