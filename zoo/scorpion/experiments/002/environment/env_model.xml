@@ -81,13 +81,13 @@
 
   
 <actuator>
-  <motor name='world.scorpion.m.1' ctrlrange='-1. +1.' joint='world.scorpion.head.a'/>
+  <motor name='world.scorpion.actuator.1' ctrlrange='-1. +1.' joint='world.scorpion.head.a'/>
 </actuator>
 
 <actuator>
-  <motor name='world.scorpion.tentacle.m.1' ctrlrange='-200 +200' joint='world.scorpion.tentacle.s1.a'/>
-  <motor name='world.scorpion.tentacle.m.2' ctrlrange='-150 +150' joint='world.scorpion.tentacle.s2.a'/>
-  <motor name='world.scorpion.tentacle.m.3' ctrlrange=' -50  +50' joint='world.scorpion.tentacle.s3.a'/>
+  <motor name='world.scorpion.tentacle.actuator.1' ctrlrange='-200 +200' joint='world.scorpion.tentacle.s1.a'/>
+  <motor name='world.scorpion.tentacle.actuator.2' ctrlrange='-150 +150' joint='world.scorpion.tentacle.s2.a'/>
+  <motor name='world.scorpion.tentacle.actuator.3' ctrlrange=' -50  +50' joint='world.scorpion.tentacle.s3.a'/>
 </actuator>
 
 

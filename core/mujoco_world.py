@@ -32,4 +32,4 @@ class MujocoWorld(GymWorld, MujocoAgent):
         return reward
 
     def select_actuators(self, prefix):
-        return [a for a in self._env.actuators if a['name'].startswith(prefix)]
+        return [a for a in self._env.actuators if a['name'].startswith(prefix + '.actuator.')]
