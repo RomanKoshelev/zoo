@@ -21,6 +21,7 @@ config = {
 
     'env.id': "Zoo:Mujoco:Scorpion-v1",
     'env.assets': "./assets/",
+    'env.frame_skip': 2,
     'env.world.agents': ['scorpion', 'ball'],
     'env.world.scorpion.agents': ['tentacle', 'target'],
     'env.world.scorpion.algorithm': RandomAlgorithm,

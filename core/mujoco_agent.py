@@ -10,7 +10,7 @@ class MujocoAgent:
         self._super_agent = super_agent
         self.model_path = os.path.join(Context.config['env.assets'], "%s.xml" % agent_id)
         self.mind = None
-        self.motors = []
+        self.actuators = []
         self.agents = []
         for s in Context.config.get('env.%s.agents' % self.full_id, []):
             self.agents.append(MujocoAgent(s, self))
@@ -20,7 +20,7 @@ class MujocoAgent:
             self.__class__.__name__,
             "model_path: " + self.model_path,
             "mind: " + tab(self.mind),
-            self._str_motors(),
+            self._str_actuators(),
             self._str_agents(),
         )
 
@@ -30,28 +30,34 @@ class MujocoAgent:
     def predict(self, state):
         return self.mind.predict(state)
 
-    def init_mind(self):
-        mind_class = Context.config['exp.mind_class']
-        alg_class = Context.config.get('env.%s.algorithm' % self.full_id, DummyAlgorithm)
-        self.mind = mind_class(alg_class)
+    def init_agents(self):
+        self._init_mind()
+        self._init_actuators()
         for a in self.agents:
-            a.init_mind()
+            a.init_agents()
 
-    def init_motors(self):
+    def _init_mind(self):
         mind_class = Context.config['exp.mind_class']
         alg_class = Context.config.get('env.%s.algorithm' % self.full_id, DummyAlgorithm)
         self.mind = mind_class(alg_class)
-        for a in self.agents:
-            a.init_mind()
+
+    def _init_actuators(self):
+        self.actuators = Context.world.select_actuators(self.agent_id)
 
     def _str_agents(self):
         if len(self.agents) > 0:
-            return "\n\tagents:" + tab("".join(["\n\t%s: %s" % (s.agent_id, tab(str(s))) for s in self.agents]))
+            arr = []
+            for a in self.agents:
+                arr.append("\n\t%s: %s" % (a.agent_id, tab(str(a))))
+            return "\n\tagents:" + tab("".join(arr))
         return ""
 
-    def _str_motors(self):
-        if len(self.agents) > 0:
-            return "\n\tmotors:" + tab("".join(["\n\t%s: %s" % (s.agent_id, tab(str(s))) for s in self.agents]))
+    def _str_actuators(self):
+        if len(self.actuators) > 0:
+            arr = []
+            for a in self.actuators:
+                arr.append("\n\t%s %s" % (a['name'], a['box']))
+            return "\n\tactuators:" + tab("".join(arr))
         return ""
 
     def read_model(self):

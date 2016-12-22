@@ -11,8 +11,6 @@ from core.context import Context
 from utils.os_tools import make_dir_if_not_exists
 from utils.string_tools import tab
 
-FRAME_SKIP = 2
-
 
 class ZooMujocoEnv(MujocoEnv):
     def __init__(self):
@@ -22,7 +20,7 @@ class ZooMujocoEnv(MujocoEnv):
         self.episod_num = 0
         self._episod_jpos = {}
         self.model_path = self._compile_model()
-        MujocoEnv.__init__(self, self.model_path, frame_skip=FRAME_SKIP)
+        MujocoEnv.__init__(self, self.model_path, frame_skip=Context.config['env.frame_skip'])
 
     def __str__(self):
         return "%s:\n\t%s%s" % (
@@ -33,9 +31,10 @@ class ZooMujocoEnv(MujocoEnv):
 
     def _str_actuators(self):
         if len(self.actuators) > 0:
-            return "\n\tactuators:" + tab("".join(
-                ["\n\t%s:\n\t\tidx: %s\n\t\tbox: %s" % (a['name'], a['idx'], a['box']) for a in self.actuators])
-            )
+            arr = []
+            for a in self.actuators:
+                arr.append("\n\t%s %s" % (a['name'], a['box']))
+            return "\n\tactuators:" + tab("".join(arr))
         return ""
 
     def _step(self, action):

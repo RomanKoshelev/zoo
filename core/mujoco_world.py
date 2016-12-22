@@ -7,8 +7,7 @@ class MujocoWorld(GymWorld, MujocoAgent):
     def __init__(self):
         MujocoAgent.__init__(self, agent_id='world', super_agent=None)
         GymWorld.__init__(self)
-        self.init_motors()
-        self.init_mind()
+        self.init_agents()
 
     def __str__(self):
         return "%s:\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s%s" % (
@@ -34,3 +33,6 @@ class MujocoWorld(GymWorld, MujocoAgent):
             s, r, done, _ = self.step(a)
             reward += r
         return reward
+
+    def select_actuators(self, prefix):
+        return [a for a in self._env.actuators if a['name'].startswith(prefix)]
