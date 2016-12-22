@@ -6,6 +6,7 @@ class MujocoWorld(GymWorld, MujocoAgent):
     def __init__(self):
         MujocoAgent.__init__(self, agent_id='world', super_agent=None)
         GymWorld.__init__(self)
+        self.init_motors()
         self.init_mind()
 
     def __str__(self):
@@ -25,6 +26,9 @@ class MujocoWorld(GymWorld, MujocoAgent):
         for t in xrange(steps):
             self.render()
             a = self.predict(s)
+
+            # todo: print actuators in agents
+            # todo: split s and a by minds and run hierarchically
             s, r, done, _ = self.step(a)
             reward += r
         return reward

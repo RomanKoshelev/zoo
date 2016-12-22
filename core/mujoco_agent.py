@@ -10,15 +10,17 @@ class MujocoAgent:
         self._super_agent = super_agent
         self.model_path = os.path.join(Context.config['env.assets'], "%s.xml" % agent_id)
         self.mind = None
+        self.motors = []
         self.agents = []
         for s in Context.config.get('env.%s.agents' % self.full_id, []):
             self.agents.append(MujocoAgent(s, self))
 
     def __str__(self):
-        return "%s:\n\t%s\n\t%s%s" % (
+        return "%s:\n\t%s\n\t%s%s%s" % (
             self.__class__.__name__,
             "model_path: " + self.model_path,
             "mind: " + tab(self.mind),
+            self._str_motors(),
             self._str_agents(),
         )
 
@@ -35,9 +37,21 @@ class MujocoAgent:
         for a in self.agents:
             a.init_mind()
 
+    def init_motors(self):
+        mind_class = Context.config['exp.mind_class']
+        alg_class = Context.config.get('env.%s.algorithm' % self.full_id, DummyAlgorithm)
+        self.mind = mind_class(alg_class)
+        for a in self.agents:
+            a.init_mind()
+
     def _str_agents(self):
         if len(self.agents) > 0:
             return "\n\tagents:" + tab("".join(["\n\t%s: %s" % (s.agent_id, tab(str(s))) for s in self.agents]))
+        return ""
+
+    def _str_motors(self):
+        if len(self.agents) > 0:
+            return "\n\tmotors:" + tab("".join(["\n\t%s: %s" % (s.agent_id, tab(str(s))) for s in self.agents]))
         return ""
 
     def read_model(self):

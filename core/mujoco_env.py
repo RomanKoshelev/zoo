@@ -1,3 +1,4 @@
+import ctypes
 import os
 
 import six
@@ -20,6 +21,13 @@ class ZooMujocoEnv(MujocoEnv):
         self.episod_num = 0
         self._episod_jpos = {}
         MujocoEnv.__init__(self, model_path=self._compile_model(), frame_skip=FRAME_SKIP)
+        print(self.actuator_names)
+
+    @property
+    def actuator_names(self):
+        start_addr = ctypes.addressof(self.model.names.contents)
+        return [ctypes.string_at(start_addr + int(inc))
+                for inc in self.model.name_actuatoradr.flatten()]
 
     def _step(self, action):
         self.do_simulation(action, self.frame_skip)

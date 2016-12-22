@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 
 from core.context import Context
@@ -37,6 +38,7 @@ class Experiment:
         self._update_title()
         # self._world.restore()
         self._print_instances()
+        print()
         episodes = Context.config['exp.episodes']
         steps = Context.config['exp.steps']
         for ep in xrange(episodes):

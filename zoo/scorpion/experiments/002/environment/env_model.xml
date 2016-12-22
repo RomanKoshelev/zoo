@@ -86,7 +86,7 @@
 
 <actuator>
   <motor name="tentacle.m.1" ctrlrange="-200 +200" joint="tentacle.s1.a"/>
-  <motor name="tentacle.m.2" ctrlrange="-150 +150" joint="tentacle.s1.a"/>
+  <motor name="tentacle.m.2" ctrlrange="-150 +150" joint="tentacle.s2.a"/>
   <motor name="tentacle.m.3" ctrlrange=" -50  +50" joint="tentacle.s3.a"/>
 </actuator>
 

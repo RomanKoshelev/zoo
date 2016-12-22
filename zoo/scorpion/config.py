@@ -24,6 +24,7 @@ config = {
     'env.world.agents': ['scorpion', 'ball'],
     'env.world.scorpion.agents': ['tentacle', 'target'],
     'env.world.scorpion.algorithm': RandomAlgorithm,
+    'env.world.scorpion.tentacle.algorithm': RandomAlgorithm,
 
     'env.reward_method': default_reward,
     'env.episod_jpos_method': random_target,
