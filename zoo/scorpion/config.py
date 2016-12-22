@@ -21,8 +21,9 @@ config = {
 
     'env.id': "Zoo:Mujoco:Scorpion-v1",
     'env.assets': "./assets/",
-    'env.world': ['scorpion', 'ball'],
-    'env.world.scorpion': ['tentacle', 'target'],
+    'env.world.agents': ['scorpion', 'ball'],
+    'env.world.scorpion.agents': ['tentacle', 'target'],
+    'env.world.scorpion.algorithm': RandomAlgorithm,
 
     'env.reward_method': default_reward,
     'env.episod_jpos_method': random_target,
@@ -30,7 +31,6 @@ config = {
     'env.init_every_episods': 10,
 
     'mind.evaluate_every_episodes': 10,
-    'mind.algorithm_class': RandomAlgorithm,
 
     'alg.buffer_size': 100 * 1000,
     'alg.batch_size': 512,

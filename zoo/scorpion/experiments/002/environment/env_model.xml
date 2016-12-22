@@ -28,7 +28,7 @@
 
   <worldbody>
   <light diffuse='.6 .6 .6' pos='0 30 30' dir='0 -1 -1'/>
-  <geom name='floor' size='10 10 0.125' type='plane' material='MatPlane'/>
+  <geom name='floor' size='20 20 0.125' type='plane' material='MatPlane'/>
   <body name="scorpion" pos="0 0 0">
   <body name="scorpion.cart" pos="0 0 0">
     <geom type='box' pos="0 0 0.1" size='.5 .5 .1' rgba=".2 .2 .0 1"/>

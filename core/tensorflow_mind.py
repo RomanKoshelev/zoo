@@ -12,19 +12,11 @@ ALGORITHM_STATE_PATH = "algorithm/state.pickle"
 
 
 class TensorflowMind:
-    def __init__(self, platform, world, logger):
-        self.platform = platform
-        self.world = world
-        self._logger = logger
-        self._algorithm = None
+    def __init__(self, algorithm_class):
+        self.world = Context.world
+        self._logger = Context.logger
+        self._algorithm = algorithm_class(Context.platform.session, self.world)
         self._saved_episode = None
-
-    def __enter__(self):
-        self._algorithm = Context.config['mind.algorithm_class'](self.platform.session, self.world)
-        return self
-
-    def __exit__(self, *args):
-        pass
 
     def __str__(self):
         return "%s:\n\t%s" % (
@@ -51,10 +43,10 @@ class TensorflowMind:
     def _evaluate_if_need(self, ep, evs, steps):
         if (ep + 1) % evs == 0:
             self._logger.on_evaluiation_start()
-            reward = self.run_episode(steps)
+            reward = self._run_episode(steps)
             self._logger.on_evaluiation_end(ep, reward)
 
-    def run_episode(self, steps):
+    def _run_episode(self, steps):
         s = self.world.reset()
         reward = 0
         for t in xrange(steps):

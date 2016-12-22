@@ -4,8 +4,9 @@ from core.mujoco_agent import MujocoAgent
 
 class MujocoWorld(GymWorld, MujocoAgent):
     def __init__(self):
-        GymWorld.__init__(self)
         MujocoAgent.__init__(self, agent_id='world', super_agent=None)
+        GymWorld.__init__(self)
+        self.init_mind()
 
     def __str__(self):
         return "%s:\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s%s" % (
@@ -17,3 +18,13 @@ class MujocoWorld(GymWorld, MujocoAgent):
             "model_path: %s" % self.model_path,
             self._str_agents(),
         )
+
+    def run_episode(self, steps):
+        s = self.reset()
+        reward = 0
+        for t in xrange(steps):
+            self.render()
+            a = self.predict(s)
+            s, r, done, _ = self.step(a)
+            reward += r
+        return reward

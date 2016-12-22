@@ -7,6 +7,11 @@ class TensorflowAlgorithm(object):
         self.sess = sess
         self.suffix = suffix
 
+    def __str__(self):
+        return "%s" % (
+            self.__class__.__name__,
+        )
+
     @property
     def _variables(self):
         return tf.get_collection(tf.GraphKeys.VARIABLES, scope=self.scope)
@@ -18,6 +23,12 @@ class TensorflowAlgorithm(object):
 
     def _initialize_variables(self):
         self.sess.run(tf.initialize_variables(self._variables))
+
+    def predict(self, s):
+        raise NotImplementedError
+
+    def train(self, episodes, steps, on_episode):
+        raise NotImplementedError
 
     def save_weights(self, path):
         saver = tf.train.Saver(self._variables)

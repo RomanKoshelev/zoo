@@ -1,5 +1,7 @@
 class Context(object):
     experiment = None
+    platform = None
+    logger = None
     world = None
     mode = None
     config = {}

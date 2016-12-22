@@ -14,6 +14,7 @@ WORK_DIR = "logger/"
 
 class Logger:
     def __init__(self):
+        Context.logger = self
         self._episodes = Context.config['exp.episodes']
         self._work_path = os.path.join(Context.work_path, WORK_DIR)
         self._sw = Stopwatch()

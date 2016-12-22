@@ -1,3 +1,4 @@
+from alg.dummy_alg import DummyAlgorithm
 from core.context import Context
 from utils.string_tools import tab
 import os
@@ -8,24 +9,40 @@ class MujocoAgent:
         self.agent_id = agent_id
         self._super_agent = super_agent
         self.model_path = os.path.join(Context.config['env.assets'], "%s.xml" % agent_id)
-        subs = Context.config.get('env.%s' % self.full_id, [])
-        self.subagents = []
-        for s in subs:
-            self.subagents.append(MujocoAgent(s, self))
+        self.mind = None
+        self.agents = []
+        for s in Context.config.get('env.%s.agents' % self.full_id, []):
+            self.agents.append(MujocoAgent(s, self))
 
     def __str__(self):
-        return "%s:\n\t%s%s" % (
+        return "%s:\n\t%s\n\t%s%s" % (
             self.__class__.__name__,
-            "model_path: %s" % self.model_path,
+            "model_path: " + self.model_path,
+            "mind: " + tab(self.mind),
             self._str_agents(),
         )
 
+    def train(self):
+        return self.mind.train()
+
+    def predict(self, state):
+        return self.mind.predict(state)
+
+    def init_mind(self):
+        mind_class = Context.config['exp.mind_class']
+        alg_class = Context.config.get('env.%s.algorithm' % self.full_id, DummyAlgorithm)
+        self.mind = mind_class(alg_class)
+        for a in self.agents:
+            a.init_mind()
+
     def _str_agents(self):
-        return "".join(["\n\t%s: %s" % (s.agent_id, tab(str(s))) for s in self.subagents])
+        if len(self.agents) > 0:
+            return "\n\tagents:" + tab("".join(["\n\t%s: %s" % (s.agent_id, tab(str(s))) for s in self.agents]))
+        return ""
 
     def read_model(self):
         body, actuators = self._read_model()
-        for sa in self.subagents:
+        for sa in self.agents:
             pl = "{{%s}}" % sa.agent_id
             if pl in body:
                 b, a = sa.read_model()
