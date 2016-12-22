@@ -42,7 +42,7 @@ class MujocoAgent:
         self.mind = mind_class(alg_class)
 
     def _init_actuators(self):
-        self.actuators = Context.world.select_actuators(self.agent_id)
+        self.actuators = Context.world.select_actuators(self.full_id)
 
     def _str_agents(self):
         if len(self.agents) > 0:
@@ -79,9 +79,12 @@ class MujocoAgent:
 
     def _read_model(self):
         with open(self.model_path, 'r') as f:
-            xml = f.read()
+            xml = f.read().replace('{agent}', self.full_id)
             i = xml.find("<actuator>")
             if i == -1:
-                return xml, ""
+                body = xml
+                actuators = ""
             else:
-                return xml[:i], xml[i:]  # body, actuators
+                body = xml[:i]
+                actuators = xml[i:]
+        return body, actuators
