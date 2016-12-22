@@ -12,10 +12,16 @@ ALGORITHM_STATE_PATH = "algorithm/state.pickle"
 
 
 class TensorflowMind:
-    def __init__(self, algorithm_class):
+    def __init__(self, agent, algorithm_class):
         self.world = Context.world
+        self.agent = agent
         self._logger = Context.logger
-        self._algorithm = algorithm_class(Context.platform.session, self.world)
+        self._algorithm = algorithm_class(
+            session=Context.platform.session,
+            scope=agent.full_id,
+            obs_dim=agent.obs_dim,
+            act_dim=agent.act_dim,
+        )
         self._saved_episode = None
 
     def __str__(self):
@@ -26,7 +32,7 @@ class TensorflowMind:
 
     def predict(self, state):
         a = self._algorithm.predict(state)
-        return self.world.scale_action(a)
+        return self.agent.scale_action(a)
 
     def train(self):
         def on_episod(ep, reward, nr, maxq):

@@ -11,5 +11,5 @@
 </body>
 
 <actuator>
-  <motor name='{agent}.actuator.1' ctrlrange='-1. +1.' joint='{agent}.head.a'/>
+  <motor name='{agent}.actuator.head' ctrlrange='-1. +1.' joint='{agent}.head.a'/>
 </actuator>

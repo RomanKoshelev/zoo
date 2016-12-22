@@ -1,16 +1,15 @@
 from __future__ import print_function
 
 import numpy as np
-from core.tensorflow_algorithm import TensorflowAlgorithm
+from tf.algorithm import TensorflowAlgorithm
 
 
 class DummyAlgorithm(TensorflowAlgorithm):
-    def __init__(self, sess, world):
-        super(self.__class__, self).__init__(sess, world.env_id)
+    def __init__(self, session, scope, obs_dim, act_dim):
+        super(self.__class__, self).__init__(session, scope, obs_dim, act_dim)
 
-    # noinspection PyUnusedLocal,PyMethodMayBeStatic
     def predict(self, s):
-        return np.array([])
+        return np.zeros(shape=[self._act_dim])
 
     def train(self, episodes, steps, on_episode):
         pass

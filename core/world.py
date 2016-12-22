@@ -31,29 +31,21 @@ class GymWorld:
         return self._env.step(action)
 
     @property
-    def act_box(self):
+    def total_act_box(self):
         return [self._env.action_space.low, self._env.action_space.high]
 
     @property
-    def obs_box(self):
+    def total_obs_box(self):
         return [self._env.observation_space.low, self._env.observation_space.high]
 
     @property
-    def obs_dim(self):
+    def total_obs_dim(self):
         return self._env.observation_space.shape[0]
 
     @property
-    def act_dim(self):
+    def total_act_dim(self):
         return self._env.action_space.shape[0]
 
     def reset(self):
         self.state = self._env.reset()
         return self.state
-
-    def scale_action(self, a):
-        if len(a) > 0:
-            k = (a + 1.) / 2.
-            a = self.act_box[0] + (self.act_box[1] - self.act_box[0]) * k  # type: np.ndarray
-            return np.clip(a, self.act_box[0], self.act_box[1])
-        else:
-            return a

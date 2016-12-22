@@ -3,13 +3,17 @@ import os
 
 
 class TensorflowAlgorithm(object):
-    def __init__(self, sess, suffix):
+    def __init__(self, sess, scope, obs_dim, act_dim):
         self.sess = sess
-        self.suffix = suffix
+        self.suffix = scope
+        self._obs_dim = obs_dim
+        self._act_dim = act_dim
 
     def __str__(self):
-        return "%s" % (
+        return "%s:\n\t%s\n\t%s" % (
             self.__class__.__name__,
+            "obs_dim: %d" % self._obs_dim,
+            "act_dim: %d" % self._act_dim,
         )
 
     @property

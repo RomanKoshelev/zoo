@@ -102,7 +102,7 @@ class ZooMujocoEnv(MujocoEnv):
         acts = []
         for i, n in enumerate(self.actuator_names):
             acts.append({
-                'idx': i,
+                'index': i,
                 'name': n,
                 'box': [self.action_space.low[i], self.action_space.high[i]]
             })

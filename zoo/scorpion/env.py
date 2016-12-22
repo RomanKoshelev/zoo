@@ -1,5 +1,5 @@
 from __future__ import print_function
-from core.mujoco_env import ZooMujocoEnv
+from mj.env import ZooMujocoEnv
 
 
 class ScorpionEnv(ZooMujocoEnv):
