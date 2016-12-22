@@ -9,6 +9,7 @@ from gym.envs.mujoco.mujoco_env import MujocoEnv
 
 from core.context import Context
 from utils.os_tools import make_dir_if_not_exists
+from utils.string_tools import tab
 
 FRAME_SKIP = 2
 
@@ -20,14 +21,22 @@ class ZooMujocoEnv(MujocoEnv):
         self.step_num = 0
         self.episod_num = 0
         self._episod_jpos = {}
-        MujocoEnv.__init__(self, model_path=self._compile_model(), frame_skip=FRAME_SKIP)
-        print(self.actuator_names)
+        self.model_path = self._compile_model()
+        MujocoEnv.__init__(self, self.model_path, frame_skip=FRAME_SKIP)
 
-    @property
-    def actuator_names(self):
-        start_addr = ctypes.addressof(self.model.names.contents)
-        return [ctypes.string_at(start_addr + int(inc))
-                for inc in self.model.name_actuatoradr.flatten()]
+    def __str__(self):
+        return "%s:\n\t%s%s" % (
+            self.__class__.__name__,
+            "model_path: %s" % self.model_path,
+            self._str_actuators(),
+        )
+
+    def _str_actuators(self):
+        if len(self.actuators) > 0:
+            return "\n\tactuators:" + tab("".join(
+                ["\n\t%s:\n\t\tidx: %s\n\t\tbox: %s" % (a['name'], a['idx'], a['box']) for a in self.actuators])
+            )
+        return ""
 
     def _step(self, action):
         self.do_simulation(action, self.frame_skip)
@@ -83,6 +92,23 @@ class ZooMujocoEnv(MujocoEnv):
         v2 = self.site_pos(site_name_2)
         return np.linalg.norm(v1 - v2)
 
+    @property
+    def actuator_names(self):
+        start_addr = ctypes.addressof(self.model.names.contents)
+        return [ctypes.string_at(start_addr + int(inc))
+                for inc in self.model.name_actuatoradr.flatten()]
+
+    @property
+    def actuators(self):
+        acts = []
+        for i, n in enumerate(self.actuator_names):
+            acts.append({
+                'idx': i,
+                'name': n,
+                'box': [self.action_space.low[i], self.action_space.high[i]]
+            })
+        return acts
+
     def viewer_setup(self):
         v = self.viewer
         v.cam.trackbodyid = -1
@@ -111,14 +137,14 @@ class ZooMujocoEnv(MujocoEnv):
         world, actuators = self.world.read_model()
         model = model.replace('{{world}}', world).replace("{{actuators}}", actuators)
 
-        env_path = os.path.join(Context.work_path, 'environment/env_model.xml')
-        env_path = os.path.abspath(env_path)
-        make_dir_if_not_exists(env_path)
+        path = os.path.join(Context.work_path, 'environment/env_model.xml')
+        path = os.path.abspath(path)
+        make_dir_if_not_exists(path)
 
-        with open(env_path, 'w') as f:
+        with open(path, 'w') as f:
             f.write(model)
 
-        return env_path
+        return path
 
     def _update_title(self):
         viewer = self._get_viewer()
