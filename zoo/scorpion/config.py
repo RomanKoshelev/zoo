@@ -10,7 +10,7 @@ from utils.noise_tools import staircase_5
 config = {
     'exp.id': None,
     'exp.episodes': 30000,
-    'exp.steps': 100,
+    'exp.steps': 50,
     'exp.save_every_episodes': 200,
     'exp.base_path': "experiments/",
 

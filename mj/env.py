@@ -161,5 +161,5 @@ class ZooMujocoEnv(MujocoEnv):
         t = Context.window_title
         d = " "
         title = t['app'] + d + t['exp'] + d + t['episode'] + d + t['step'] + d + t['info']
-        title = ",".join(["%+8.3f" % v for v in self.get_sensor_val("world.scorpion.sensor.head.pos")])
+        # title = ",".join(["%+8.3f" % v for v in self.get_sensor_val("world.scorpion.sensor.head.pos")])
         glfw.set_window_title(window, title)
