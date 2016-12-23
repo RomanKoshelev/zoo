@@ -61,7 +61,7 @@
   <site name='world.scorpion.target.surface' type= 'box' size='2 0.01 1.5' pos='0 0 1.5' rgba='1 1 0 .1'/>
   <body name='world.scorpion.target.coords' pos='0 0 1.5'>
     <joint name='world.scorpion.target.coords.x' type='slide' axis='1 0 0' range='-2 +2' />
-    <joint name='world.scorpion.target.coords.z' type='slide' axis='0 0 1' range='-2 +2' />
+    <joint name='world.scorpion.target.coords.z' type='slide' axis='0 0 1' range='-1 +1.5' />
     <geom type='sphere' conaffinity='0' contype='0' rgba='0. 0. 0. 0.' size='.05' mass='1e-3'/>
     <site name='world.scorpion.target' pos='0 0 0' size='.05' rgba='1.5 1.5 0. 0.9' />
   </body>
@@ -82,6 +82,8 @@
   
 <actuator>
   <motor name='world.scorpion.actuator.head' ctrlrange='-1. +1.' joint='world.scorpion.head.a'/>
+  <motor name='world.scorpion.actuator.target.x' ctrlrange='-.1 +.1' joint='world.scorpion.target.coords.x'/>
+  <motor name='world.scorpion.actuator.target.z' ctrlrange='-.1 +.1' joint='world.scorpion.target.coords.z'/>
 </actuator>
 
 <actuator>

@@ -4,7 +4,7 @@ from core.logger import Logger
 from mj.world import MujocoWorld
 from tf.platform import TensorflowPlatform
 from zoo.scorpion.reward import default_reward
-from zoo.scorpion.target import random_target
+from zoo.scorpion.target import jpos_do_noting
 from utils.noise_tools import staircase_5
 
 config = {
@@ -28,7 +28,7 @@ config = {
     'env.world.scorpion.tentacle.algorithm': RandomAlgorithm,
 
     'env.reward_method': default_reward,
-    'env.episod_jpos_method': random_target,
+    'env.episod_jpos_method': jpos_do_noting,
     'env.target_range_xz': [[.0, .0], [.0, .0]],
     'env.init_every_episods': 10,
 
