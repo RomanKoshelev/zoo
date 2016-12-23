@@ -33,21 +33,18 @@ class ZooMujocoEnv(MujocoEnv):
         if len(self.actuators) > 0:
             arr = []
             for a in self.actuators:
-                arr.append("\n\t%s [%+.3g %+.3g]" % (a['name'], a['box'][0], a['box'][1]))
+                arr.append("\n\t%s [%+.5g %+.5g]" % (a['name'], a['box'][0], a['box'][1]))
             return "".join(arr)
         return "\n\tno"
 
     def _step(self, action):
         self.do_simulation(action, self.frame_skip)
-
         ob = self._get_obs()
         r = Context.config['env.reward_method'](self)
         done = False
-
         self._update_joints(self._episod_jpos)
         self._update_joints(Context.config.get('env.step_jpos_method', lambda: {})())
         self._update_title()
-
         self.step_num += 1
         return ob, r, done, {}
 
@@ -86,6 +83,13 @@ class ZooMujocoEnv(MujocoEnv):
         idx = self.model.site_names.index(six.b(site_name))
         return np.asarray(self.model.data.site_xpos[idx])
 
+    def get_sensor_val(self, sensor_name):
+        dims = np.asarray(self.model.sensor_dim).flat
+        data = np.asarray(self.model.data.sensordata).flat
+        dim_idx = self.sensor_names.index(six.b(sensor_name))
+        data_idx = np.sum(dims[:dim_idx])
+        return np.asarray([data[data_idx + i] for i in xrange(dims[dim_idx])])
+
     def site_dist(self, site_name_1, site_name_2):
         v1 = self.site_pos(site_name_1)
         v2 = self.site_pos(site_name_2)
@@ -96,6 +100,12 @@ class ZooMujocoEnv(MujocoEnv):
         start_addr = ctypes.addressof(self.model.names.contents)
         return [ctypes.string_at(start_addr + int(inc))
                 for inc in self.model.name_actuatoradr.flatten()]
+
+    @property
+    def sensor_names(self):
+        start_addr = ctypes.addressof(self.model.names.contents)
+        return [ctypes.string_at(start_addr + int(inc))
+                for inc in self.model.name_sensoradr.flatten()]
 
     @property
     def actuators(self):
@@ -151,4 +161,5 @@ class ZooMujocoEnv(MujocoEnv):
         t = Context.window_title
         d = " "
         title = t['app'] + d + t['exp'] + d + t['episode'] + d + t['step'] + d + t['info']
+        title = ",".join(["%+8.3f" % v for v in self.get_sensor_val("world.scorpion.sensor.head.pos")])
         glfw.set_window_title(window, title)

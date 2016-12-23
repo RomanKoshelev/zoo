@@ -42,7 +42,7 @@ class MujocoAgent:
         if len(self.actuators) > 0:
             arr = []
             for a in self.actuators:
-                arr.append("\n\t%s [%+.3g %+.3g]" % (a['name'], a['box'][0], a['box'][1]))
+                arr.append("\n\t%s [%+.5g %+.5g]" % (a['name'], a['box'][0], a['box'][1]))
             return "".join(arr)
         return "\n\tno"
 

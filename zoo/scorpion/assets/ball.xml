@@ -1,4 +1,5 @@
 <body name='{agent}' pos='0 0 5'>
   <joint type='free' limited='false' damping='0.1'/>
   <geom type='sphere' conaffinity='1' contype='1' rgba='0.05 1. 3. .4' size='.2' mass='3e-1'/>
+  <site name='{agent}' pos='0 0 0' size='.001' rgba='0 0 0 0' />
 </body>

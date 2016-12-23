@@ -12,6 +12,6 @@
 
 <actuator>
   <motor name='{agent}.actuator.head' ctrlrange='-10 +10' joint='{agent}.head.a'/>
-  <position name='{agent}.actuator.target.x' ctrlrange='-2 +2' joint='{agent}.target.coords.x'/>
-  <position name='{agent}.actuator.target.z' ctrlrange='-1 +2' joint='{agent}.target.coords.z'/>
+  <position name='{agent}.actuator.target.x' ctrlrange='-2 +2' kp='1' joint='{agent}.target.coords.x'/>
+  <position name='{agent}.actuator.target.z' ctrlrange='-1 +2' kp='1' joint='{agent}.target.coords.z'/>
 </actuator>
