@@ -8,7 +8,7 @@
     <geom type='capsule' conaffinity='1' contype='1' condim='3'
           friction='.1 .1 .1' rgba='0 .8 .0 1' pos='0 0 0' margin='0.001'/>
     <site type='sphere' rgba='1 1 1 0.5' pos='0 0 0' size='0.0001'/>
-    <motor ctrllimited='true' gear='10' />
+    <motor ctrllimited='true'/>
   </default>
 
   <asset>
@@ -81,15 +81,15 @@
 
   
 <actuator>
-  <motor name='world.scorpion.actuator.head' ctrlrange='-1.0 +1.0' joint='world.scorpion.head.a'/>
-  <motor name='world.scorpion.actuator.target.x' ctrlrange='-0.1 +0.1' joint='world.scorpion.target.coords.x'/>
-  <motor name='world.scorpion.actuator.target.z' ctrlrange='-0.1 +0.1' joint='world.scorpion.target.coords.z'/>
+  <motor name='world.scorpion.actuator.head' ctrlrange='-10 +10' joint='world.scorpion.head.a'/>
+  <position name='world.scorpion.actuator.target.x' ctrlrange='-2 +2' joint='world.scorpion.target.coords.x'/>
+  <position name='world.scorpion.actuator.target.z' ctrlrange='-1 +2' joint='world.scorpion.target.coords.z'/>
 </actuator>
 
 <actuator>
-  <motor name='world.scorpion.tentacle.actuator.s1' ctrlrange='-200 +200' joint='world.scorpion.tentacle.s1.a'/>
-  <motor name='world.scorpion.tentacle.actuator.s2' ctrlrange='-150 +150' joint='world.scorpion.tentacle.s2.a'/>
-  <motor name='world.scorpion.tentacle.actuator.s3' ctrlrange=' -50  +50' joint='world.scorpion.tentacle.s3.a'/>
+  <motor name='world.scorpion.tentacle.actuator.s1' ctrlrange='-2000 +2000' joint='world.scorpion.tentacle.s1.a'/>
+  <motor name='world.scorpion.tentacle.actuator.s2' ctrlrange='-1500 +1500' joint='world.scorpion.tentacle.s2.a'/>
+  <motor name='world.scorpion.tentacle.actuator.s3' ctrlrange=' -500  +500' joint='world.scorpion.tentacle.s3.a'/>
 </actuator>
 
 

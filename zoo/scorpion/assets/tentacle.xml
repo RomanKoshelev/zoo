@@ -20,7 +20,7 @@
 </body>
 
 <actuator>
-  <motor name='{agent}.actuator.s1' ctrlrange='-200 +200' joint='{agent}.s1.a'/>
-  <motor name='{agent}.actuator.s2' ctrlrange='-150 +150' joint='{agent}.s2.a'/>
-  <motor name='{agent}.actuator.s3' ctrlrange=' -50  +50' joint='{agent}.s3.a'/>
+  <motor name='{agent}.actuator.s1' ctrlrange='-2000 +2000' joint='{agent}.s1.a'/>
+  <motor name='{agent}.actuator.s2' ctrlrange='-1500 +1500' joint='{agent}.s2.a'/>
+  <motor name='{agent}.actuator.s3' ctrlrange=' -500  +500' joint='{agent}.s3.a'/>
 </actuator>
