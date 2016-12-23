@@ -23,19 +23,19 @@ class ZooMujocoEnv(MujocoEnv):
         MujocoEnv.__init__(self, self.model_path, frame_skip=Context.config['env.frame_skip'])
 
     def __str__(self):
-        return "%s:\n\t%s%s" % (
+        return "%s:\n\t%s\n\t%s" % (
             self.__class__.__name__,
-            "model_path: %s" % self.model_path,
-            self._str_actuators(),
+            "model_path: " + self.model_path,
+            "actuators: " + tab(self._str_actuators()),
         )
 
     def _str_actuators(self):
         if len(self.actuators) > 0:
             arr = []
             for a in self.actuators:
-                arr.append("\n\t%s %s" % (a['name'], a['box']))
-            return "\n\tactuators:" + tab("".join(arr))
-        return ""
+                arr.append("\n\t%s [%+.3g %+.3g]" % (a['name'], a['box'][0], a['box'][1]))
+            return "".join(arr)
+        return "\n\tno"
 
     def _step(self, action):
         self.do_simulation(action, self.frame_skip)

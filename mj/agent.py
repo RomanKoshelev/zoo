@@ -24,44 +24,35 @@ class MujocoAgent:
         return "%s:\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s" % (
             self.__class__.__name__,
             "model_path: " + self.model_path,
-            self._str_observations(),
-            self._str_actuators(),
+            "observations: " + tab(self._str_observations()),
+            "actuators: " + tab(self._str_actuators()),
             "mind: " + tab(self.mind),
-            self._str_agents(),
+            "agents: " + tab(self._str_agents()),
         )
 
     def _str_agents(self):
-        s = "agents: "
         if len(self.agents) > 0:
             arr = []
             for a in self.agents:
                 arr.append("\n\t%s: %s" % (a.agent_id, tab(str(a))))
-            s += tab("".join(arr))
-        else:
-            s += "no"
-        return s
+            return "".join(arr)
+        return "\n\tno"
 
     def _str_actuators(self):
-        s = "actuators: "
         if len(self.actuators) > 0:
             arr = []
             for a in self.actuators:
-                arr.append("\n\t%s %s" % (a['name'], a['box']))
-            s += tab("".join(arr))
-        else:
-            s += "no"
-        return s
+                arr.append("\n\t%s [%+.3g %+.3g]" % (a['name'], a['box'][0], a['box'][1]))
+            return "".join(arr)
+        return "\n\tno"
 
     def _str_observations(self):
-        s = "observations: "
         if len(self.observations) > 0:
             arr = []
             for a in self.actuators:
                 arr.append("\n\t%s %s" % (a['name'], a['box']))
-            s += tab("".join(arr))
-        else:
-            s += "no"
-        return s
+            return "".join(arr)
+        return "\n\tno"
 
     def train(self):
         return self.mind.train()

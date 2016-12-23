@@ -10,15 +10,14 @@ class MujocoWorld(GymWorld, MujocoAgent):
         self.init_agents()
 
     def __str__(self):
-        return "%s:\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s%s" % (
+        return "%s:\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s" % (
             self.__class__.__name__,
             "env_id: " + self.env_id,
             "total_obs_dim: %s" % self.total_obs_dim,
-            "total_act_box: %s" % self.total_act_box[0],
-            "               %s" % self.total_act_box[1],
+            "total_act_dim: %s" % self.total_act_dim,
             "model_path: %s" % self.model_path,
             "env: " + tab(self._env),
-            self._str_agents(),
+            "agents: " + tab(self._str_agents()),
         )
 
     def run_episode(self, steps):
