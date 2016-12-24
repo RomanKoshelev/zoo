@@ -71,7 +71,6 @@ class ZooMujocoEnv(MujocoEnv):
     def _update_joints(self, jpos):
         qpos = self.model.data.qpos.ravel().copy()
         qvel = self.model.data.qvel.ravel().copy()
-
         for j, pos in jpos.iteritems():
             qposadr, qveladr, _ = self.model.joint_adr(j)
             qpos[qposadr] = pos
@@ -143,8 +142,11 @@ class ZooMujocoEnv(MujocoEnv):
         with open(os.path.join(Context.config['env.assets'], 'env.xml'), 'r') as f:
             model = f.read()
 
-        world, actuators = self.world.read_model()
-        model = model.replace('{{world}}', world).replace("{{actuators}}", actuators)
+        world, sensors, actuators = self.world.read_model()
+        model = model.\
+            replace('{{world}}', world).\
+            replace("{{sensors}}", sensors). \
+            replace("{{actuators}}", actuators)
 
         path = os.path.join(Context.work_path, 'environment/env_model.xml')
         path = os.path.abspath(path)
@@ -161,5 +163,4 @@ class ZooMujocoEnv(MujocoEnv):
         t = Context.window_title
         d = " "
         title = t['app'] + d + t['exp'] + d + t['episode'] + d + t['step'] + d + t['info']
-        # title = ",".join(["%+8.3f" % v for v in self.get_sensor_val("world.scorpion.sensor.head.pos")])
         glfw.set_window_title(window, title)

@@ -6,6 +6,26 @@ import numpy as np
 import os
 
 
+def xml_children_content(xml, xpath):
+    import lxml.html as parser
+    from lxml.html import tostring
+    try:
+        root = parser.fromstring(xml).xpath('//' + xpath)[0]
+        return ''.join([tostring(child) for child in root.iterchildren()])
+    except IndexError:
+        return ""
+
+
+def xml_content(xml, xpath):
+    import lxml.html as parser
+    from lxml.html import tostring
+    try:
+        root = parser.fromstring(xml).xpath('//' + xpath)[0]
+        return tostring(root)
+    except IndexError:
+        return ""
+
+
 class MujocoAgent:
     def __init__(self, agent_id, super_agent):
         self.agent_id = agent_id
@@ -90,14 +110,15 @@ class MujocoAgent:
         self.act_box = np.asarray(ab)
 
     def read_model(self):
-        body, actuators = self._read_model()
+        body, sensors, actuators = self._read_model()
         for sa in self.agents:
             pl = "{{%s}}" % sa.agent_id
             if pl in body:
-                b, a = sa.read_model()
+                b, s, a = sa.read_model()
                 body = body.replace(pl, b)
+                sensors += '\n' + s
                 actuators += '\n' + a
-        return body, actuators
+        return body, sensors, actuators
 
     @property
     def full_id(self):
@@ -120,12 +141,9 @@ class MujocoAgent:
 
     def _read_model(self):
         with open(self.model_path, 'r') as f:
-            xml = f.read().replace('{agent}', self.full_id)
-            i = xml.find("<actuator>")
-            if i == -1:
-                body = xml
-                actuators = ""
-            else:
-                body = xml[:i]
-                actuators = xml[i:]
-        return body, actuators
+            xml = f.read().replace('{agent}', self.full_id).replace('<body', '<_body').replace('</body', '</_body')
+            body = xml_content(xml, '//agent/_body') + xml_content(xml, '//agent/worldbody')
+            body = body.replace('<_body', '<body').replace('</_body', '</body')
+            sensors = xml_children_content(xml, '//agent/sensor')
+            actuators = xml_children_content(xml, '//agent/actuator')
+        return body, sensors, actuators
