@@ -1,11 +1,9 @@
 import gym
 
 from core.context import Context
-import numpy as np
 
 
 class GymWorld:
-
     def __init__(self):
         Context.world = self
         self.state = None
@@ -29,22 +27,6 @@ class GymWorld:
 
     def step(self, action):
         return self._env.step(action)
-
-    @property
-    def total_act_box(self):
-        return [self._env.action_space.low, self._env.action_space.high]
-
-    @property
-    def total_obs_box(self):
-        return [self._env.observation_space.low, self._env.observation_space.high]
-
-    @property
-    def total_obs_dim(self):
-        return self._env.observation_space.shape[0]
-
-    @property
-    def total_act_dim(self):
-        return self._env.action_space.shape[0]
 
     def reset(self):
         self.state = self._env.reset()

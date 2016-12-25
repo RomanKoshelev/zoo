@@ -15,7 +15,7 @@
     <jointvel name='{agent}.sensor_vx' joint='{agent}.coords_x'/>
     <jointvel name='{agent}.sensor_vy' joint='{agent}.coords_y'/>
     <jointvel name='{agent}.sensor_vz' joint='{agent}.coords_z'/>
-    <accelerometer name='{agent}.accelerometer' site='{agent}'/>
+    <accelerometer name='{agent}.sensor_accelerometer' site='{agent}'/>
   </sensor>
 
 </agent>

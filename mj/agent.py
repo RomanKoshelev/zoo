@@ -28,8 +28,8 @@ class MujocoAgent:
             self.__class__.__name__,
             "model_path: " + self.model_path,
             "sensors: " + tab(self._str_sensors()),
-            "observations: " + tab(self._str_observations()),
             "actuators: " + tab(self._str_actuators()),
+            "observations: " + tab(self._str_observations()),
             "mind: " + tab(self.mind),
             "agents: " + tab(self._str_agents()),
         )
@@ -38,7 +38,7 @@ class MujocoAgent:
         if len(self.agents) > 0:
             arr = []
             for a in self.agents:
-                arr.append("\n\t%s: %s" % (a.agent_id, tab(str(a))))
+                arr.append("\n\t%s: %s" % (a.full_id, tab(str(a))))
             return "".join(arr)
         return "\n\tno"
 
@@ -60,13 +60,17 @@ class MujocoAgent:
 
     def _str_observations(self):
         if len(self.observations) > 0:
-            return "???"
+            arr = []
+            for o in self.observations:
+                val = ", ".join(["%.5g" % v for v in o['get_val']()])
+                arr.append("\n\t%s: %s = (%s)" % (o['type'], o['name'], val))
+            return "".join(arr)
         return "\n\tno"
 
     def train(self):
         return self.mind.train()
 
-    def make_actions(self, state, actions=None):
+    def do_actions(self, state, actions=None):
         pred = self.mind.predict(state)
         if actions is None:
             actions = [None] * Context.world.total_act_dim
@@ -76,15 +80,17 @@ class MujocoAgent:
             assert actions[i] is None
             actions[i] = pred[j]
         for agent in self.agents:
-            actions = agent.make_actions(state, actions)
+            actions = agent.do_actions(state, actions)
         return actions
 
     def init_agents(self):
         self._init_sensors()
+        self._init_observation()
         self._init_actuators()
         self._init_mind()
         for a in self.agents:
             a.init_agents()
+            self.observations += a.observations
 
     def _init_mind(self):
         mind_class = Context.config['exp.mind_class']
@@ -101,6 +107,15 @@ class MujocoAgent:
 
     def _init_sensors(self):
         self.sensors = Context.world.select_sensors(self.full_id)
+
+    def _init_observation(self):
+        self.observations = []
+        for s in self.sensors:
+            self.observations.append({
+                'type': 'sensor',
+                'name': s['name'],
+                'get_val': lambda: Context.world.get_sensor_val(s['name']),
+            })
 
     def read_model(self):
         body, sensors, actuators = self._read_model()

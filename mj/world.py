@@ -10,13 +10,16 @@ class MujocoWorld(GymWorld, MujocoAgent):
         self.init_agents()
 
     def __str__(self):
-        return "%s:\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s" % (
+        return "%s:\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s" % (
             self.__class__.__name__,
             "env_id: " + self.env_id,
-            "total_obs_dim: %s" % self.total_obs_dim,
-            "total_act_dim: %s" % self.total_act_dim,
             "model_path: %s" % self.model_path,
+            "total_act_dim: %s" % self.total_act_dim,
             "env: " + tab(self._env),
+            "sensors: " + tab(self._str_sensors()),
+            "actuators: " + tab(self._str_actuators()),
+            "observations: " + tab(self._str_observations()),
+            "mind: " + tab(self.mind),
             "agents: " + tab(self._str_agents()),
         )
 
@@ -25,7 +28,7 @@ class MujocoWorld(GymWorld, MujocoAgent):
         reward = 0
         for t in xrange(steps):
             self.render()
-            a = self.make_actions(s)
+            a = self.do_actions(s)
             s, r, done, _ = self.step(a)
             reward += r
         return reward
@@ -35,3 +38,11 @@ class MujocoWorld(GymWorld, MujocoAgent):
 
     def select_sensors(self, prefix):
         return [s for s in self._env.sensors if s['name'].startswith(prefix + '.sensor_')]
+
+    def get_sensor_val(self, name):
+        return self._env.get_sensor_val(name)
+
+    @property
+    def total_act_dim(self):
+        assert len(self._env.actuators) == self._env.action_space.shape[0]
+        return len(self._env.actuators)

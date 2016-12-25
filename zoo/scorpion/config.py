@@ -30,7 +30,7 @@ config = {
     'env.world.scorpion.algorithm': RandomAlgorithm,
     'env.world.scorpion.input': ['tx', 'ty', 'tz'],
     # tgentacle
-    'env.world.scorpion.tentacle.input': ['tx', 'ty', 'tz'],
+    'env.world.scorpion.tentacle.input': ['target_x', 'target_z'],
     'env.world.scorpion.tentacle.algorithm': RandomAlgorithm,
 
     'env.reward_method': default_reward,
