@@ -79,6 +79,7 @@
     <site name="world.ball" pos="0 0 0" size=".001" rgba="0 0 0 0"></site>
   </body>
 
+  
   </worldbody>
 
   <sensor>
@@ -96,7 +97,8 @@
     <jointvel name="world.scorpion.tentacle.sensor_s3_vel" joint="world.scorpion.tentacle.s3_a"></jointvel>
   
 
-
+<magnetometer name="world.ball.magnetometer" site="world.ball"></magnetometer>
+  
   </sensor>
   <actuator>
     

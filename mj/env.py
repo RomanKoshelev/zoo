@@ -42,7 +42,7 @@ class ZooMujocoEnv(MujocoEnv):
         if len(self.sensors) > 0:
             arr = []
             for s in self.sensors:
-                arr.append("\n\t%s" % s['name'])
+                arr.append("\n\t%s [%d]" % (s['name'], s['dim']))
             return "".join(arr)
         return "\n\tno"
 
@@ -98,6 +98,10 @@ class ZooMujocoEnv(MujocoEnv):
         data_idx = np.sum(dims[:dim_idx])
         return np.asarray([data[data_idx + i] for i in xrange(dims[dim_idx])])
 
+    def _get_sensor_dim(self, idx):
+        dims = np.asarray(self.model.sensor_dim).flat
+        return dims[idx]
+
     def site_dist(self, site_name_1, site_name_2):
         v1 = self.site_pos(site_name_1)
         v2 = self.site_pos(site_name_2)
@@ -133,6 +137,7 @@ class ZooMujocoEnv(MujocoEnv):
             arr.append({
                 'index': i,
                 'name': n,
+                'dim': self._get_sensor_dim(i),
             })
         return arr
 

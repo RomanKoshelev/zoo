@@ -50,10 +50,7 @@ class MujocoAgent:
 
     def _str_observations(self):
         if len(self.observations) > 0:
-            arr = []
-            for a in self.actuators:
-                arr.append("\n\t%s %s" % (a['name'], a['box']))
-            return "".join(arr)
+            return "???"
         return "\n\tno"
 
     def train(self):
