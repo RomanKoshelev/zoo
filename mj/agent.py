@@ -115,7 +115,14 @@ class MujocoAgent:
             self.observations.append({
                 'type': 'sensor',
                 'name': s['name'],
-                'get_val': lambda n=name: Context.world.get_sensor_val(n)  # using 'name' for the value capturing
+                'get_val': lambda n=name: Context.world.get_sensor_val(n)
+            })
+
+        for inp in Context.config.get("env.%s.inputs" % self.full_id, []):
+            self.observations.append({
+                'type': 'input',
+                'name': inp,
+                'get_val': lambda n=inp: self._super_agent.get_input_val(n)
             })
 
     def read_model(self):
@@ -128,6 +135,10 @@ class MujocoAgent:
                 sensors += '\n' + s
                 actuators += '\n' + a
         return body, sensors, actuators
+
+    # noinspection PyMethodMayBeStatic,PyUnusedLocal
+    def get_input_val(self, key):
+        return []
 
     @property
     def full_id(self):
