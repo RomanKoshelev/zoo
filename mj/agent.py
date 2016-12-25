@@ -136,9 +136,9 @@ class MujocoAgent:
                 actuators += '\n' + a
         return body, sensors, actuators
 
-    # noinspection PyMethodMayBeStatic,PyUnusedLocal
     def get_input_val(self, key):
-        return []
+        # todo: implement in concrete agent classes
+        raise NotImplementedError
 
     @property
     def full_id(self):
