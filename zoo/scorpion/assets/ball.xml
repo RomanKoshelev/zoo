@@ -1,13 +1,21 @@
 <agent>
   <!-- ball -->
   <body name='{agent}' pos='0 0 5'>
-    <joint type='free' limited='false' damping='0.1'/>
+    <joint name='{agent}.coords_x' type='slide' axis='1 0 0' range='-100.0 +100.0' />
+    <joint name='{agent}.coords_y' type='slide' axis='0 1 0' range='-100.0 +100.0' />
+    <joint name='{agent}.coords_z' type='slide' axis='0 0 1' range='-100.0 +100.0' />
     <geom type='sphere' conaffinity='1' contype='1' rgba='0.05 1. 3. .4' size='.2' mass='3e-1'/>
     <site name='{agent}' pos='0 0 0' size='.001' rgba='0 0 0 0' />
   </body>
 
   <sensor>
-    <magnetometer name='{agent}.magnetometer' site='{agent}'/>
+    <jointpos name='{agent}.sensor_x' joint='{agent}.coords_x'/>
+    <jointpos name='{agent}.sensor_y' joint='{agent}.coords_y'/>
+    <jointpos name='{agent}.sensor_z' joint='{agent}.coords_z'/>
+    <jointvel name='{agent}.sensor_vx' joint='{agent}.coords_x'/>
+    <jointvel name='{agent}.sensor_vy' joint='{agent}.coords_y'/>
+    <jointvel name='{agent}.sensor_vz' joint='{agent}.coords_z'/>
+    <accelerometer name='{agent}.accelerometer' site='{agent}'/>
   </sensor>
 
 </agent>

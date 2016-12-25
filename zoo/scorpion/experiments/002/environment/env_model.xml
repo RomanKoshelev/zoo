@@ -74,7 +74,9 @@
 
   
     <body name="world.ball" pos="0 0 5">
-    <joint type="free" limited="false" damping="0.1"></joint>
+    <joint name="world.ball.coords_x" type="slide" axis="1 0 0" range="-100.0 +100.0"></joint>
+    <joint name="world.ball.coords_y" type="slide" axis="0 1 0" range="-100.0 +100.0"></joint>
+    <joint name="world.ball.coords_z" type="slide" axis="0 0 1" range="-100.0 +100.0"></joint>
     <geom type="sphere" conaffinity="1" contype="1" rgba="0.05 1. 3. .4" size=".2" mass="3e-1"></geom>
     <site name="world.ball" pos="0 0 0" size=".001" rgba="0 0 0 0"></site>
   </body>
@@ -97,7 +99,13 @@
     <jointvel name="world.scorpion.tentacle.sensor_s3_vel" joint="world.scorpion.tentacle.s3_a"></jointvel>
   
 
-<magnetometer name="world.ball.magnetometer" site="world.ball"></magnetometer>
+<jointpos name="world.ball.sensor_x" joint="world.ball.coords_x"></jointpos>
+    <jointpos name="world.ball.sensor_y" joint="world.ball.coords_y"></jointpos>
+    <jointpos name="world.ball.sensor_z" joint="world.ball.coords_z"></jointpos>
+    <jointvel name="world.ball.sensor_vx" joint="world.ball.coords_x"></jointvel>
+    <jointvel name="world.ball.sensor_vy" joint="world.ball.coords_y"></jointvel>
+    <jointvel name="world.ball.sensor_vz" joint="world.ball.coords_z"></jointvel>
+    <accelerometer name="world.ball.accelerometer" site="world.ball"></accelerometer>
   
   </sensor>
   <actuator>
