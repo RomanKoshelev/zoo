@@ -105,6 +105,7 @@
     <jointvel name="world.ball.sensor_vx" joint="world.ball.coords_x"></jointvel>
     <jointvel name="world.ball.sensor_vy" joint="world.ball.coords_y"></jointvel>
     <jointvel name="world.ball.sensor_vz" joint="world.ball.coords_z"></jointvel>
+    <accelerometer name="world.ball.sensor_accelerometer" site="world.ball"></accelerometer>
   
   </sensor>
   <actuator>

@@ -62,8 +62,8 @@ class MujocoAgent:
         if len(self.observations) > 0:
             arr = []
             for o in self.observations:
-                val = ", ".join(["%.5g" % v for v in o['get_val']()])
-                arr.append("\n\t%s: %s = (%s)" % (o['type'], o['name'], val))
+                val = ",".join(["%.5g" % v for v in o['get_val']()])
+                arr.append("\n\t%s: %s=[%s]" % (o['type'], o['name'], val))
             return "".join(arr)
         return "\n\tno"
 
@@ -111,10 +111,11 @@ class MujocoAgent:
     def _init_observation(self):
         self.observations = []
         for s in self.sensors:
+            name = s['name']
             self.observations.append({
                 'type': 'sensor',
                 'name': s['name'],
-                'get_val': lambda: Context.world.get_sensor_val(s['name']),
+                'get_val': lambda n=name: Context.world.get_sensor_val(n)  # using 'name' for the value capturing
             })
 
     def read_model(self):
