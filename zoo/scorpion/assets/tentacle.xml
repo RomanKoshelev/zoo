@@ -1,15 +1,16 @@
 <agent>
+  <!-- tentacle -->
   <body name='{agent}' pos='0 0 .2'>
     <geom type='box' pos='0 0 0.1' size='.3 .3 .05' rgba='0.6 0.6 0 1'/>
     <geom type='sphere' pos='0 0 .1' size='0.12'/>
     <body name='{agent}.s1' pos='0 0 0.17'>
-      <joint name='{agent}.s1.a' range=' -70 +70'/>
+      <joint name='{agent}.s1_a' range=' -70 +70'/>
       <geom fromto='0 0 0 0 0 .9' size='0.075'/>
       <body name='{agent}.s2' pos='0 0 .95'>
-        <joint name='{agent}.s2.a' range=' -120 +120'/>
+        <joint name='{agent}.s2_a' range=' -120 +120'/>
         <geom fromto='0 0 0 0 0 .7' size='0.06'/>
         <body name='{agent}.s3' pos='0 0 .75'>
-          <joint name='{agent}.s3.a' range=' -150 +150'/>
+          <joint name='{agent}.s3_a' range=' -150 +150'/>
           <geom fromto='0 0 0 0 0 .5' size='0.05'/>
           <body name='{agent}.head' pos='0 0 .5'>
             <geom type='cylinder' fromto='0 0 0  0 0 .06' rgba='1.2 1.2 0. 1' size='.06'/>
@@ -20,9 +21,19 @@
     </body>
   </body>
 
+  <sensor>
+    <jointpos name='{agent}.sensor_s1_pos' joint='{agent}.s1_a'/>
+    <jointvel name='{agent}.sensor_s1_vel' joint='{agent}.s1_a'/>
+    <jointpos name='{agent}.sensor_s2_pos' joint='{agent}.s2_a'/>
+    <jointvel name='{agent}.sensor_s2_vel' joint='{agent}.s2_a'/>
+    <jointpos name='{agent}.sensor_s3_pos' joint='{agent}.s3_a'/>
+    <jointvel name='{agent}.sensor_s3_vel' joint='{agent}.s3_a'/>
+  </sensor>
+
   <actuator>
-    <motor name='{agent}.actuator.s1' ctrlrange='-2000 +2000' joint='{agent}.s1.a'/>
-    <motor name='{agent}.actuator.s2' ctrlrange='-1500 +1500' joint='{agent}.s2.a'/>
-    <motor name='{agent}.actuator.s3' ctrlrange=' -500  +500' joint='{agent}.s3.a'/>
+    <motor name='{agent}.actuator_s1' ctrlrange='-2000 +2000' joint='{agent}.s1_a'/>
+    <motor name='{agent}.actuator_s2' ctrlrange='-1500 +1500' joint='{agent}.s2_a'/>
+    <motor name='{agent}.actuator_s3' ctrlrange=' -500  +500' joint='{agent}.s3_a'/>
   </actuator>
+
 </agent>

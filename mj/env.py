@@ -23,9 +23,10 @@ class ZooMujocoEnv(MujocoEnv):
         MujocoEnv.__init__(self, self.model_path, frame_skip=Context.config['env.frame_skip'])
 
     def __str__(self):
-        return "%s:\n\t%s\n\t%s" % (
+        return "%s:\n\t%s\n\t%s\n\t%s" % (
             self.__class__.__name__,
             "model_path: " + self.model_path,
+            "sensors: " + tab(self._str_sensors()),
             "actuators: " + tab(self._str_actuators()),
         )
 
@@ -34,6 +35,14 @@ class ZooMujocoEnv(MujocoEnv):
             arr = []
             for a in self.actuators:
                 arr.append("\n\t%s [%+.5g %+.5g]" % (a['name'], a['box'][0], a['box'][1]))
+            return "".join(arr)
+        return "\n\tno"
+
+    def _str_sensors(self):
+        if len(self.sensors) > 0:
+            arr = []
+            for s in self.sensors:
+                arr.append("\n\t%s" % s['name'])
             return "".join(arr)
         return "\n\tno"
 
@@ -108,14 +117,24 @@ class ZooMujocoEnv(MujocoEnv):
 
     @property
     def actuators(self):
-        acts = []
+        arr = []
         for i, n in enumerate(self.actuator_names):
-            acts.append({
+            arr.append({
                 'index': i,
                 'name': n,
                 'box': [self.action_space.low[i], self.action_space.high[i]]
             })
-        return acts
+        return arr
+
+    @property
+    def sensors(self):
+        arr = []
+        for i, n in enumerate(self.sensor_names):
+            arr.append({
+                'index': i,
+                'name': n,
+            })
+        return arr
 
     def viewer_setup(self):
         v = self.viewer

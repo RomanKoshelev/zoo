@@ -33,19 +33,19 @@
     <body name="world.scorpion.cart" pos="0 0 0">
       <geom type="box" pos="0 0 0.1" size=".5 .5 .1" rgba=".2 .2 .0 1"></geom>
       <body name="world.scorpion.head" pos="0 0 0">
-        <joint name="world.scorpion.head.a" axis="0 0 1" range="-120 +120"></joint>
+        <joint name="world.scorpion.head_a" axis="0 0 1" range="-120 +120"></joint>
         <geom type="cylinder" fromto="0 0 .2  0 0 0.25" size=".15" rgba="1.5 1.5 0 1"></geom>
         <body name="world.scorpion.tentacle" pos="0 0 .2">
     <geom type="box" pos="0 0 0.1" size=".3 .3 .05" rgba="0.6 0.6 0 1"></geom>
     <geom type="sphere" pos="0 0 .1" size="0.12"></geom>
     <body name="world.scorpion.tentacle.s1" pos="0 0 0.17">
-      <joint name="world.scorpion.tentacle.s1.a" range=" -70 +70"></joint>
+      <joint name="world.scorpion.tentacle.s1_a" range=" -70 +70"></joint>
       <geom fromto="0 0 0 0 0 .9" size="0.075"></geom>
       <body name="world.scorpion.tentacle.s2" pos="0 0 .95">
-        <joint name="world.scorpion.tentacle.s2.a" range=" -120 +120"></joint>
+        <joint name="world.scorpion.tentacle.s2_a" range=" -120 +120"></joint>
         <geom fromto="0 0 0 0 0 .7" size="0.06"></geom>
         <body name="world.scorpion.tentacle.s3" pos="0 0 .75">
-          <joint name="world.scorpion.tentacle.s3.a" range=" -150 +150"></joint>
+          <joint name="world.scorpion.tentacle.s3_a" range=" -150 +150"></joint>
           <geom fromto="0 0 0 0 0 .5" size="0.05"></geom>
           <body name="world.scorpion.tentacle.head" pos="0 0 .5">
             <geom type="cylinder" fromto="0 0 0  0 0 .06" rgba="1.2 1.2 0. 1" size=".06"></geom>
@@ -60,12 +60,13 @@
         <body name="world.scorpion.target" pos="0 0 0">
     <site name="world.scorpion.target.surface" type="box" size="2 0.01 1.5" pos="0 0 1.5" rgba="1 1 0 .1"></site>
     <body name="world.scorpion.target.coords" pos="0 0 1.5">
-      <joint name="world.scorpion.target.coords.x" type="slide" axis="1 0 0" range="-2.0 +2.0"></joint>
-      <joint name="world.scorpion.target.coords.z" type="slide" axis="0 0 1" range="-1.0 +1.5"></joint>
+      <joint name="world.scorpion.target.coords_x" type="slide" axis="1 0 0" range="-2.0 +2.0"></joint>
+      <joint name="world.scorpion.target.coords_z" type="slide" axis="0 0 1" range="-1.0 +1.5"></joint>
       <geom type="sphere" conaffinity="0" contype="0" rgba="0. 0. 0. 0." size=".05" mass="1e-3"></geom>
       <site name="world.scorpion.target" pos="0 0 0" size=".05" rgba="1.5 1.5 0. 0.9"></site>
     </body>
   </body>
+
 
       </body>
     </body>
@@ -82,24 +83,30 @@
 
   <sensor>
     
-<accelerometer name="-- world.scorpion.sensor.head.pos" site="world.scorpion.target"></accelerometer>
-    <jointvel name="---- world.scorpion.sensor.head.pos" joint="world.scorpion.head.a"></jointvel>
-    <accelerometer name="--- world.scorpion.sensor.head.pos" site="world.ball"></accelerometer>
-    <jointpos name="world.scorpion.sensor.head.pos" joint="world.scorpion.target.coords.z"></jointpos>
+<jointpos name="world.scorpion.sensor_head_pos" joint="world.scorpion.head_a"></jointpos>
+    <jointvel name="world.scorpion.sensor_head_vel" joint="world.scorpion.head_a"></jointvel>
+    <jointpos name="world.scorpion.sensor_target_x" joint="world.scorpion.target.coords_x"></jointpos>
+    <jointpos name="world.scorpion.sensor_target_z" joint="world.scorpion.target.coords_z"></jointpos>
   
-
+<jointpos name="world.scorpion.tentacle.sensor_s1_pos" joint="world.scorpion.tentacle.s1_a"></jointpos>
+    <jointvel name="world.scorpion.tentacle.sensor_s1_vel" joint="world.scorpion.tentacle.s1_a"></jointvel>
+    <jointpos name="world.scorpion.tentacle.sensor_s2_pos" joint="world.scorpion.tentacle.s2_a"></jointpos>
+    <jointvel name="world.scorpion.tentacle.sensor_s2_vel" joint="world.scorpion.tentacle.s2_a"></jointvel>
+    <jointpos name="world.scorpion.tentacle.sensor_s3_pos" joint="world.scorpion.tentacle.s3_a"></jointpos>
+    <jointvel name="world.scorpion.tentacle.sensor_s3_vel" joint="world.scorpion.tentacle.s3_a"></jointvel>
+  
 
 
   </sensor>
   <actuator>
     
-<motor name="world.scorpion.actuator.head" ctrlrange="-10 +10" joint="world.scorpion.head.a"></motor>
-    <position name="world.scorpion.actuator.target.x" ctrlrange="-2 +2" kp="1" joint="world.scorpion.target.coords.x"></position>
-    <position name="world.scorpion.actuator.target.z" ctrlrange="-1 +2" kp="1" joint="world.scorpion.target.coords.z"></position>
+<motor name="world.scorpion.actuator_head" ctrlrange="-10 +10" joint="world.scorpion.head_a"></motor>
+    <position name="world.scorpion.actuator_target_x" ctrlrange="-2 +2" kp="1" joint="world.scorpion.target.coords_x"></position>
+    <position name="world.scorpion.actuator_target_z" ctrlrange="-1 +2" kp="1" joint="world.scorpion.target.coords_z"></position>
   
-<motor name="world.scorpion.tentacle.actuator.s1" ctrlrange="-2000 +2000" joint="world.scorpion.tentacle.s1.a"></motor>
-    <motor name="world.scorpion.tentacle.actuator.s2" ctrlrange="-1500 +1500" joint="world.scorpion.tentacle.s2.a"></motor>
-    <motor name="world.scorpion.tentacle.actuator.s3" ctrlrange=" -500  +500" joint="world.scorpion.tentacle.s3.a"></motor>
+<motor name="world.scorpion.tentacle.actuator_s1" ctrlrange="-2000 +2000" joint="world.scorpion.tentacle.s1_a"></motor>
+    <motor name="world.scorpion.tentacle.actuator_s2" ctrlrange="-1500 +1500" joint="world.scorpion.tentacle.s2_a"></motor>
+    <motor name="world.scorpion.tentacle.actuator_s3" ctrlrange=" -500  +500" joint="world.scorpion.tentacle.s3_a"></motor>
   
 
 

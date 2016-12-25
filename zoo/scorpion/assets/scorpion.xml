@@ -4,7 +4,7 @@
     <body name='{agent}.cart' pos='0 0 0'>
       <geom type='box' pos='0 0 0.1' size='.5 .5 .1' rgba='.2 .2 .0 1'/>
       <body name='{agent}.head'  pos='0 0 0'>
-        <joint name='{agent}.head.a' axis='0 0 1' range='-120 +120'/>
+        <joint name='{agent}.head_a' axis='0 0 1' range='-120 +120'/>
         <geom type='cylinder' fromto='0 0 .2  0 0 0.25' size='.15' rgba='1.5 1.5 0 1'/>
         {{tentacle}}
         {{target}}
@@ -13,15 +13,16 @@
   </body>
 
   <sensor>
-    <accelerometer name='-- world.scorpion.sensor.head.pos' site='world.scorpion.target'/>
-    <jointvel name='---- world.scorpion.sensor.head.pos' joint='world.scorpion.head.a'/>
-    <accelerometer name='--- world.scorpion.sensor.head.pos' site='world.ball'/>
-    <jointpos name='world.scorpion.sensor.head.pos' joint='world.scorpion.target.coords.z'/>
+    <jointpos name='{agent}.sensor_head_pos' joint='{agent}.head_a'/>
+    <jointvel name='{agent}.sensor_head_vel' joint='{agent}.head_a'/>
+    <jointpos name='{agent}.sensor_target_x' joint='{agent}.target.coords_x'/>
+    <jointpos name='{agent}.sensor_target_z' joint='{agent}.target.coords_z'/>
   </sensor>
 
   <actuator>
-    <motor name='{agent}.actuator.head' ctrlrange='-10 +10' joint='{agent}.head.a'/>
-    <position name='{agent}.actuator.target.x' ctrlrange='-2 +2' kp='1' joint='{agent}.target.coords.x'/>
-    <position name='{agent}.actuator.target.z' ctrlrange='-1 +2' kp='1' joint='{agent}.target.coords.z'/>
+    <motor name='{agent}.actuator_head' ctrlrange='-10 +10' joint='{agent}.head_a'/>
+    <position name='{agent}.actuator_target_x' ctrlrange='-2 +2' kp='1' joint='{agent}.target.coords_x'/>
+    <position name='{agent}.actuator_target_z' ctrlrange='-1 +2' kp='1' joint='{agent}.target.coords_z'/>
   </actuator>
+
 </agent>

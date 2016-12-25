@@ -5,25 +5,7 @@ from utils.string_tools import tab
 import numpy as np
 import os
 
-
-def xml_children_content(xml, xpath):
-    import lxml.html as parser
-    from lxml.html import tostring
-    try:
-        root = parser.fromstring(xml).xpath('//' + xpath)[0]
-        return ''.join([tostring(child) for child in root.iterchildren()])
-    except IndexError:
-        return ""
-
-
-def xml_content(xml, xpath):
-    import lxml.html as parser
-    from lxml.html import tostring
-    try:
-        root = parser.fromstring(xml).xpath('//' + xpath)[0]
-        return tostring(root)
-    except IndexError:
-        return ""
+from utils.xml_tools import xml_content, xml_children_content
 
 
 class MujocoAgent:
