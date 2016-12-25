@@ -67,7 +67,7 @@
     </body>
   </body>
 
-
+  
       </body>
     </body>
   </body>
@@ -88,8 +88,6 @@
     
 <jointpos name="world.scorpion.sensor_head_pos" joint="world.scorpion.head_a"></jointpos>
     <jointvel name="world.scorpion.sensor_head_vel" joint="world.scorpion.head_a"></jointvel>
-    <jointpos name="world.scorpion.sensor_target_x" joint="world.scorpion.target.coords_x"></jointpos>
-    <jointpos name="world.scorpion.sensor_target_z" joint="world.scorpion.target.coords_z"></jointpos>
   
 <jointpos name="world.scorpion.tentacle.sensor_s1_pos" joint="world.scorpion.tentacle.s1_a"></jointpos>
     <jointvel name="world.scorpion.tentacle.sensor_s1_vel" joint="world.scorpion.tentacle.s1_a"></jointvel>
@@ -98,7 +96,9 @@
     <jointpos name="world.scorpion.tentacle.sensor_s3_pos" joint="world.scorpion.tentacle.s3_a"></jointpos>
     <jointvel name="world.scorpion.tentacle.sensor_s3_vel" joint="world.scorpion.tentacle.s3_a"></jointvel>
   
-
+<jointpos name="world.scorpion.target.sensor_x" joint="world.scorpion.target.coords_x"></jointpos>
+    <jointpos name="world.scorpion.target.sensor_z" joint="world.scorpion.target.coords_z"></jointpos>
+  
 <jointpos name="world.ball.sensor_x" joint="world.ball.coords_x"></jointpos>
     <jointpos name="world.ball.sensor_y" joint="world.ball.coords_y"></jointpos>
     <jointpos name="world.ball.sensor_z" joint="world.ball.coords_z"></jointpos>

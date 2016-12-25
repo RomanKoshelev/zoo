@@ -13,19 +13,21 @@ class MujocoAgent:
         self.agent_id = agent_id
         self._super_agent = super_agent
         self.model_path = os.path.join(Context.config['env.assets'], "%s.xml" % agent_id)
-        self.mind = None
         self.obs_dim = 0
         self.act_box = None
-        self.observations = []
+        self.sensors = []
         self.actuators = []
+        self.observations = []
+        self.mind = None
         self.agents = []
         for s in Context.config.get('env.%s.agents' % self.full_id, []):
             self.agents.append(MujocoAgent(s, self))
 
     def __str__(self):
-        return "%s:\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s" % (
+        return "%s:\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s" % (
             self.__class__.__name__,
             "model_path: " + self.model_path,
+            "sensors: " + tab(self._str_sensors()),
             "observations: " + tab(self._str_observations()),
             "actuators: " + tab(self._str_actuators()),
             "mind: " + tab(self.mind),
@@ -37,6 +39,14 @@ class MujocoAgent:
             arr = []
             for a in self.agents:
                 arr.append("\n\t%s: %s" % (a.agent_id, tab(str(a))))
+            return "".join(arr)
+        return "\n\tno"
+
+    def _str_sensors(self):
+        if len(self.sensors) > 0:
+            arr = []
+            for s in self.sensors:
+                arr.append("\n\t%s [%d]" % (s['name'], s['dim']))
             return "".join(arr)
         return "\n\tno"
 
@@ -70,6 +80,7 @@ class MujocoAgent:
         return actions
 
     def init_agents(self):
+        self._init_sensors()
         self._init_actuators()
         self._init_mind()
         for a in self.agents:
@@ -87,6 +98,9 @@ class MujocoAgent:
             ab[0].append(a['box'][0])
             ab[1].append(a['box'][1])
         self.act_box = np.asarray(ab)
+
+    def _init_sensors(self):
+        self.sensors = Context.world.select_sensors(self.full_id)
 
     def read_model(self):
         body, sensors, actuators = self._read_model()

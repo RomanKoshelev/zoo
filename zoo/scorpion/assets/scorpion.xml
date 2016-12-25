@@ -15,8 +15,6 @@
   <sensor>
     <jointpos name='{agent}.sensor_head_pos' joint='{agent}.head_a'/>
     <jointvel name='{agent}.sensor_head_vel' joint='{agent}.head_a'/>
-    <jointpos name='{agent}.sensor_target_x' joint='{agent}.target.coords_x'/>
-    <jointpos name='{agent}.sensor_target_z' joint='{agent}.target.coords_z'/>
   </sensor>
 
   <actuator>

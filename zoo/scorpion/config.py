@@ -22,9 +22,15 @@ config = {
     'env.id': "Zoo:Mujoco:Scorpion-v1",
     'env.assets': "./assets/",
     'env.frame_skip': 2,
+
+    # world
     'env.world.agents': ['scorpion', 'ball'],
+    # scorpion
     'env.world.scorpion.agents': ['tentacle', 'target'],
     'env.world.scorpion.algorithm': RandomAlgorithm,
+    'env.world.scorpion.input': ['tx', 'ty', 'tz'],
+    # tgentacle
+    'env.world.scorpion.tentacle.input': ['tx', 'ty', 'tz'],
     'env.world.scorpion.tentacle.algorithm': RandomAlgorithm,
 
     'env.reward_method': default_reward,

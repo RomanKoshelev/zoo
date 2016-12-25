@@ -10,4 +10,9 @@
     </body>
   </body>
 
+  <sensor>
+    <jointpos name='{agent}.sensor_x' joint='{agent}.coords_x'/>
+    <jointpos name='{agent}.sensor_z' joint='{agent}.coords_z'/>
+  </sensor>
+
 </agent>
