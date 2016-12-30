@@ -352,3 +352,33 @@ WARNING: Nan, Inf or huge value in QACC at DOF 1. The simulation is unstable. Ti
 Sun Dec 25 17:38:17 2016
 WARNING: Nan, Inf or huge value in QPOS at DOF 4. The simulation is unstable. Time = 16.6950.
 
+Fri Dec 30 22:48:56 2016
+WARNING: Nan, Inf or huge value in QVEL at DOF 0. The simulation is unstable. Time = 38.7650.
+
+Fri Dec 30 22:50:02 2016
+WARNING: Nan, Inf or huge value in QACC at DOF 3. The simulation is unstable. Time = 38.8300.
+
+Fri Dec 30 22:51:14 2016
+WARNING: Nan, Inf or huge value in QPOS at DOF 0. The simulation is unstable. Time = 42.5500.
+
+Fri Dec 30 22:55:03 2016
+WARNING: Nan, Inf or huge value in QVEL at DOF 0. The simulation is unstable. Time = 135.4850.
+
+Fri Dec 30 22:56:09 2016
+WARNING: Nan, Inf or huge value in QPOS at DOF 1. The simulation is unstable. Time = 25.1200.
+
+Fri Dec 30 22:59:51 2016
+WARNING: Nan, Inf or huge value in QVEL at DOF 0. The simulation is unstable. Time = 80.6450.
+
+Fri Dec 30 23:35:38 2016
+WARNING: Nan, Inf or huge value in QACC at DOF 0. The simulation is unstable. Time = 0.0100.
+
+Fri Dec 30 23:35:46 2016
+WARNING: Nan, Inf or huge value in QACC at DOF 0. The simulation is unstable. Time = 0.0100.
+
+Sat Dec 31 00:11:34 2016
+WARNING: Inertia matrix is too close to singular at DOF 2. Check model. Time = 6.7000.
+
+Sat Dec 31 00:11:34 2016
+WARNING: Nan, Inf or huge value in QPOS at DOF 0. The simulation is unstable. Time = 6.7000.
+

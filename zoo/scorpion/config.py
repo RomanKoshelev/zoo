@@ -1,11 +1,12 @@
 from alg.random_alg import RandomAlgorithm
 from tf.mind import TensorflowMind
 from core.logger import Logger
-from mj.world import MujocoWorld
 from tf.platform import TensorflowPlatform
 from zoo.scorpion.reward import default_reward
+from zoo.scorpion.scorpion import ScorpionAgent
 from zoo.scorpion.target import jpos_do_noting
 from utils.noise_tools import staircase_5
+from zoo.scorpion.world import ScorpionWorld
 
 config = {
     'exp.id': None,
@@ -16,7 +17,7 @@ config = {
 
     'exp.platform_class': TensorflowPlatform,
     'exp.mind_class': TensorflowMind,
-    'exp.world_class': MujocoWorld,
+    'exp.world_class': ScorpionWorld,
     'exp.logger_class': Logger,
 
     'env.id': "Zoo:Mujoco:Scorpion-v1",
@@ -26,9 +27,10 @@ config = {
     # world
     'env.world.agents': ['scorpion', 'ball'],
     # scorpion
+    'env.world.scorpion.class': ScorpionAgent,
     'env.world.scorpion.agents': ['tentacle', 'target'],
     'env.world.scorpion.algorithm': RandomAlgorithm,
-    'env.world.scorpion.input': ['tx', 'ty', 'tz'],
+    'env.world.scorpion.inputs': ['ball_x', 'ball_y', 'ball_z'],
     # tgentacle
     'env.world.scorpion.tentacle.inputs': ['target_x', 'target_z'],
     'env.world.scorpion.tentacle.algorithm': RandomAlgorithm,

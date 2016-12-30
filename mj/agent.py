@@ -2,6 +2,7 @@ from __future__ import print_function
 from alg.dummy_alg import DummyAlgorithm
 from core.context import Context
 from utils.string_tools import tab
+from asq.initiators import query
 import numpy as np
 import os
 
@@ -19,9 +20,7 @@ class MujocoAgent:
         self.actuators = []
         self.observations = []
         self.mind = None
-        self.agents = []
-        for s in Context.config.get('env.%s.agents' % self.full_id, []):
-            self.agents.append(MujocoAgent(s, self))
+        self._create_agents()
 
     def __str__(self):
         return "%s:\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s" % (
@@ -33,6 +32,15 @@ class MujocoAgent:
             "mind: " + tab(self.mind),
             "agents: " + tab(self._str_agents()),
         )
+
+    def _create_agents(self):
+        self.agents = []
+        for a in Context.config.get('env.%s.agents' % self.full_id, []):
+            agent_class = Context.config.get('env.%s.%s.class' % (self.full_id, a), MujocoAgent)
+            self.agents.append(agent_class(a, self))
+
+    def get_agent(self, agent_id):
+        return query(self.agents).first(lambda a: a.agent_id == agent_id)
 
     def _str_agents(self):
         if len(self.agents) > 0:
@@ -62,7 +70,7 @@ class MujocoAgent:
         if len(self.observations) > 0:
             arr = []
             for o in self.observations:
-                val = ",".join(["%.5g" % v for v in o['get_val']()])
+                val = ",".join(["%+.3g" % v if v is not None else "?" for v in o['get_val']()])
                 arr.append("\n\t%s: %s=[%s]" % (o['type'], o['name'], val))
             return "".join(arr)
         return "\n\tno"
@@ -120,10 +128,19 @@ class MujocoAgent:
 
         for inp in Context.config.get("env.%s.inputs" % self.full_id, []):
             self.observations.append({
-                'type': 'input',
-                'name': inp,
-                'get_val': lambda n=inp: self._super_agent.get_input_val(n)
+                'type': 'inputs',
+                'name': self.inputs_name(inp),
+                'get_val': lambda n=inp: self._super_agent.provide_inputs(n)
             })
+
+    def get_observation(self, obs_id):
+        return query(self.observations).first(lambda o: o['name'] == obs_id)
+
+    def inputs_name(self, key):
+        return '%s.inputs_%s' % (self.full_id, key)
+
+    def sensor_name(self, key):
+        return '%s.sensor_%s' % (self.full_id, key)
 
     def read_model(self):
         body, sensors, actuators = self._read_model()
@@ -136,9 +153,8 @@ class MujocoAgent:
                 actuators += '\n' + a
         return body, sensors, actuators
 
-    def get_input_val(self, key):
-        # todo: implement in concrete agent classes
-        raise NotImplementedError
+    def provide_inputs(self, inputs_id):
+        return [None]
 
     @property
     def full_id(self):

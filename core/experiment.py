@@ -45,6 +45,7 @@ class Experiment:
             reward = self._world.run_episode(steps)
             Context.window_title['episode'] = "|  %d: R = %+.0f" % (ep, reward)
             print("%3d  Reward = %+7.0f" % (ep, reward))
+            self._print_instances()
 
     def _make_instances(self):
         self._logger = Context.config['exp.logger_class']()
