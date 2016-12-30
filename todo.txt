@@ -1,4 +1,5 @@
 TODO:
+- simplify provide_inputs method
 - run the scorpion
 - make the 'rider' algorithm
 
