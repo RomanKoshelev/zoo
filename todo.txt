@@ -1,6 +1,7 @@
 TODO:
 - simplify provide_inputs method
-- run the scorpion
+- train tentacle
+- train scorpionwith pretrained tentacle
 - make the 'rider' algorithm
 
 LATER:
@@ -8,6 +9,7 @@ LATER:
 - move to python 3.4
 
 DONE:
++ run the scorpion
 + use mouse to control target # mx, my = glfw.get_cursor_pos(window)
 + draw diagramm for Noise, Qmax and Rewards (w/o noise) depended on Episodes and Time
 + reporter
@@ -20,4 +22,3 @@ DONE:
     https://www.safaribooksonline.com/library/view/head-first-python/9781449397524/ch04.html
 + add experiment name to the mujoco window title
 + run experiment with training the tentacle
-
