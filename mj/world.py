@@ -10,10 +10,13 @@ class MujocoWorld(GymWorld, MujocoAgent):
         self.init_agents()
 
     def __str__(self):
-        return "%s:\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s" % (
+        return "%s:\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s" % (
             self.__class__.__name__,
             "env_id: " + self.env_id,
             "model_path: %s" % self.model_path,
+            "state: %s " % self.provide_state(),
+            "state_dim: %s " % self.state_dim,
+            "act_dim: %s" % self.act_dim,
             "total_act_dim: %s" % self.total_act_dim,
             "env: " + tab(self._env),
             "sensors: " + tab(self._str_sensors()),

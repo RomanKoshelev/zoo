@@ -42,6 +42,8 @@ config = {
 
     'mind.evaluate_every_episodes': 10,
 
+    'train.agent': None,
+
     'alg.buffer_size': 100 * 1000,
     'alg.batch_size': 512,
     'alg.noise_sigma': .1,

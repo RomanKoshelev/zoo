@@ -1,5 +1,7 @@
 TODO:
 > train tentacle
+- refactore training -- use callbacks from alg
+- use state_dim instead of obs_dim -- they are different in agent, as to state is flatten but obs are not
 - train scorpionwith pretrained tentacle
 - make the 'rider' algorithm
 

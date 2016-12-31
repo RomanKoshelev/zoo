@@ -19,7 +19,7 @@ class TensorflowMind:
         self._algorithm = algorithm_class(
             session=Context.platform.session,
             scope=agent.full_id,
-            obs_dim=agent.obs_dim,
+            obs_dim=agent.state_dim,  # todo: calculate correctly!
             act_dim=agent.act_dim,
         )
         self._saved_episode = None
@@ -36,15 +36,14 @@ class TensorflowMind:
 
     def train(self):
         def on_episod(ep, reward, nr, maxq):
+            cf = Context.config
             self._logger.on_train_episode(ep, nr, reward, maxq)
-            self._save_results_if_need(ep,
-                                       Context.config['exp.episodes'],
-                                       Context.config['exp.save_every_episodes'])
-            self._evaluate_if_need(ep,
-                                   Context.config['mind.evaluate_every_episodes'],
-                                   Context.config['exp.steps'])
-
-        return self._algorithm.train(Context.config['exp.episodes'], Context.config['exp.steps'], on_episod)
+            self._save_results_if_need(ep, cf['exp.episodes'], cf['exp.save_every_episodes'])
+            self._evaluate_if_need(ep, cf['mind.evaluate_every_episodes'], cf['exp.steps'])
+        return self._algorithm.train(
+            episodes=Context.config['exp.episodes'],
+            steps=Context.config['exp.steps'],
+            on_episode=on_episod)
 
     def _evaluate_if_need(self, ep, evs, steps):
         if (ep + 1) % evs == 0:

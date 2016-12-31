@@ -14,18 +14,22 @@ class MujocoAgent:
         self.agent_id = agent_id
         self._super_agent = super_agent
         self.model_path = os.path.join(Context.config['env.assets'], "%s.xml" % agent_id)
-        self.obs_dim = 0
         self.act_box = None
         self.sensors = []
         self.actuators = []
         self.observations = []
         self.mind = None
         self._create_agents()
+        if self.is_training:
+            Context.training_agent = self
 
     def __str__(self):
-        return "%s:\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s" % (
-            self.__class__.__name__,
+        return "%s:\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s" % (
+            self.__class__.__name__ + (' ' * 10 + '>>>> training <<<<' if self.is_training else ''),
             "model_path: " + self.model_path,
+            "state: %s " % self.provide_state(),
+            "state_dim: %s " % self.state_dim,
+            "act_dim: %d" % self.act_dim,
             "sensors: " + tab(self._str_sensors()),
             "actuators: " + tab(self._str_actuators()),
             "observations: " + tab(self._str_observations()),
@@ -76,7 +80,11 @@ class MujocoAgent:
         return "\n\tno"
 
     def train(self):
-        return self.mind.train()
+        if Context.config['train.agent'] == self.full_id:
+            self.mind.train()
+        else:
+            for a in self.agents:
+                a.train()
 
     def do_actions(self, state, actions=None):
         pred = self.mind.predict(state)
@@ -134,6 +142,7 @@ class MujocoAgent:
             })
 
     def get_observation(self, obs_id):
+        print(self.full_id, obs_id)
         return query(self.observations).first(lambda o: o['name'] == obs_id)
 
     def inputs_name(self, key):
@@ -159,6 +168,14 @@ class MujocoAgent:
     def provide_inputs(self, inputs_id):
         return [None]
 
+    def provide_state(self):
+        state = []
+        for o in self.observations:
+            print(o['name'])
+            for s in o['get_val']():
+                state.append(s)
+        return state
+
     @property
     def full_id(self):
         if self._super_agent is not None:
@@ -169,6 +186,14 @@ class MujocoAgent:
     @property
     def act_dim(self):
         return len(self.actuators)
+
+    @property
+    def state_dim(self):
+        return len(self.provide_state())
+
+    @property
+    def is_training(self):
+        return self.full_id == Context.config.get('train.agent', None)
 
     def scale_action(self, a):
         if len(a) > 0:

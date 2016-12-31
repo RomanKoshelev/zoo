@@ -5,7 +5,7 @@ import tensorflow as tf
 
 import config as cfg
 from actor import ActorNetwork
-from core.tensorflow_algorithm import TensorflowAlgorithm
+from tf.algorithm import TensorflowAlgorithm
 from buffer import ReplayBuffer
 from critic import CriticNetwork
 from core.context import Context
@@ -14,24 +14,22 @@ from utils.string_tools import tab
 
 
 class DDPG_PeterKovacs(TensorflowAlgorithm):
-    def __init__(self, sess, world):
-        super(self.__class__, self).__init__(sess, world.env_id)
-
-        self.world = world
+    def __init__(self, session, scope, obs_dim, act_dim):
+        TensorflowAlgorithm.__init__(self, session, scope, obs_dim, act_dim)
         self.buffer = None
         self.episode = None
-
         with tf.variable_scope(self.scope):
             with tf.variable_scope('actor'):
-                self.actor = ActorNetwork(sess, world.obs_dim, world.act_dim, cfg)
+                self.actor = ActorNetwork(session, obs_dim, act_dim, cfg)
             with tf.variable_scope('critic'):
-                self.critic = CriticNetwork(sess, world.obs_dim, world.act_dim, cfg)
-
+                self.critic = CriticNetwork(session, obs_dim, act_dim, cfg)
         self._initialize_variables()
 
     def __str__(self):
-        return "%s\n\t%s\n\t%s" % (
+        return "%s\n\t%s\n\t%s\n\t%s\n\t%s" % (
             self.__class__.__name__,
+            "obs_dim: %d" % self._obs_dim,
+            "act_dim: %d" % self._act_dim,
             "buffer: " + tab(self.buffer),
             "episode: " + str(self.episode),
         )
@@ -39,18 +37,20 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
     def predict(self, s):
         return self.actor.predict([s])
 
-    def train(self, last_episode, steps, on_episode):
+    def train(self, episodes, steps, on_episode):
+        world = Context.world
+        agent = Context.training_agent
 
         first_episide = self.episode + 1 if self.episode is not None else 0
+        expl = self._create_exploration(world)
 
-        expl = self._create_exploration()
         if self.buffer is None:
             self.buffer = self._create_buffer()
 
-        for self.episode in range(first_episide, last_episode + 1):
+        for self.episode in range(first_episide, episodes + 1):
+            s = self._reset_world_and_get_state(world, agent)
 
-            nrate = self._get_noise_rate(self.episode, last_episode)
-            s = self.world.reset()
+            nrate = self._get_noise_rate(self.episode, episodes)
             reward = 0
             qmax = []
 
@@ -61,7 +61,7 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
                 # play
                 a = self._make_action(s)
                 a = self._add_noise(a, expl.noise(), nrate)
-                s2, r, done = self._world_step(a)
+                s2, r, done = self._world_step(world, a)
                 self.buffer.add(s, a, r, s2, done)
                 s = s2
 
@@ -73,7 +73,7 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
                 self._update_target_networks()
 
                 # show
-                self.world.render()
+                world.render()
                 qmax.append(q)
                 reward += r
 
@@ -82,16 +82,25 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
 
             on_episode(self.episode, reward, nrate, np.mean(qmax))
 
+    # ==================================
+    # todo: refactore, use callbacs
+    @staticmethod
+    def _world_step(world, a):
+        s2, r, done, _ = world.step(world.scale_action(a))
+        return s2, r, done
+
+    @staticmethod
+    def _reset_world_and_get_state(world, agent):
+        world.reset()
+        return agent.provide_state()
+    # ==================================
+
     @staticmethod
     def _add_noise(a, n, k):
         return (1 - k) * a + k * n
 
     def _make_action(self, s):
         return self.actor.predict([s])[0]
-
-    def _world_step(self, a):
-        s2, r, done, _ = self.world.step(self.world.scale_action(a))
-        return s2, r, done
 
     def _make_target(self, r, s2, done):
         q = self.critic.target_predict(s2, self.actor.target_predict(s2))
@@ -120,8 +129,9 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
         s, a, r, s2, done = zip(*batch)
         return s, a, r, s2, done
 
-    def _create_exploration(self):
-        return OUNoise(self.world.act_dim, mu=0,
+    @staticmethod
+    def _create_exploration(world):
+        return OUNoise(world.act_dim, mu=0,
                        sigma=Context.config['alg.noise_sigma'],
                        theta=Context.config['alg.noise_theta'])
 

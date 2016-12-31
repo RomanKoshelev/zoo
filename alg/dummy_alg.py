@@ -12,7 +12,7 @@ class DummyAlgorithm(TensorflowAlgorithm):
         return np.zeros(shape=[self._act_dim])
 
     def train(self, episodes, steps, on_episode):
-        pass
+        raise NotImplementedError
 
     def save_weights(self, path):
         pass

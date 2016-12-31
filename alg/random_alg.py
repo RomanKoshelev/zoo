@@ -16,7 +16,7 @@ class RandomAlgorithm(TensorflowAlgorithm):
         return self.noise.noise()
 
     def train(self, episodes, steps, on_episode):
-        pass
+        raise NotImplementedError
 
     def save_weights(self, path):
         pass
