@@ -142,6 +142,9 @@ class MujocoAgent:
     def sensor_name(self, key):
         return '%s.sensor_%s' % (self.full_id, key)
 
+    def sensor_val(self, key):
+        return self.get_observation(self.sensor_name(key))['get_val']()
+
     def read_model(self):
         body, sensors, actuators = self._read_model()
         for sa in self.agents:
