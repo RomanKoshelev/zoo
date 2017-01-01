@@ -15,23 +15,30 @@ class TensorflowMind:
     def __init__(self, agent, algorithm_class):
         self.world = Context.world
         self.agent = agent
+        self._algorithm = None
+        self._algorithm_class = algorithm_class
         self._logger = Context.logger
-        self._algorithm = algorithm_class(
-            session=Context.platform.session,
-            scope=agent.full_id,
-            obs_dim=agent.state_dim,  # todo: calculate correctly!
-            act_dim=agent.act_dim,
-        )
         self._saved_episode = None
 
     def __str__(self):
         return "%s:\n\t%s" % (
             self.__class__.__name__,
-            "algorithm: " + tab(self._algorithm),
+            "algorithm: " + tab(self.algorithm),
         )
 
+    @property
+    def algorithm(self):
+        if self._algorithm is None:
+            self._algorithm = self._algorithm_class(
+                session=Context.platform.session,
+                scope=self.agent.full_id,
+                obs_dim=self.agent.state_dim,  # todo: calculate correctly!
+                act_dim=self.agent.act_dim,
+            )
+        return self._algorithm
+
     def predict(self, state):
-        a = self._algorithm.predict(state)
+        a = self.algorithm.predict(state)
         return self.agent.scale_action(a)
 
     def train(self):
@@ -40,7 +47,7 @@ class TensorflowMind:
             self._logger.on_train_episode(ep, nr, reward, maxq)
             self._save_results_if_need(ep, cf['exp.episodes'], cf['exp.save_every_episodes'])
             self._evaluate_if_need(ep, cf['mind.evaluate_every_episodes'], cf['exp.steps'])
-        return self._algorithm.train(
+        return self.algorithm.train(
             episodes=Context.config['exp.episodes'],
             steps=Context.config['exp.steps'],
             on_episode=on_episod)
@@ -75,25 +82,25 @@ class TensorflowMind:
         self.restore_algorithm_state()
 
     def restore_weights(self):
-        self._algorithm.restore_weights(self.network_weights_path)
+        self.algorithm.restore_weights(self.network_weights_path)
 
     def save_weights(self):
-        self._algorithm.save_weights(make_dir_if_not_exists(self.network_weights_path))
+        self.algorithm.save_weights(make_dir_if_not_exists(self.network_weights_path))
 
     def save_algorithm_state(self):
         with open(make_dir_if_not_exists(self.algorithm_state_path), 'w') as f:
             pickle.dump([
-                self._algorithm.episode,
-                self._algorithm.buffer,
+                self.algorithm.episode,
+                self.algorithm.buffer,
             ], f, protocol=pickle.HIGHEST_PROTOCOL)
 
     def restore_algorithm_state(self):
         with open(self.algorithm_state_path, 'r') as f:
             [
-                self._algorithm.episode,
-                self._algorithm.buffer,
+                self.algorithm.episode,
+                self.algorithm.buffer,
             ] = pickle.load(f)
-        self._saved_episode = self._algorithm.episode
+        self._saved_episode = self.algorithm.episode
 
     def _save_results_if_need(self, ep, eps, sve):
         if (ep > self._saved_episode and (ep + 1) % sve == 0) or (ep == eps):
