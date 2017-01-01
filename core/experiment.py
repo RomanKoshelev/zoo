@@ -29,7 +29,7 @@ class Experiment:
         # if self._world.can_restore():
         #   self._world.restore()
         #   self._logger.restore()
-        # self._print_instances()
+        self._print_instances()
         self._logger.on_start()
         print("Train %s" % Context.config['train.agent'])
         self._world.train()

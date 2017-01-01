@@ -59,12 +59,14 @@ class TensorflowMind:
             self._logger.on_evaluiation_end(ep, reward)
 
     def _run_episode(self, steps):
-        s = self.world.reset()
+        self.world.reset()
+        s = self.agent.provide_alg_obs()
         reward = 0
         for t in xrange(steps):
             self.world.render()
             a = self.predict(s)
-            s, r, done, _ = self.world.step(a)
+            _, r, done, _ = self.world.step(a)
+            s = self.agent.provide_alg_obs()
             reward += r
         return reward
 

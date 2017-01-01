@@ -39,8 +39,8 @@ class Reporter:
     def write_html_report(self, info):
         s = "<HTML><HEAD>%s<TITLE>%s</TITLE></HEAD><BODY><H1>%s</H1>\n" % (
             "<meta http-equiv='refresh' content='%d'>" % Context.config['report.refresh_html_every_secs'],
-            "Exp #%s" % Context.experiment.env_id,
-            "Experiment #%s" % Context.experiment.env_id,
+            "Exp #%s" % Context.experiment.id,
+            "Experiment #%s" % Context.experiment.id,
         )
 
         s += self._urgent_section(info)
