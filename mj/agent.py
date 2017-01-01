@@ -5,7 +5,6 @@ from utils.string_tools import tab
 from asq.initiators import query
 import numpy as np
 import os
-
 from utils.xml_tools import xml_content, xml_children_content
 
 
@@ -27,9 +26,9 @@ class MujocoAgent:
         return "%s:\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s" % (
             self.__class__.__name__ + (' ' * 10 + '>>>> training <<<<' if self.is_training else ''),
             "model_path: " + self.model_path,
-            "state: %s " % self.provide_state(),
-            "state_dim: %s " % self.state_dim,
-            "act_dim: %d" % self.act_dim,
+            "alg_obs: %s " % self.provide_alg_obs(),
+            "alg_obs_dim: %d" % self.alg_obs_dim,
+            "alg_act_dim: %d" % self.alg_act_dim,
             "sensors: " + tab(self._str_sensors()),
             "actuators: " + tab(self._str_actuators()),
             "observations: " + tab(self._str_observations()),
@@ -142,7 +141,6 @@ class MujocoAgent:
             })
 
     def get_observation(self, obs_id):
-        print(self.full_id, obs_id)
         return query(self.observations).first(lambda o: o['name'] == obs_id)
 
     def inputs_name(self, key):
@@ -168,13 +166,12 @@ class MujocoAgent:
     def provide_inputs(self, inputs_id):
         return [None]
 
-    def provide_state(self):
-        state = []
+    def provide_alg_obs(self):
+        obs = []
         for o in self.observations:
-            print(o['name'])
             for s in o['get_val']():
-                state.append(s)
-        return state
+                obs.append(s)
+        return obs
 
     @property
     def full_id(self):
@@ -184,12 +181,12 @@ class MujocoAgent:
             return self.agent_id
 
     @property
-    def act_dim(self):
+    def alg_act_dim(self):
         return len(self.actuators)
 
     @property
-    def state_dim(self):
-        return len(self.provide_state())
+    def alg_obs_dim(self):
+        return len(self.provide_alg_obs())
 
     @property
     def is_training(self):

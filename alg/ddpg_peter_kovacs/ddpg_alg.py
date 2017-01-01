@@ -11,6 +11,7 @@ from critic import CriticNetwork
 from core.context import Context
 from utils.ou_noise import OUNoise
 from utils.string_tools import tab
+from utils.trace_tools import trace_var
 
 
 class DDPG_PeterKovacs(TensorflowAlgorithm):
@@ -40,9 +41,11 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
     def train(self, episodes, steps, on_episode):
         world = Context.world
         agent = Context.training_agent
+        trace_var(self)
+        trace_var(agent.full_id)
 
         first_episide = self.episode + 1 if self.episode is not None else 0
-        expl = self._create_exploration(world)
+        expl = self._create_exploration()
 
         if self.buffer is None:
             self.buffer = self._create_buffer()
@@ -61,7 +64,7 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
                 # play
                 a = self._make_action(s)
                 a = self._add_noise(a, expl.noise(), nrate)
-                s2, r, done = self._world_step(world, a)
+                s2, r, done = self._world_agent_step(world, agent, a)
                 self.buffer.add(s, a, r, s2, done)
                 s = s2
 
@@ -85,14 +88,14 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
     # ==================================
     # todo: refactore, use callbacs
     @staticmethod
-    def _world_step(world, a):
-        s2, r, done, _ = world.step(world.scale_action(a))
+    def _world_agent_step(world, agent, a):
+        s2, r, done, _ = world.step(agent.scale_action(a))
         return s2, r, done
 
     @staticmethod
     def _reset_world_and_get_state(world, agent):
         world.reset()
-        return agent.provide_state()
+        return agent.provide_alg_obs()
     # ==================================
 
     @staticmethod
@@ -129,9 +132,8 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
         s, a, r, s2, done = zip(*batch)
         return s, a, r, s2, done
 
-    @staticmethod
-    def _create_exploration(world):
-        return OUNoise(world.act_dim, mu=0,
+    def _create_exploration(self):
+        return OUNoise(self._act_dim, mu=0,
                        sigma=Context.config['alg.noise_sigma'],
                        theta=Context.config['alg.noise_theta'])
 

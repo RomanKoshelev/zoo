@@ -32,8 +32,8 @@ class TensorflowMind:
             self._algorithm = self._algorithm_class(
                 session=Context.platform.session,
                 scope=self.agent.full_id,
-                obs_dim=self.agent.state_dim,  # todo: calculate correctly!
-                act_dim=self.agent.act_dim,
+                obs_dim=self.agent.alg_obs_dim,
+                act_dim=self.agent.alg_act_dim,
             )
         return self._algorithm
 
