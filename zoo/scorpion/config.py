@@ -45,7 +45,7 @@ config = {
     'train.agent': None,
 
     'alg.buffer_size': 100 * 1000,
-    'alg.batch_size': 512,
+    'alg.batch_size': 128,
     'alg.noise_sigma': .1,
     'alg.noise_theta': .01,
     'alg.noise_rate_method': staircase_5,

@@ -1,6 +1,7 @@
 TODO:
 - train: controll tagret coords
 - train: add reward method
+- train: freeze or remove the ball and the turret
 - refactore training -- use callbacks from alg
 - refactore -- clear code, fix up dependences
 - use state_dim instead of obs_dim -- they are different in agent, as to state is flatten but obs are not
