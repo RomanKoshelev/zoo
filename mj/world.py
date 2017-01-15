@@ -1,6 +1,7 @@
 from core.world import GymWorld
 from mj.agent import MujocoAgent
 from utils.string_tools import tab
+import numpy as np
 
 
 class MujocoWorld(GymWorld, MujocoAgent):
@@ -32,6 +33,12 @@ class MujocoWorld(GymWorld, MujocoAgent):
             s, r, done, _ = self.step(a)
             reward += r
         return reward
+
+    def step_agent(self, agent, agent_actions):
+        actions = np.zeros(len(self._env.actuators))
+        for i, a in enumerate(agent.actuators):
+            actions[a['index']] = agent_actions[i]
+        return self.step(actions)
 
     def select_actuators(self, prefix):
         return [a for a in self._env.actuators if a['name'].startswith(prefix + '.actuator_')]
