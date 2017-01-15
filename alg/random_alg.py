@@ -18,8 +18,11 @@ class RandomAlgorithm(TensorflowAlgorithm):
     def train(self, episodes, steps, **callbacks):
         raise NotImplementedError
 
-    def save_weights(self, path):
+    def _save_weights(self, path):
         pass
 
-    def restore_weights(self, path):
+    def can_restore(self, path):
+        return True
+
+    def _restore_weights(self, path):
         pass

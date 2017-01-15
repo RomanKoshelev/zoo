@@ -1,6 +1,8 @@
 TODO:
+- format alg_obs
 - train scorpion with pretrained tentacle
-- make the 'rider' algorithm
+- demo the 'rider' algorithm
+- simulate MVP model (arm and spoon)
 
 LATER:
 - train: freeze or remove the ball and the turret
@@ -8,6 +10,8 @@ LATER:
 - move to python 3.4
 
 DONE:
++ fix eval (maybe use step_agent instead step)
++ train: save - restore weights
 + use state_dim instead of obs_dim -- they are different in agent, as to state is flatten but obs are not
 + refactore -- clear code, fix up dependences
 + refactore training -- use callbacks from alg

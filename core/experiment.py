@@ -26,9 +26,9 @@ class Experiment:
     def train(self):
         Context.mode = 'train'
         self._update_title()
-        # if self._world.can_restore():
-        #   self._world.restore()
-        #   self._logger.restore()
+        if self._world.can_restore():
+            self._world.restore()
+            self._logger.restore()
         self._print_instances()
         self._logger.on_start()
         print("Train %s" % Context.config['train.agent'])
@@ -37,7 +37,7 @@ class Experiment:
     def demo(self):
         Context.mode = 'demo'
         self._update_title()
-        # self._world.restore()
+        self._world.restore()
         self._print_instances()
         print()
         episodes = Context.config['exp.episodes']

@@ -5,6 +5,7 @@ from utils.string_tools import tab
 from asq.initiators import query
 import numpy as np
 import os
+
 from utils.xml_tools import xml_content, xml_children_content
 
 
@@ -84,6 +85,20 @@ class MujocoAgent:
         else:
             for a in self.agents:
                 a.train()
+
+    def can_restore(self):
+        for a in self.agents:
+            if not a.can_restore():
+                return False
+        if not self.mind.can_restore():
+            return False
+        return True
+
+    def restore(self):
+        Context.logger.log("Restoring %s..." % self.full_id)
+        for a in self.agents:
+            a.restore()
+        self.mind.restore()
 
     def do_actions(self, state, actions=None):
         pred = self.mind.predict(state)

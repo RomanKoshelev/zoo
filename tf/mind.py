@@ -4,11 +4,6 @@ import os
 
 from core.context import Context
 from utils.string_tools import tab
-from utils.os_tools import make_dir_if_not_exists
-import pickle
-
-NETWORK_WEIGHTS_PATH = "network/weights.ckpt"
-ALGORITHM_STATE_PATH = "algorithm/state.pickle"
 
 
 class TensorflowMind:
@@ -21,8 +16,9 @@ class TensorflowMind:
         self._saved_episode = None
 
     def __str__(self):
-        return "%s:\n\t%s" % (
+        return "%s:\n\t%s\n\t%s" % (
             self.__class__.__name__,
+            "saved_episode: %s" % self._saved_episode,
             "algorithm: " + tab(self.algorithm),
         )
 
@@ -79,45 +75,22 @@ class TensorflowMind:
         reward = 0
         for t in xrange(steps):
             self.world.render()
-            a = self.predict(s)
-            _, r, done, _ = self.world.step(a)
+            a = self.predict(s)[0]
+            _, r, done, _ = self.world.step_agent(self.agent, a)
             s = self.agent.provide_alg_obs()
             reward += r
         return reward
 
     def save(self):
-        self._logger.log('Saving weights and algorithm state...')
-        self.save_weights()
-        self.save_algorithm_state()
-
-    def can_restore(self):
-        return os.path.exists(self.network_weights_path)
+        self._logger.log('Saving %s mind...' % self.agent.full_id)
+        self.algorithm.save(self.data_path)
 
     def restore(self):
-        self._logger.log('Restoring weights and algorithm state...')
-        self.restore_weights()
-        self.restore_algorithm_state()
-
-    def restore_weights(self):
-        self.algorithm.restore_weights(self.network_weights_path)
-
-    def save_weights(self):
-        self.algorithm.save_weights(make_dir_if_not_exists(self.network_weights_path))
-
-    def save_algorithm_state(self):
-        with open(make_dir_if_not_exists(self.algorithm_state_path), 'w') as f:
-            pickle.dump([
-                self.algorithm.episode,
-                self.algorithm.buffer,
-            ], f, protocol=pickle.HIGHEST_PROTOCOL)
-
-    def restore_algorithm_state(self):
-        with open(self.algorithm_state_path, 'r') as f:
-            [
-                self.algorithm.episode,
-                self.algorithm.buffer,
-            ] = pickle.load(f)
+        self.algorithm.restore(self.data_path)
         self._saved_episode = self.algorithm.episode
+
+    def can_restore(self):
+        return self.algorithm.can_restore(self.data_path)
 
     def _save_results_if_need(self, ep, eps, sve):
         if (ep > self._saved_episode and (ep + 1) % sve == 0) or (ep == eps):
@@ -125,9 +98,5 @@ class TensorflowMind:
             self.save()
 
     @property
-    def network_weights_path(self):
-        return os.path.join(Context.work_path, NETWORK_WEIGHTS_PATH)
-
-    @property
-    def algorithm_state_path(self):
-        return os.path.join(Context.work_path, ALGORITHM_STATE_PATH)
+    def data_path(self):
+        return os.path.join(Context.work_path, 'mind', self.agent.full_id)

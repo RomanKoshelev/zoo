@@ -17,7 +17,6 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
     def __init__(self, session, scope, obs_dim, act_dim):
         TensorflowAlgorithm.__init__(self, session, scope, obs_dim, act_dim)
         self.buffer = None
-        self.episode = None
         with tf.variable_scope(self.scope):
             with tf.variable_scope('actor'):
                 self.actor = ActorNetwork(session, obs_dim, act_dim, cfg)
@@ -26,8 +25,9 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
         self._initialize_variables()
 
     def __str__(self):
-        return "%s\n\t%s\n\t%s\n\t%s\n\t%s" % (
+        return "%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s" % (
             self.__class__.__name__,
+            "scope: %s" % self.scope,
             "obs_dim: %d" % self._obs_dim,
             "act_dim: %d" % self._act_dim,
             "buffer: " + tab(self.buffer),
@@ -123,3 +123,9 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
     @staticmethod
     def _create_buffer():
         return ReplayBuffer(Context.config['alg.buffer_size'])
+
+    def _save_state(self, path):
+        self._do_save_state([self.episode, self.buffer], path)
+
+    def _restore_state(self, path):
+        [self.episode, self.buffer] = self._do_restore_state(path)
