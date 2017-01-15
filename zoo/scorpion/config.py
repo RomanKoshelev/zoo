@@ -39,7 +39,7 @@ config = {
     'env.episod_jpos_method': jpos_do_nothing,
     'env.step_jpos_method': jpos_do_nothing,
     'env.target_range_xz': [[.0, .0], [.0, .0]],
-    'env.init_every_episods': 10,
+    'env.init_every_episods': 30,
 
     'mind.evaluate_every_episodes': 10,
 
@@ -51,8 +51,8 @@ config = {
     'alg.noise_theta': .01,
     'alg.noise_rate_method': staircase_5,
 
-    'report.write_every_episodes': 15,
-    'report.summary_every_episodes': 20,
+    'report.write_every_episodes': 30,
+    'report.summary_every_episodes': 30,
     'report.diagram_mean_frame': 50,
-    'report.refresh_html_every_secs': 30,
+    'report.refresh_html_every_secs': 90,
 }
