@@ -15,7 +15,7 @@ class RandomAlgorithm(TensorflowAlgorithm):
     def predict(self, s):
         return self.noise.noise()
 
-    def train(self, episodes, steps, on_episode):
+    def train(self, episodes, steps, **callbacks):
         raise NotImplementedError
 
     def save_weights(self, path):

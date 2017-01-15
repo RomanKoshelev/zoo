@@ -31,7 +31,7 @@ class TensorflowAlgorithm(object):
     def predict(self, s):
         raise NotImplementedError
 
-    def train(self, episodes, steps, on_episode):
+    def train(self, episodes, steps, on_episode_beg, on_episode_end, on_step):
         raise NotImplementedError
 
     def save_weights(self, path):

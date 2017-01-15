@@ -11,7 +11,6 @@ from critic import CriticNetwork
 from core.context import Context
 from utils.ou_noise import OUNoise
 from utils.string_tools import tab
-from utils.trace_tools import trace_var
 
 
 class DDPG_PeterKovacs(TensorflowAlgorithm):
@@ -38,12 +37,7 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
     def predict(self, s):
         return self.actor.predict([s])
 
-    def train(self, episodes, steps, on_episode):
-        world = Context.world
-        agent = Context.training_agent
-        trace_var(self)
-        trace_var(agent.full_id)
-
+    def train(self, episodes, steps, on_episode_beg, on_episode_end, on_step):
         first_episide = self.episode + 1 if self.episode is not None else 0
         expl = self._create_exploration()
 
@@ -51,7 +45,7 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
             self.buffer = self._create_buffer()
 
         for self.episode in range(first_episide, episodes + 1):
-            s = self._reset_world_and_get_state(world, agent)
+            s = on_episode_beg()
 
             nrate = self._get_noise_rate(self.episode, episodes)
             reward = 0
@@ -64,7 +58,7 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
                 # play
                 a = self._make_action(s)
                 a = self._add_noise(a, expl.noise(), nrate)
-                s2, r, done = self._world_agent_step(world, agent, a)
+                s2, r, done = on_step(a)
                 self.buffer.add(s, a, r, s2, done)
                 s = s2
 
@@ -75,30 +69,14 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
                 self._update_actor(bs)
                 self._update_target_networks()
 
-                # show
-                world.render()
-                qmax.append(q)
+                # statistic
                 reward += r
+                qmax.append(q)
 
                 if done:
                     break
 
-            on_episode(self.episode, reward, nrate, np.mean(qmax))
-
-    # ==================================
-    # todo: refactore, use callbacs
-    @staticmethod
-    def _world_agent_step(world, agent, acts):
-        agent_actions = agent.scale_action(acts)
-        _, r, done, _ = world.step_agent(agent, agent_actions)
-        s = agent.provide_alg_obs()
-        return s, r, done
-
-    @staticmethod
-    def _reset_world_and_get_state(world, agent):
-        world.reset()
-        return agent.provide_alg_obs()
-    # ==================================
+            on_episode_end(self.episode, reward, nrate, np.mean(qmax))
 
     @staticmethod
     def _add_noise(a, n, k):

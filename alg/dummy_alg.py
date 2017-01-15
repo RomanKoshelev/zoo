@@ -11,7 +11,7 @@ class DummyAlgorithm(TensorflowAlgorithm):
     def predict(self, s):
         return np.zeros(shape=[self._act_dim])
 
-    def train(self, episodes, steps, on_episode):
+    def train(self, episodes, steps, **callbacks):
         raise NotImplementedError
 
     def save_weights(self, path):

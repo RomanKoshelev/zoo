@@ -42,15 +42,30 @@ class TensorflowMind:
         return self.agent.scale_action(a)
 
     def train(self):
-        def on_episod(ep, reward, nr, maxq):
+        def do_episode_beg():
+            self.world.reset()
+            return self.agent.provide_alg_obs()
+
+        def do_episode_end(ep, reward, nr, maxq):
             cf = Context.config
             self._logger.on_train_episode(ep, nr, reward, maxq)
             self._save_results_if_need(ep, cf['exp.episodes'], cf['exp.save_every_episodes'])
             self._evaluate_if_need(ep, cf['mind.evaluate_every_episodes'], cf['exp.steps'])
+
+        def do_step(acts):
+            agent_actions = self.agent.scale_action(acts)
+            _, r, done, _ = self.world.step_agent(self.agent, agent_actions)
+            s = self.agent.provide_alg_obs()
+            self.world.render()
+            return s, r, done
+
         return self.algorithm.train(
             episodes=Context.config['exp.episodes'],
             steps=Context.config['exp.steps'],
-            on_episode=on_episod)
+            on_episode_beg=do_episode_beg,
+            on_episode_end=do_episode_end,
+            on_step=do_step,
+        )
 
     def _evaluate_if_need(self, ep, evs, steps):
         if (ep + 1) % evs == 0:
