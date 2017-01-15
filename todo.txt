@@ -1,5 +1,6 @@
 TODO:
 - train: controll tagret coords
+- refactore (see todos in code)
 - train: add reward method
 - train: freeze or remove the ball and the turret
 - refactore training -- use callbacks from alg

@@ -3,7 +3,7 @@ import numpy as np
 from core.context import Context
 
 
-def jpos_do_noting():
+def jpos_do_nothing():
     return {}
 
 

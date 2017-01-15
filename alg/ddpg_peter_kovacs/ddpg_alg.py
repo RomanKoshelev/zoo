@@ -88,8 +88,13 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
     # ==================================
     # todo: refactore, use callbacs
     @staticmethod
-    def _world_agent_step(world, agent, a):
-        _, r, done, _ = world.step(agent.scale_action(a))
+    def _world_agent_step(world, agent, acts):
+        agent_actions = agent.scale_action(acts)
+        world_actions = np.zeros(len(world._env.actuators))
+        for i, a in enumerate(agent.actuators):
+            j = a['index']
+            world_actions[j] = agent_actions[i]
+        _, r, done, _ = world.step(world_actions)
         s = agent.provide_alg_obs()
         return s, r, done
 
