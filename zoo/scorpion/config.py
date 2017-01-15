@@ -2,7 +2,7 @@ from alg.random_alg import RandomAlgorithm
 from tf.mind import TensorflowMind
 from core.logger import Logger
 from tf.platform import TensorflowPlatform
-from zoo.scorpion.reward import default_reward
+from zoo.scorpion.rewards import zero_reward
 from zoo.scorpion.scorpion import ScorpionAgent
 from zoo.scorpion.target import jpos_do_nothing
 from utils.noise_tools import staircase_5
@@ -35,7 +35,7 @@ config = {
     'env.world.scorpion.tentacle.inputs': ['target_x', 'target_z'],
     'env.world.scorpion.tentacle.algorithm': RandomAlgorithm,
 
-    'env.reward_method': default_reward,
+    'env.reward_method': zero_reward,
     'env.episod_jpos_method': jpos_do_nothing,
     'env.step_jpos_method': jpos_do_nothing,
     'env.target_range_xz': [[.0, .0], [.0, .0]],

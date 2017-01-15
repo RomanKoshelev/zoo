@@ -5,6 +5,7 @@ from alg.dummy_alg import DummyAlgorithm
 from config import config
 from core.experiment import Experiment
 from utils.noise_tools import linear_05_00
+from zoo.scorpion.rewards import tentacle_reward
 from zoo.scorpion.target import jpos_random_target
 
 config['exp.id'] = "train_tentacle"
@@ -13,7 +14,7 @@ config['train.agent'] = "world.scorpion.tentacle"
 config['env.world.scorpion.tentacle.algorithm'] = DDPG_PeterKovacs
 
 config['exp.episodes'] = 30000
-config['exp.steps'] = 150
+config['exp.steps'] = 50
 config['exp.save_every_episodes'] = 200
 config['alg.noise_rate_method'] = linear_05_00
 
@@ -23,6 +24,8 @@ config['view.height'] = 800
 
 config['env.world.scorpion.algorithm'] = DummyAlgorithm
 config['env.episod_jpos_method'] = jpos_random_target
+
+config['env.reward_method'] = tentacle_reward
 
 exp = Experiment(config)
 exp.train()

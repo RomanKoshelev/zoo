@@ -1,17 +1,17 @@
 TODO:
-> train: add reward method
-- train: freeze or remove the ball and the turret
-- refactore training -- use callbacks from alg
-- refactore -- clear code, fix up dependences
-- use state_dim instead of obs_dim -- they are different in agent, as to state is flatten but obs are not
-- train scorpionwith pretrained tentacle
+- train scorpion with pretrained tentacle
 - make the 'rider' algorithm
 
 LATER:
+- train: freeze or remove the ball and the turret
 - save params to out_path/params.txt
 - move to python 3.4
 
 DONE:
++ use state_dim instead of obs_dim -- they are different in agent, as to state is flatten but obs are not
++ refactore -- clear code, fix up dependences
++ refactore training -- use callbacks from alg
++ train: add reward method
 + refactore (see todos in code)
 + train: controll tagret coords
 + train tentacle

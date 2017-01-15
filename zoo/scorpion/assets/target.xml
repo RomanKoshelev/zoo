@@ -6,7 +6,7 @@
       <joint name='{agent}.coords_x' type='slide' axis='1 0 0' range='-2.0 +2.0' />
       <joint name='{agent}.coords_z' type='slide' axis='0 0 1' range='-1.0 +1.5' />
       <geom type='sphere' conaffinity='0' contype='0' rgba='0. 0. 0. 0.' size='.05' mass='1e-3'/>
-      <site name='{agent}' pos='0 0 0' size='.05' rgba='1.5 1.5 0. 0.9' />
+      <site name='{agent}.site_center' pos='0 0 0' size='0.05' rgba='1.5 1.5 0. 0.9' />
     </body>
   </body>
 

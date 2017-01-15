@@ -14,7 +14,7 @@
           <geom fromto='0 0 0 0 0 .5' size='0.05'/>
           <body name='{agent}.head' pos='0 0 .5'>
             <geom type='cylinder' fromto='0 0 0  0 0 .06' rgba='1.2 1.2 0. 1' size='.06'/>
-            <site name='{agent}.head' pos='0 0 0.06' rgba='.2 .2 1.5 0.5' size='.06'/>
+            <site name='{agent}.site_head' pos='0 0 0.06' rgba='.2 .2 1.5 0.5' size='.06'/>
           </body>
         </body>
       </body>
