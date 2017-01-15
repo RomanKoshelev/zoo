@@ -56,7 +56,7 @@ class MujocoAgent:
 
     def _str_alg_obs(self):
         alg_obs = self.provide_alg_obs()
-        return '[' + ','.join(["%.3g" % o for o in alg_obs]) + ']'
+        return '[' + ','.join(["%+.3g" % o for o in alg_obs]) + ']'
 
     def _str_sensors(self):
         if len(self.sensors) > 0:
