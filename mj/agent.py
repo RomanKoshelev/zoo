@@ -27,7 +27,7 @@ class MujocoAgent:
         return "%s:\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s" % (
             self.__class__.__name__ + (' ' * 10 + '>>>> training <<<<' if self.is_training else ''),
             "model_path: " + self.model_path,
-            "alg_obs: %s " % self.provide_alg_obs(),
+            "alg_obs: %s" % self._str_alg_obs(),
             "alg_obs_dim: %d" % self.alg_obs_dim,
             "alg_act_dim: %d" % self.alg_act_dim,
             "sensors: " + tab(self._str_sensors()),
@@ -53,6 +53,10 @@ class MujocoAgent:
                 arr.append("\n\t%s: %s" % (a.full_id, tab(str(a))))
             return "".join(arr)
         return "\n\tno"
+
+    def _str_alg_obs(self):
+        alg_obs = self.provide_alg_obs()
+        return '[' + ','.join(["%.3g" % o for o in alg_obs]) + ']'
 
     def _str_sensors(self):
         if len(self.sensors) > 0:
