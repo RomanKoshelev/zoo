@@ -35,7 +35,7 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
         )
 
     def predict(self, s):
-        return self.actor.predict([s])
+        return self.actor.predict([s])[0]
 
     def train(self, episodes, steps, on_episode_beg, on_episode_end, on_step):
         first_episide = self.episode + 1 if self.episode is not None else 0

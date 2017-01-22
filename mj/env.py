@@ -17,8 +17,8 @@ class ZooMujocoEnv(MujocoEnv):
         self.work_path = Context.work_path
         self.world = Context.world
         self.step_num = 0
-        self.episod_num = 0
-        self._episod_jpos = {}
+        self.episode_num = 0
+        self._episode_jpos = {}
         self.model_path = self._compile_model()
         MujocoEnv.__init__(self, self.model_path, frame_skip=Context.config['env.frame_skip'])
 
@@ -51,7 +51,7 @@ class ZooMujocoEnv(MujocoEnv):
         ob = self._get_obs()
         r = Context.config['env.reward_method'](self)
         done = False
-        self._update_joints(self._episod_jpos)
+        self._update_joints(self._episode_jpos)
         self._update_joints(Context.config.get('env.step_jpos_method', lambda: {})())
         self._update_title()
         self.step_num += 1
@@ -59,13 +59,13 @@ class ZooMujocoEnv(MujocoEnv):
 
     def reset_model(self):
         self._reset_if_need()
-        self._episod_jpos = Context.config.get('env.episod_jpos_method', lambda: {})()
-        self._update_joints(self._episod_jpos)
-        self.episod_num += 1
+        self._episode_jpos = Context.config.get('env.episode_jpos_method', lambda: {})()
+        self._update_joints(self._episode_jpos)
+        self.episode_num += 1
         return self._get_obs()
 
     def _reset_if_need(self):
-        if self.episod_num % Context.config['env.init_every_episods'] == 0:
+        if self.episode_num % Context.config['env.init_every_episods'] == 0:
             qpos = self.init_qpos
             qvel = self.init_qvel
         else:

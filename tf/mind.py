@@ -66,16 +66,16 @@ class TensorflowMind:
     def _evaluate_if_need(self, ep, evs, steps):
         if (ep + 1) % evs == 0:
             self._logger.on_evaluiation_start()
-            reward = self._run_episode(steps)
+            reward = self._evaluate_episode(steps)
             self._logger.on_evaluiation_end(ep, reward)
 
-    def _run_episode(self, steps):
+    def _evaluate_episode(self, steps):
         self.world.reset()
         s = self.agent.provide_alg_obs()
         reward = 0
         for t in xrange(steps):
             self.world.render()
-            a = self.predict(s)[0]
+            a = self.predict(s)
             _, r, done, _ = self.world.step_agent(self.agent, a)
             s = self.agent.provide_alg_obs()
             reward += r

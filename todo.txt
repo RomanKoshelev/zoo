@@ -1,4 +1,5 @@
 TODO:
+- demo pretrained tentacle
 - train scorpion with pretrained tentacle
 - demo the 'rider' algorithm
 - simulate MVP model (arm and spoon)

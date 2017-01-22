@@ -23,7 +23,7 @@ config['view.width'] = 1200
 config['view.height'] = 800
 
 config['env.world.scorpion.algorithm'] = DummyAlgorithm
-config['env.episod_jpos_method'] = jpos_random_target
+config['env.episode_jpos_method'] = jpos_random_target
 
 config['env.reward_method'] = tentacle_reward
 

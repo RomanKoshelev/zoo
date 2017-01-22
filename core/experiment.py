@@ -38,8 +38,8 @@ class Experiment:
         Context.mode = 'demo'
         self._update_title()
         self._world.restore()
+        self._logger.restore()
         self._print_instances()
-        print()
         episodes = Context.config['exp.episodes']
         steps = Context.config['exp.steps']
         for ep in xrange(episodes):

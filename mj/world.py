@@ -25,11 +25,11 @@ class MujocoWorld(GymWorld, MujocoAgent):
         )
 
     def run_episode(self, steps):
-        s = self.reset()
+        self.reset()
         reward = 0
         for t in xrange(steps):
             self.render()
-            a = self.do_actions(s)
+            a = self.make_actions([None] * self.total_act_dim)
             s, r, done, _ = self.step(a)
             reward += r
         return reward
