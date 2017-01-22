@@ -21,8 +21,5 @@ class RandomAlgorithm(TensorflowAlgorithm):
     def _save_weights(self, path):
         pass
 
-    def can_restore(self, path):
-        return True
-
     def _restore_weights(self, path):
         pass

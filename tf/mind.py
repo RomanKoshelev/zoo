@@ -89,8 +89,14 @@ class TensorflowMind:
         self.algorithm.restore(self.data_path)
         self._saved_episode = self.algorithm.episode
 
-    def can_restore(self):
-        return self.algorithm.can_restore(self.data_path)
+    def try_restore(self):
+        try:
+            self.restore()
+        except (ValueError, IOError):
+            if not self.agent.is_training:
+                print("Can't restore mind for '%s' from path '%s'" % (self.agent.full_id, self.data_path))
+            return False
+        return True
 
     def _save_results_if_need(self, ep, eps, sve):
         if (ep > self._saved_episode and (ep + 1) % sve == 0) or (ep == eps):
@@ -99,4 +105,7 @@ class TensorflowMind:
 
     @property
     def data_path(self):
+        path = Context.config.get('env.%s.mind_path' % self.agent.full_id, None)
+        if path is not None:
+            return path
         return os.path.join(Context.work_path, 'mind', self.agent.full_id)

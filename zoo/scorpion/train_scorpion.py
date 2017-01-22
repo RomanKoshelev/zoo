@@ -6,12 +6,13 @@ from core.experiment import Experiment
 from utils.noise_tools import linear_05_00
 from zoo.scorpion.rewards import tentacle_reward
 
-config['exp.id'] = "003"
+config['exp.id'] = "004"
 
 config['train.agent'] = "world.scorpion"
 config['env.reward_method'] = tentacle_reward
 config['env.world.scorpion.algorithm'] = DDPG_PeterKovacs
 config['env.world.scorpion.tentacle.algorithm'] = DDPG_PeterKovacs
+config['env.world.scorpion.tentacle.mind_path'] = 'experiments/003/mind/world.scorpion.tentacle'
 
 config['exp.episodes'] = 30000
 config['exp.steps'] = 50

@@ -91,6 +91,13 @@ class Logger:
                 self._eval_history
             ] = pickle.load(f)
 
+    def try_restore(self):
+        try:
+            self.restore()
+        except (ValueError, IOError):
+            return False
+        return True
+
     def _write_html_report(self):
         info = {
             'ep': len(self._train_history),

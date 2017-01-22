@@ -90,21 +90,21 @@ class MujocoAgent:
             for a in self.agents:
                 a.train()
 
-    def can_restore(self):
-        for a in self.agents:
-            if not a.can_restore():
-                return False
-        if not self.mind.can_restore():
-            if not self.is_training:
-                return False
-        return True
-
     def restore(self):
         Context.logger.log("Restoring %s..." % self.full_id)
         for a in self.agents:
             a.restore()
-        if self.mind.can_restore():
-            self.mind.restore()
+        self.mind.restore()
+
+    def try_restore(self):
+        Context.logger.log("Trying restore %s..." % self.full_id)
+        try:
+            self.mind.try_restore()
+            for a in self.agents:
+                a.try_restore()
+        except IOError:
+            return False
+        return True
 
     def predict_actions(self, actions, ignore=None):
         if self != ignore:

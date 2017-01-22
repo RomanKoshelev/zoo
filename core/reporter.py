@@ -46,10 +46,10 @@ class Reporter:
         s += self._urgent_section(info)
         s += self._passport_section()
         s += self._config_section()
-        s += self._instances_section()
         s += self._progress_section(info)
         s += self._results_section(info)
         s += self._diagrams_section(info)
+        s += self._instances_section()
 
         s += "</BODY></HTML>\n"
         with open(make_dir_if_not_exists(self.html_path), 'w') as f:
