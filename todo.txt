@@ -1,6 +1,6 @@
 TODO:
-> train scorpion with pretrained tentacle
-- demo the 'rider' algorithm
+> fix demo and eval while training scorpion (see world.run_episode and agent.predict_actions)
+- demo scorpion
 - simulate MVP model (arm and spoon)
 
 LATER:
@@ -9,6 +9,7 @@ LATER:
 - move to python 3.4
 
 DONE:
++ train scorpion with pretrained tentacle
 + demo pretrained tentacle
 + format alg_obs
 + fix eval (maybe use step_agent instead step)
