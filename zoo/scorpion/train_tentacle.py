@@ -8,7 +8,7 @@ from utils.noise_tools import linear_05_00
 from zoo.scorpion.rewards import tentacle_reward
 from zoo.scorpion.target import jpos_random_target
 
-config['exp.id'] = "train_tentacle"
+config['exp.id'] = "003"
 
 config['train.agent'] = "world.scorpion.tentacle"
 config['env.world.scorpion.tentacle.algorithm'] = DDPG_PeterKovacs

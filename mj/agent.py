@@ -6,7 +6,6 @@ from asq.initiators import query
 import numpy as np
 import os
 
-from utils.trace_tools import trace_var
 from utils.xml_tools import xml_content, xml_children_content
 
 
@@ -108,14 +107,7 @@ class MujocoAgent:
     def make_actions(self, actions):
         alg_obs = self.provide_alg_obs()
         pred = self.mind.predict(alg_obs)
-
-        trace_var(self.full_id)
-        trace_var(alg_obs)
-        trace_var(pred)
-        trace_var("")
-
         assert len(self.actuators) == len(pred), "actuators=%d pred=%d" % (len(self.actuators), len(pred))
-
         for j, actuator in enumerate(self.actuators):
             i = actuator['index']
             assert actions[i] is None

@@ -1,3 +1,4 @@
+from __future__ import print_function
 import traceback
 
 
@@ -9,6 +10,9 @@ def _make_names(func_name_len, *expr):
     return zip(text, expr)
 
 
-def trace_var(var):
+def trace_var(var=None):
+    if var is None:
+        print()
+        return
     for n in _make_names(len(trace_var.__name__), var):
         print("%s: %s" % (n[0], n[1]))
