@@ -84,7 +84,7 @@ class MujocoAgent:
         return "\n\tno"
 
     def train(self):
-        if Context.config['train.agent'] == self.full_id:
+        if self.is_training:
             self.mind.train()
         else:
             for a in self.agents:
@@ -95,25 +95,25 @@ class MujocoAgent:
             if not a.can_restore():
                 return False
         if not self.mind.can_restore():
-            return False
+            if not self.is_training:
+                return False
         return True
 
     def restore(self):
         Context.logger.log("Restoring %s..." % self.full_id)
         for a in self.agents:
             a.restore()
-        self.mind.restore()
+        if self.mind.can_restore():
+            self.mind.restore()
 
-    def make_actions(self, actions):
-        alg_obs = self.provide_alg_obs()
-        pred = self.mind.predict(alg_obs)
-        assert len(self.actuators) == len(pred), "actuators=%d pred=%d" % (len(self.actuators), len(pred))
-        for j, actuator in enumerate(self.actuators):
-            i = actuator['index']
-            assert actions[i] is None
-            actions[i] = pred[j]
+    def predict_actions(self, actions, ignore=None):
+        if self != ignore:
+            pred = self.mind.predict(self.provide_alg_obs())
+            assert len(self.actuators) == len(pred)
+            for j, a in enumerate(self.actuators):
+                actions[a['index']] = pred[j]
         for agent in self.agents:
-            actions = agent.make_actions(actions)
+            actions = agent.predict_actions(actions)
         return actions
 
     def init_agents(self):

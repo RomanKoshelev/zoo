@@ -1,7 +1,6 @@
 from core.world import GymWorld
 from mj.agent import MujocoAgent
 from utils.string_tools import tab
-import numpy as np
 
 
 class MujocoWorld(GymWorld, MujocoAgent):
@@ -29,13 +28,13 @@ class MujocoWorld(GymWorld, MujocoAgent):
         reward = 0
         for t in xrange(steps):
             self.render()
-            a = self.make_actions([None] * self.total_act_dim)
-            s, r, done, _ = self.step(a)
+            actions = self.predict_actions(self.empty_actions)
+            s, r, done, _ = self.step(actions)
             reward += r
         return reward
 
     def step_agent(self, agent, agent_actions):
-        actions = np.zeros(len(self._env.actuators))
+        actions = self.predict_actions(self.empty_actions, ignore=agent)
         for i, a in enumerate(agent.actuators):
             actions[a['index']] = agent_actions[i]
         return self.step(actions)
@@ -53,3 +52,7 @@ class MujocoWorld(GymWorld, MujocoAgent):
     def total_act_dim(self):
         assert len(self._env.actuators) == self._env.action_space.shape[0]
         return len(self._env.actuators)
+
+    @property
+    def empty_actions(self):
+        return [None] * self.total_act_dim
