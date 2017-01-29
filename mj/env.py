@@ -18,7 +18,6 @@ class ZooMujocoEnv(MujocoEnv):
         self.world = Context.world
         self.step_num = 0
         self.episode_num = 0
-        self._episode_jpos = {}
         self.model_path = self._compile_model()
         MujocoEnv.__init__(self, self.model_path, frame_skip=Context.config['env.frame_skip'])
 
@@ -51,7 +50,6 @@ class ZooMujocoEnv(MujocoEnv):
         ob = self._get_obs()
         r = Context.config['env.reward_method'](self)
         done = False
-        self._update_joints(self._episode_jpos)
         self._update_joints(Context.config.get('env.step_jpos_method', lambda: {})())
         self._update_title()
         self.step_num += 1
@@ -59,8 +57,7 @@ class ZooMujocoEnv(MujocoEnv):
 
     def reset_model(self):
         self._reset_if_need()
-        self._episode_jpos = Context.config.get('env.episode_jpos_method', lambda: {})()
-        self._update_joints(self._episode_jpos)
+        self._update_joints(Context.config.get('env.episode_jpos_method', lambda: {})())
         self.episode_num += 1
         return self._get_obs()
 
@@ -84,7 +81,6 @@ class ZooMujocoEnv(MujocoEnv):
             qposadr, qveladr, _ = self.model.joint_adr(j)
             qpos[qposadr] = pos
             qvel[qveladr] = 0.
-
         self.set_state(qpos, qvel)
 
     def site_pos(self, site_name):

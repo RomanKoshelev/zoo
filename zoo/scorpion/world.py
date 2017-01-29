@@ -10,3 +10,9 @@ class ScorpionWorld(MujocoWorld):
             return ball.sensor_val('y')
         if inputs_id == 'ball_z':
             return ball.sensor_val('z')
+        if inputs_id == 'ball_vx':
+            return ball.sensor_val('vx')
+        if inputs_id == 'ball_vy':
+            return ball.sensor_val('vy')
+        if inputs_id == 'ball_vz':
+            return ball.sensor_val('vz')

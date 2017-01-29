@@ -1,11 +1,11 @@
 <HTML><HEAD><meta http-equiv='refresh' content='90'><TITLE>Exp #004</TITLE></HEAD><BODY><H1>Experiment #004</H1>
 <font color=red><pre>
-  Reward:        1784
-  Qmax:          5597
-  Left:          11:46:22 (11%)
+  Reward:        4286
+  Qmax:          10636
+  Left:          00:00:00 (100%)
 </pre></font>
 <font color=#AAAAAA><pre>
-  Report time:   2017-01-22 23:32:21
+  Report time:   2017-01-28 15:01:53
   Host name:     bernard
 </pre></font>
 <h2>Configuration</h2>
@@ -53,18 +53,18 @@
 </pre>
 <h2>Progress</h2>
 <pre>
-  Episodes:      3400
-  Steps:         170000
-  Total time:    13:16:39
-    spent:       01:30:17 (11%)
-    left:        11:46:22
-  Finish:        11:18:43 2017-01-23
-  Performance:   0.63 per sec
+  Episodes:      30000
+  Steps:         1500000
+  Total time:    16:31:55
+    spent:       16:31:55 (100%)
+    left:        00:00:00
+  Finish:        15:01:53 2017-01-28
+  Performance:   0.50 per sec
 </pre>
 <h2>Results</h2>
 <pre>
-  Train reward:      +2805.02
-  Eval reward:       +1783.70
+  Train reward:      +4229.15
+  Eval reward:       +4286.26
 </pre>
 <h2>Diagrams</h2>
 <img src='eval_reward.png' width=500>
@@ -113,28 +113,28 @@ Experiment:
     actuators: 
       no
     observations: 
-      sensor: world.scorpion.sensor_head_pos=[+1.91]
-      sensor: world.scorpion.sensor_head_vel=[+0.0134]
-      inputs: world.scorpion.inputs_ball_x=[-5.29]
-      inputs: world.scorpion.inputs_ball_y=[-0.734]
+      sensor: world.scorpion.sensor_head_pos=[-2.09]
+      sensor: world.scorpion.sensor_head_vel=[-1.87e-06]
+      inputs: world.scorpion.inputs_ball_x=[-4.73]
+      inputs: world.scorpion.inputs_ball_y=[+2.42]
       inputs: world.scorpion.inputs_ball_z=[-4.8]
-      sensor: world.scorpion.tentacle.sensor_s1_pos=[+1.04]
-      sensor: world.scorpion.tentacle.sensor_s1_vel=[+2.75]
-      sensor: world.scorpion.tentacle.sensor_s2_pos=[-1.88]
-      sensor: world.scorpion.tentacle.sensor_s2_vel=[-4.41]
-      sensor: world.scorpion.tentacle.sensor_s3_pos=[+1.38]
-      sensor: world.scorpion.tentacle.sensor_s3_vel=[-5.59]
-      inputs: world.scorpion.tentacle.inputs_target_x=[+0.475]
-      inputs: world.scorpion.tentacle.inputs_target_z=[+0.317]
-      sensor: world.scorpion.target.sensor_x=[+0.475]
-      sensor: world.scorpion.target.sensor_z=[+0.317]
-      sensor: world.ball.sensor_x=[-5.29]
-      sensor: world.ball.sensor_y=[-0.734]
+      sensor: world.scorpion.tentacle.sensor_s1_pos=[+0.968]
+      sensor: world.scorpion.tentacle.sensor_s1_vel=[+0.0539]
+      sensor: world.scorpion.tentacle.sensor_s2_pos=[-2.04]
+      sensor: world.scorpion.tentacle.sensor_s2_vel=[+0.389]
+      sensor: world.scorpion.tentacle.sensor_s3_pos=[+1.31]
+      sensor: world.scorpion.tentacle.sensor_s3_vel=[+3.03]
+      inputs: world.scorpion.tentacle.inputs_target_x=[+0.267]
+      inputs: world.scorpion.tentacle.inputs_target_z=[+0.309]
+      sensor: world.scorpion.target.sensor_x=[+0.267]
+      sensor: world.scorpion.target.sensor_z=[+0.309]
+      sensor: world.ball.sensor_x=[-4.73]
+      sensor: world.ball.sensor_y=[+2.42]
       sensor: world.ball.sensor_z=[-4.8]
-      sensor: world.ball.sensor_vx=[-0.000356]
-      sensor: world.ball.sensor_vy=[+0.000524]
-      sensor: world.ball.sensor_vz=[+6.68e-05]
-      sensor: world.ball.sensor_accelerometer=[+0.000541,+0.0637,+9.81]
+      sensor: world.ball.sensor_vx=[+0.000253]
+      sensor: world.ball.sensor_vy=[+0.000342]
+      sensor: world.ball.sensor_vz=[+2.42e-10]
+      sensor: world.ball.sensor_accelerometer=[-1.06e-08,-5.41e-09,+9.81]
     mind: TensorflowMind:
       saved_episode: None
       algorithm: DummyAlgorithm:
@@ -144,7 +144,7 @@ Experiment:
     agents: 
       world.scorpion: ScorpionAgent          >>>> training <<<<:
         model_path: ./assets/scorpion.xml
-        alg_obs: [+1.91,+0.0134,-5.29,-0.734,-4.8,+1.04,+2.75,-1.88,-4.41,+1.38,-5.59,+0.475,+0.317,+0.475,+0.317]
+        alg_obs: [-2.09,-1.87e-06,-4.73,+2.42,-4.8,+0.968,+0.0539,-2.04,+0.389,+1.31,+3.03,+0.267,+0.309,+0.267,+0.309]
         alg_obs_dim: 15
         alg_act_dim: 3
         sensors: 
@@ -155,23 +155,23 @@ Experiment:
           world.scorpion.actuator_target_x [-2 +2]
           world.scorpion.actuator_target_z [-1 +2]
         observations: 
-          sensor: world.scorpion.sensor_head_pos=[+1.91]
-          sensor: world.scorpion.sensor_head_vel=[+0.0134]
-          inputs: world.scorpion.inputs_ball_x=[-5.29]
-          inputs: world.scorpion.inputs_ball_y=[-0.734]
+          sensor: world.scorpion.sensor_head_pos=[-2.09]
+          sensor: world.scorpion.sensor_head_vel=[-1.87e-06]
+          inputs: world.scorpion.inputs_ball_x=[-4.73]
+          inputs: world.scorpion.inputs_ball_y=[+2.42]
           inputs: world.scorpion.inputs_ball_z=[-4.8]
-          sensor: world.scorpion.tentacle.sensor_s1_pos=[+1.04]
-          sensor: world.scorpion.tentacle.sensor_s1_vel=[+2.75]
-          sensor: world.scorpion.tentacle.sensor_s2_pos=[-1.88]
-          sensor: world.scorpion.tentacle.sensor_s2_vel=[-4.41]
-          sensor: world.scorpion.tentacle.sensor_s3_pos=[+1.38]
-          sensor: world.scorpion.tentacle.sensor_s3_vel=[-5.59]
-          inputs: world.scorpion.tentacle.inputs_target_x=[+0.475]
-          inputs: world.scorpion.tentacle.inputs_target_z=[+0.317]
-          sensor: world.scorpion.target.sensor_x=[+0.475]
-          sensor: world.scorpion.target.sensor_z=[+0.317]
+          sensor: world.scorpion.tentacle.sensor_s1_pos=[+0.968]
+          sensor: world.scorpion.tentacle.sensor_s1_vel=[+0.0539]
+          sensor: world.scorpion.tentacle.sensor_s2_pos=[-2.04]
+          sensor: world.scorpion.tentacle.sensor_s2_vel=[+0.389]
+          sensor: world.scorpion.tentacle.sensor_s3_pos=[+1.31]
+          sensor: world.scorpion.tentacle.sensor_s3_vel=[+3.03]
+          inputs: world.scorpion.tentacle.inputs_target_x=[+0.267]
+          inputs: world.scorpion.tentacle.inputs_target_z=[+0.309]
+          sensor: world.scorpion.target.sensor_x=[+0.267]
+          sensor: world.scorpion.target.sensor_z=[+0.309]
         mind: TensorflowMind:
-          saved_episode: 3199
+          saved_episode: 29799
           algorithm: DDPG_PeterKovacs
             scope: DDPG_PeterKovacs_world_scorpion
             obs_dim: 15
@@ -179,11 +179,11 @@ Experiment:
             buffer: ReplayBuffer:
               buffer_size: 100000
               num_experiences: 100000
-            episode: 3399
+            episode: 29999
         agents: 
           world.scorpion.tentacle: MujocoAgent:
             model_path: ./assets/tentacle.xml
-            alg_obs: [+1.04,+2.75,-1.88,-4.41,+1.38,-5.59,+0.475,+0.317]
+            alg_obs: [+0.968,+0.0539,-2.04,+0.389,+1.31,+3.03,+0.267,+0.309]
             alg_obs_dim: 8
             alg_act_dim: 3
             sensors: 
@@ -198,14 +198,14 @@ Experiment:
               world.scorpion.tentacle.actuator_s2 [-1500 +1500]
               world.scorpion.tentacle.actuator_s3 [-500 +500]
             observations: 
-              sensor: world.scorpion.tentacle.sensor_s1_pos=[+1.04]
-              sensor: world.scorpion.tentacle.sensor_s1_vel=[+2.75]
-              sensor: world.scorpion.tentacle.sensor_s2_pos=[-1.88]
-              sensor: world.scorpion.tentacle.sensor_s2_vel=[-4.41]
-              sensor: world.scorpion.tentacle.sensor_s3_pos=[+1.38]
-              sensor: world.scorpion.tentacle.sensor_s3_vel=[-5.59]
-              inputs: world.scorpion.tentacle.inputs_target_x=[+0.475]
-              inputs: world.scorpion.tentacle.inputs_target_z=[+0.317]
+              sensor: world.scorpion.tentacle.sensor_s1_pos=[+0.968]
+              sensor: world.scorpion.tentacle.sensor_s1_vel=[+0.0539]
+              sensor: world.scorpion.tentacle.sensor_s2_pos=[-2.04]
+              sensor: world.scorpion.tentacle.sensor_s2_vel=[+0.389]
+              sensor: world.scorpion.tentacle.sensor_s3_pos=[+1.31]
+              sensor: world.scorpion.tentacle.sensor_s3_vel=[+3.03]
+              inputs: world.scorpion.tentacle.inputs_target_x=[+0.267]
+              inputs: world.scorpion.tentacle.inputs_target_z=[+0.309]
             mind: TensorflowMind:
               saved_episode: 22399
               algorithm: DDPG_PeterKovacs
@@ -220,7 +220,7 @@ Experiment:
               no
           world.scorpion.target: MujocoAgent:
             model_path: ./assets/target.xml
-            alg_obs: [+0.475,+0.317]
+            alg_obs: [+0.267,+0.309]
             alg_obs_dim: 2
             alg_act_dim: 0
             sensors: 
@@ -229,8 +229,8 @@ Experiment:
             actuators: 
               no
             observations: 
-              sensor: world.scorpion.target.sensor_x=[+0.475]
-              sensor: world.scorpion.target.sensor_z=[+0.317]
+              sensor: world.scorpion.target.sensor_x=[+0.267]
+              sensor: world.scorpion.target.sensor_z=[+0.309]
             mind: TensorflowMind:
               saved_episode: None
               algorithm: DummyAlgorithm:
@@ -241,7 +241,7 @@ Experiment:
               no
       world.ball: MujocoAgent:
         model_path: ./assets/ball.xml
-        alg_obs: [-5.29,-0.734,-4.8,-0.000356,+0.000524,+6.68e-05,+0.000541,+0.0637,+9.81]
+        alg_obs: [-4.73,+2.42,-4.8,+0.000253,+0.000342,+2.42e-10,-1.06e-08,-5.41e-09,+9.81]
         alg_obs_dim: 9
         alg_act_dim: 0
         sensors: 
@@ -255,13 +255,13 @@ Experiment:
         actuators: 
           no
         observations: 
-          sensor: world.ball.sensor_x=[-5.29]
-          sensor: world.ball.sensor_y=[-0.734]
+          sensor: world.ball.sensor_x=[-4.73]
+          sensor: world.ball.sensor_y=[+2.42]
           sensor: world.ball.sensor_z=[-4.8]
-          sensor: world.ball.sensor_vx=[-0.000356]
-          sensor: world.ball.sensor_vy=[+0.000524]
-          sensor: world.ball.sensor_vz=[+6.68e-05]
-          sensor: world.ball.sensor_accelerometer=[+0.000541,+0.0637,+9.81]
+          sensor: world.ball.sensor_vx=[+0.000253]
+          sensor: world.ball.sensor_vy=[+0.000342]
+          sensor: world.ball.sensor_vz=[+2.42e-10]
+          sensor: world.ball.sensor_accelerometer=[-1.06e-08,-5.41e-09,+9.81]
         mind: TensorflowMind:
           saved_episode: None
           algorithm: DummyAlgorithm:
@@ -271,9 +271,9 @@ Experiment:
         agents: 
           no
   logger: Logger:
-    saved_time: 00:55:26
-    train_history: 3400
-    eval_history: 335
+    saved_time: 01:30:17
+    train_history: 30000
+    eval_history: 2994
     reporter: Reporter:
       html_path: /home/roman-ml/prj/rmus/zoo/zoo/scorpion/experiments/004/reporter/report.html</pre>
 </BODY></HTML>

@@ -1,5 +1,6 @@
 TODO:
-> fix demo and eval while training scorpion (see world.run_episode and agent.predict_actions)
+- train to catch the ball (add ball.velocity to inputs) reward := z^2 - |x| - |y| if z>2, done := z<1
+- fix demo and eval while training scorpion (see world.run_episode and agent.predict_actions)
 - demo scorpion
 - simulate MVP model (arm and spoon)
 
