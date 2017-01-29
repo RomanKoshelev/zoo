@@ -23,5 +23,5 @@ def jpos_init_ball():
     return {
         'world.ball.coords_x': x,
         'world.ball.coords_y': y,
-        'world.ball.coords_z': -2,
+        'world.ball.coords_z': -1.5,
     }

@@ -8,7 +8,7 @@ from zoo.scorpion.target import jpos_init_ball
 
 config['exp.id'] = "006"
 config['exp.steps'] = 75
-config['exp.episodes'] = 10000
+config['exp.episodes'] = 15000
 config['train.agent'] = "world.scorpion"
 config['env.reward_method'] = ball_reward
 config['env.world.scorpion.algorithm'] = DDPG_PeterKovacs
