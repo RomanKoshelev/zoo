@@ -1,5 +1,5 @@
 TODO:
-- train to catch the ball (add ball.velocity to inputs) reward := z^2 - |x| - |y| if z>2, done := z<1
+- train to move target to ball (dist ball-target)
 - fix demo and eval while training scorpion (see world.run_episode and agent.predict_actions)
 - demo scorpion
 - simulate MVP model (arm and spoon)
@@ -10,6 +10,7 @@ LATER:
 - move to python 3.4
 
 DONE:
+x train to catch the ball (add ball.velocity to inputs) reward := z^2 - |x| - |y| if z>2, done := z<1
 + train scorpion with pretrained tentacle
 + demo pretrained tentacle
 + format alg_obs
