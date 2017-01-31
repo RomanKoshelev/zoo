@@ -4,8 +4,8 @@ from alg.ddpg_peter_kovacs.ddpg_alg import DDPG_PeterKovacs
 from alg.random_alg import RandomAlgorithm
 from config import config
 from core.experiment import Experiment
-from zoo.scorpion.rewards import tentacle_reward
-from zoo.scorpion.target import jpos_random_target
+from zoo.scorpion.task_rewards import tentacle_reward
+from zoo.scorpion.task_init_jpos import jpos_random_target
 
 config['exp.id'] = "003"
 config['exp.steps'] = 50

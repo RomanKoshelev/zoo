@@ -3,8 +3,8 @@ from __future__ import print_function
 from alg.ddpg_peter_kovacs.ddpg_alg import DDPG_PeterKovacs
 from config import config
 from core.experiment import Experiment
-from zoo.scorpion.rewards import ball_reward
-from zoo.scorpion.target import jpos_init_ball
+from zoo.scorpion.task_rewards import ball_reward
+from zoo.scorpion.task_init_jpos import jpos_init_ball
 
 config['exp.id'] = "006"
 config['exp.steps'] = 75

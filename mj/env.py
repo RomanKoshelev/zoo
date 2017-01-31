@@ -48,9 +48,12 @@ class ZooMujocoEnv(MujocoEnv):
     def _step(self, action):
         self.do_simulation(action, self.frame_skip)
         ob = self._get_obs()
+
+        # todo: use Task object here
         r = Context.config['env.reward_method'](self)
-        done = False
+        done = Context.config['env.done_method'](self)
         self._update_joints(Context.config.get('env.step_jpos_method', lambda: {})())
+
         self._update_title()
         self.step_num += 1
         return ob, r, done, {}

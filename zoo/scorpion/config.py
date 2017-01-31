@@ -2,11 +2,12 @@ from alg.dummy_alg import DummyAlgorithm
 from tf.mind import TensorflowMind
 from core.logger import Logger
 from tf.platform import TensorflowPlatform
-from zoo.scorpion.rewards import zero_reward
+from zoo.scorpion.task_rewards import zero_reward
 from zoo.scorpion.scorpion import ScorpionAgent
-from zoo.scorpion.target import jpos_do_nothing
+from zoo.scorpion.task_init_jpos import jpos_do_nothing
 from utils.noise_tools import linear_05_00
 from zoo.scorpion.world import ScorpionWorld
+from zoo.scorpion.task_done import done_false
 
 config = {
     'exp.id': None,
@@ -35,11 +36,14 @@ config = {
     'env.world.scorpion.tentacle.inputs': ['target_x', 'target_z'],
     'env.world.scorpion.tentacle.algorithm': DummyAlgorithm,
 
+    # task
     'env.reward_method': zero_reward,
     'env.episode_jpos_method': jpos_do_nothing,
     'env.step_jpos_method': jpos_do_nothing,
     'env.target_range_xz': [[-.7, +.7], [+.5, +1.0]],
     'env.init_every_episods': 30,
+    'env.done_method': done_false,
+
 
     'mind.evaluate_every_episodes': 10,
 
@@ -56,7 +60,7 @@ config = {
     'report.diagram_mean_frame': 50,
     'report.refresh_html_every_secs': 90,
 
-    'view.width': 1200,
-    'view.height': 800,
+    'view.width': 600,  # 1200,
+    'view.height': 400,  # 800,
 
 }

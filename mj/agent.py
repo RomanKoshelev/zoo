@@ -90,18 +90,11 @@ class MujocoAgent:
             for a in self.agents:
                 a.train()
 
-    def demo(self):
-        if self.is_training:
-            self.mind.demo()
-        else:
-            for a in self.agents:
-                a.demo()
-
     def restore(self):
         Context.logger.log("Restoring %s..." % self.full_id)
+        self.mind.restore()
         for a in self.agents:
             a.restore()
-        self.mind.restore()
 
     def try_restore(self):
         Context.logger.log("Trying restore %s..." % self.full_id)
