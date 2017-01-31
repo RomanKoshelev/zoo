@@ -14,7 +14,7 @@ config = {
     'exp.steps': 50,
     'exp.episodes': 30000,
     'exp.save_every_episodes': 100,
-    'exp.base_path': "experiments/",
+    'exp.base_path': "../experiments/",
 
     'exp.platform_class': TensorflowPlatform,
     'exp.mind_class': TensorflowMind,
@@ -22,7 +22,7 @@ config = {
     'exp.logger_class': Logger,
 
     'env.id': "Zoo:Mujoco:Scorpion-v1",
-    'env.assets': "./assets/",
+    'env.assets': "../assets/",
     'env.frame_skip': 2,
 
     # world
@@ -43,7 +43,6 @@ config = {
     'env.target_range_xz': [[-.7, +.7], [+.5, +1.0]],
     'env.init_every_episods': 30,
     'env.done_method': done_false,
-
 
     'mind.evaluate_every_episodes': 10,
 

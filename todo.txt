@@ -1,4 +1,5 @@
 TODO:
+- add ball_dist to scorpion.inputs
 - train to move target to ball (dist ball-target)
 - train to move target to fixed ball if failed to mobile one
 - report eval actions to be shure it works (with corresponded actuators names)
