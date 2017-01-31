@@ -13,7 +13,7 @@ config = {
     'exp.id': None,
     'exp.steps': 50,
     'exp.episodes': 30000,
-    'exp.save_every_episodes': 200,
+    'exp.save_every_episodes': 100,
     'exp.base_path': "experiments/",
 
     'exp.platform_class': TensorflowPlatform,
@@ -55,12 +55,11 @@ config = {
     'alg.noise_theta': .01,
     'alg.noise_rate_method': linear_05_00,
 
-    'report.write_every_episodes': 10,
+    'report.write_every_episodes': 2,
     'report.summary_every_episodes': 30,
     'report.diagram_mean_frame': 50,
     'report.refresh_html_every_secs': 90,
 
-    'view.width': 600,  # 1200,
-    'view.height': 400,  # 800,
-
+    'view.width': 800,  # 1200,
+    'view.height': 1000,  # 800,
 }

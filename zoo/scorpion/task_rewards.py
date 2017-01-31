@@ -36,7 +36,6 @@ def target_ball_reward(env):
 
 def ball_height_reward(env):
     x, y, z = env.site_pos('world.ball')
-    h = 4.8
-    height_reward = z - h
-
-    return 100 * height_reward + max(0, target_ball_reward(env))
+    h = 3
+    height_reward = (1 if z > h else -1) * (z - h) ** 2
+    return height_reward + max(0, ball_reward(env))

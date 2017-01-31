@@ -51,9 +51,14 @@ class Logger:
         if (e + 1) % Context.config['exp.save_every_episodes'] == 0:
             self._save_state()
 
+    @staticmethod
+    def on_evaluiation_start():
+        Context.window_title['episode'] = "| Evaluating..."
+
     def on_evaluiation_end(self, e, r):
         self._log_evaluiation_end(r)
         self._eval_history.append([e, self.time_spent, r])  # e,t,r
+        Context.window_title['episode'] = "| Trainig..."
 
     @property
     def episode(self):
@@ -109,10 +114,6 @@ class Logger:
             'eval_history': self._eval_history,
         }
         self._reporter.write_html_report(info)
-
-    @staticmethod
-    def on_evaluiation_start():
-        Context.window_title['episode'] = "| Evaluating ..."
 
     def _log_evaluiation_end(self, r):
         pass
