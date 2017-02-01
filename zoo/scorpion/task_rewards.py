@@ -39,3 +39,10 @@ def ball_height_reward(env):
     h = 3
     height_reward = (1 if z > h else -1) * (z - h) ** 2
     return height_reward + max(0, ball_reward(env))
+
+
+def ball_very_height_reward(env):
+    x, y, z = env.site_pos('world.ball')
+    h = 3
+    height_reward = (1 if z > h else -1) * (z - h) ** 2
+    return 10 * height_reward + max(0, ball_reward(env))

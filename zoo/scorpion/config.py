@@ -60,5 +60,5 @@ config = {
     'report.refresh_html_every_secs': 90,
 
     'view.width': 800,  # 1200,
-    'view.height': 1000,  # 800,
+    'view.height': 600,  # 800,
 }
