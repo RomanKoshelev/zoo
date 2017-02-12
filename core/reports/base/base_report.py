@@ -3,10 +3,10 @@ import inspect
 import os
 import socket
 
-from common.reports.base.page_builder import PageBuilder
-from common.utils.lazyproperty import lazyproperty
-from common.utils.os_tools import make_dir_if_not_exists, make_symlink
-from common.utils.time_tools import datetime_after_secs
+from core.reports.base.page_builder import PageBuilder
+from utils.lazyproperty import lazyproperty
+from utils.os_tools import make_dir_if_not_exists
+from utils.time_tools import datetime_after_secs
 
 GROUPS = ['exp', 'ds', 'nn', 'train', 'test', 'report', 'log']
 GROUP_NAMES = {
@@ -25,7 +25,7 @@ class BaseReport:
         self.config = config
         self.exp_id = config['exp.id']
         self.report_id = report_id
-        self.work_path = os.path.join(config['exp.base_path'], config['exp.id'], 'report')
+        self.work_path = os.path.join(config['exp.base_path'], config['exp.id'], 'reporter')
         self.info = info
         self.content = None
         self.dataset_path = dataset_path
@@ -123,17 +123,11 @@ class BaseReport:
     def save(self):
         with open(make_dir_if_not_exists(self._report_path), "w") as f:
             f.write(self.content)
-        self._make_ref()
         self.page.update_files()
 
     def _make_classified_img_path(self, img_path):
         class_image = '/'.join(img_path.split('/')[-2:])
         return os.path.join(self.dataset_path, class_image)
-
-    def _make_ref(self):
-        if self.dataset_path is not None:
-            link_path = os.path.join(self.work_path, self.dataset_path)
-            make_symlink(self.config['ds.test_path'], link_path)
 
     @property
     def _report_path(self):

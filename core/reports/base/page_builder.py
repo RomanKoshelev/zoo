@@ -2,10 +2,10 @@ import os
 
 from asq.initiators import query
 
-from common.utils.os_tools import listdirs
+from utils.os_tools import listdirs
 
 LEFT_MENU_HTML = "left_menu.html"
-TOP_MENU_HTML = "top_menu_%s.html"
+TOP_MENU_HTML = "top_menu.html"
 INDEX_HTML = "index.html"
 
 
@@ -16,11 +16,12 @@ class PageBuilder:
         self.report_registry = []
         self._register('main_report', 'Main')
         self._register('train_report', 'Train')
-        self._register('test_report', 'Test')
-        self._register('error_report', 'Errors')
-        self._register('signal_report', 'Signals')
-        self._left_menu_path = os.path.join(self.config['report.http_home'], LEFT_MENU_HTML)
-        self._top_menu_path = os.path.join(self._report.work_path, TOP_MENU_HTML % self._report.exp_id)
+
+        self._left_menu_path = os.path.join(self.config['exp.base_path'], LEFT_MENU_HTML)
+        self._top_menu_path = os.path.join(report.work_path, TOP_MENU_HTML)
+
+        self._left_menu_url = config['report.http_home'] + LEFT_MENU_HTML
+        self._top_menu_url = config['report.http_home'] + report.exp_id + '/reporter/' + TOP_MENU_HTML
 
     def get_report_name(self, report_id):
         report = query(self.report_registry).first_or_default(None, lambda r: r['id'] == report_id)
@@ -38,7 +39,7 @@ class PageBuilder:
           $("#report_menu").load("%s");
         });
         </script>
-        """ % (self._left_menu_path, self._top_menu_path)
+        """ % (self._left_menu_url, self._top_menu_url)
 
     @staticmethod
     def css_styles():
@@ -80,7 +81,7 @@ class PageBuilder:
             self.report_registry.append({
                 'id': rid,
                 'name': name,
-                'path': 'report/%s.html' % rid
+                'path': 'reporter/%s.html' % rid
             })
 
     def _update_root(self):
@@ -102,12 +103,12 @@ class PageBuilder:
         http_home = self.config['report.http_home']
         http_root = self.config['report.http_root']
         s = ""
-        s += "<a class=left_menu href='%s'>NetForge</a> | " % http_root
-        s += "<a class=left_menu href='%s'>%s experiments</a>" % (http_home, exp_group)
+        s += "<a class=left_menu href='%s'>Rmus</a> | " % http_root
+        s += "<a class=left_menu href='%s'>%s</a>" % (http_home, exp_group)
         s += "\n\n"
 
         for exp_id in listdirs(exp_path):
-            s += "  <a class=left_menu href='%s%s/report/main_report.html'>%s</a>\n" % (http_home, exp_id, exp_id)
+            s += "  <a class=left_menu href='%s%s/reporter/main_report.html'>%s</a>\n" % (http_home, exp_id, exp_id)
 
         with open(self._left_menu_path, 'w') as f:
             f.write(s)

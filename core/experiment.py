@@ -2,6 +2,7 @@ from __future__ import print_function
 import os
 
 from core.context import Context
+from core.reports.main_report import MainReport
 from utils.string_tools import tab
 
 
@@ -52,8 +53,11 @@ class Experiment:
         self._platform = Context.config['exp.platform_class']()
         self._world = Context.config['exp.world_class']()
 
-    def main_report(self):
-        pass
+    @staticmethod
+    def main_report():
+        report = MainReport(Context.config)
+        report.make()
+        report.save()
 
     @property
     def work_path(self):

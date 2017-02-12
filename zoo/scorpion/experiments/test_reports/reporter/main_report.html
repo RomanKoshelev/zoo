@@ -1,0 +1,62 @@
+<html><head><title>#test_reports-main_report</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script>
+        $(document).ready(function(){
+          $("#left_menu").load("/rmus/experiments/scorpion/left_menu.html");
+          $("#report_menu").load("/rmus/experiments/scorpion/test_reports/reporter/top_menu.html");
+        });
+        </script>
+        
+        <style type='text/css'>
+        body, html {padding: 0; margin:0;}
+        a.left_menu:link { color:#AAA; text-decoration:none; font-weight:normal; }
+        a.left_menu:visited { color: #AAA; text-decoration:none; font-weight:normal; }
+        a.left_menu:hover { color: #FFF; text-decoration:underline; font-weight:normal; }
+        a.left_menu:active { color: #AAA; text-decoration:none; font-weight:normal; }
+        a.top_menu:link { color:#AAA; text-decoration:none; font-weight:normal; }
+        a.top_menu:visited { color: #AAA; text-decoration:none; font-weight:normal; }
+        a.top_menu:hover { color: #444; text-decoration:underline; font-weight:normal; }
+        a.top_menu:active { color: #AAA; text-decoration:none; font-weight:normal; }
+        </style>
+        </head><body bgcolor=#FFFFFF><font face='courier'>
+        <table cellpadding=5 width=100% height=100%><tr><td valign=top width=200 bgcolor=#444444>
+          <font color=#DDD>
+          <pre><div id="left_menu"></div></pre>
+          </font>
+        </td><td valign=top>
+        <table width=100%><tr><td bgcolor='#888'>&nbsp;<font size=+2 color=#FFF>test_reports</font></td></tr></table><table width=100%><tr><td bgcolor='#CCC'>&nbsp;<font size=+4 color=#FFF>Main</font></td></tr></table><div id='report_menu'></div><font color=#888888><pre>
+  Description:     make reports greate again
+  Host name:       bernard
+  Reported at:     20:31:13 2017-02-12
+</pre></font>
+<h2>Configuration</h2>
+<pre>
+<b>  Experiment:</b>
+    exp.base_path:                   ../experiments/
+    exp.description:                 make reports greate again
+    exp.episodes:                    15000
+    exp.group:                       scorpion
+    exp.id:                          test_reports
+    exp.logger_class:                <i>core.logger</i>.Logger
+    exp.mind_class:                  <i>tf.mind</i>.TensorflowMind
+    exp.platform_class:              <i>tf.platform</i>.TensorflowPlatform
+    exp.save_every_episodes:         100
+    exp.steps:                       300
+    exp.world_class:                 <i>zoo.scorpion.world</i>.ScorpionWorld
+<b>  BaseDataset:</b>
+<b>  BaseNetwork:</b>
+<b>  Training:</b>
+    train.agent:                     world.scorpion
+<b>  Testing:</b>
+<b>  Reporting:</b>
+    report.diagram_mean_frame:       50
+    report.http_home:                /rmus/experiments/scorpion/
+    report.http_root:                /rmus/
+    report.refresh_html_every_secs:  90
+    report.summary_every_episodes:   30
+    report.width:                    116
+    report.write_every_episodes:     2
+<b>  Logging:</b>
+</pre>
+<br/><br/><br/><table width=100%%><tr><td bgcolor='#CCC'><font color=#FFF>&nbsp;</font></td></tr></table>
+</td></tr></table></font></body></html>

@@ -11,6 +11,9 @@ from zoo.scorpion.task_done import done_false
 
 config = {
     'exp.id': None,
+    'exp.group': 'scorpion',
+    'exp.description': None,
+
     'exp.steps': 50,
     'exp.episodes': 30000,
     'exp.save_every_episodes': 100,
@@ -58,6 +61,9 @@ config = {
     'report.summary_every_episodes': 30,
     'report.diagram_mean_frame': 50,
     'report.refresh_html_every_secs': 90,
+    'report.http_root': "/rmus/",
+    'report.http_home': "/rmus/experiments/scorpion/",
+    'report.width': 116,
 
     'view.width': 800,  # 1200,
     'view.height': 600,  # 800,

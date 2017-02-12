@@ -2,12 +2,14 @@ from __future__ import print_function
 
 from alg.ddpg_peter_kovacs.ddpg_alg import DDPG_PeterKovacs
 from core.experiment import Experiment
+from utils.os_tools import main_script_name
 from zoo.scorpion.config import config
 from zoo.scorpion.task_done import done_ball_under_1
 from zoo.scorpion.task_rewards import ball_height_reward
 from zoo.scorpion.task_init_jpos import jpos_init_ball
 
-config['exp.id'] = "009"
+config['exp.id'] = main_script_name()
+config['exp.description'] = "make reports greate again"
 config['exp.steps'] = 300
 config['exp.episodes'] = 15000
 config['train.agent'] = "world.scorpion"
