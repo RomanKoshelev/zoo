@@ -1,13 +1,11 @@
-from __future__ import print_function
-
 import numpy as np
 import tensorflow as tf
 
-import config as cfg
-from actor import ActorNetwork
+from alg.ddpg_peter_kovacs import config as cfg
+from .actor import ActorNetwork
 from tf.algorithm import TensorflowAlgorithm
-from buffer import ReplayBuffer
-from critic import CriticNetwork
+from .buffer import ReplayBuffer
+from .critic import CriticNetwork
 from core.context import Context
 from utils.ou_noise import OUNoise
 from utils.string_tools import tab
@@ -54,7 +52,7 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
             if self.episode % 100 == 0:
                 expl.reset()
 
-            for step in xrange(steps):
+            for _ in range(steps):
                 # play
                 a = self._make_noisy_action(s, expl.noise(), nrate)
                 s2, r, done = on_step(a)
@@ -87,7 +85,7 @@ class DDPG_PeterKovacs(TensorflowAlgorithm):
     def _make_target(self, r, s2, done):
         q = self.critic.target_predict(s2, self.actor.target_predict(s2))
         y = []
-        for i in xrange(len(s2)):
+        for i in range(len(s2)):
             if done[i]:
                 y.append(r[i])
             else:

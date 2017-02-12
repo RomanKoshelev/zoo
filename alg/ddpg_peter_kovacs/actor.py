@@ -12,17 +12,16 @@ class ActorNetwork(object):
         self.L2 = cfg.L2A
 
         with tf.variable_scope('master'):
-            self.state, self.out, self.net = self.create_actor_network(state_size, action_size)
+            self.state, self.out, self.weights = self.create_actor_network(state_size, action_size)
 
         with tf.variable_scope('target'):
             self.target_state, self.target_update, self.target_net, self.target_out = \
-                self.crate_actor_target_network(state_size, self.net)
+                self.crate_actor_target_network(state_size, self.weights)
 
         # TRAINING
         self.action_gradient = tf.placeholder(tf.float32, [None, action_size], name='action_gradient')
-        self.params_grad = tf.gradients(
-            self.out, self.net, -self.action_gradient)
-        grads = zip(self.params_grad, self.net)
+        self.grads = tf.gradients(self.out, self.weights, -self.action_gradient)
+        grads = zip(self.grads, self.weights)
         self.optimize = tf.train.AdamOptimizer(cfg.LRA).apply_gradients(grads)
 
     def train(self, states, action_grads):
@@ -44,18 +43,18 @@ class ActorNetwork(object):
     def target_train(self):
         self.sess.run(self.target_update)
 
-    def crate_actor_target_network(self, input_dim, net):
+    def crate_actor_target_network(self, input_dim, weights):
         state = tf.placeholder(tf.float32, shape=[None, input_dim], name='state')
 
         ema = tf.train.ExponentialMovingAverage(decay=1 - self.TAU)
-        target_update = ema.apply(net)
-        target_net = [ema.average(x) for x in net]
+        target_update = ema.apply(weights)
+        target_weights = [ema.average(x) for x in weights]
 
-        h1 = tf.nn.relu(tf.matmul(state, target_net[0]) + target_net[1])
-        h2 = tf.nn.relu(tf.matmul(h1, target_net[2]) + target_net[3])
-        out = tf.tanh(tf.matmul(h2, target_net[4]) + target_net[5])
+        h1 = tf.nn.relu(tf.matmul(state, target_weights[0]) + target_weights[1])
+        h2 = tf.nn.relu(tf.matmul(h1, target_weights[2]) + target_weights[3])
+        out = tf.tanh(tf.matmul(h2, target_weights[4]) + target_weights[5])
 
-        return state, target_update, target_net, out
+        return state, target_update, target_weights, out
 
     def create_actor_network(self, input_dim, output_dim):
         state = tf.placeholder(tf.float32, shape=[None, input_dim], name='state')

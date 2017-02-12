@@ -77,7 +77,7 @@ class Stopwatch(object):
         """
         self.stop()
         if errtype:
-            raise errtype, value, traceback
+            raise errtype
 
     def __str__(self):
         return "%.2f" % self.time_elapsed

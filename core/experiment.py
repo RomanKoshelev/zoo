@@ -28,7 +28,7 @@ class Experiment:
         self._update_title()
         self._world.try_restore()
         self._logger.try_restore()
-        self._print_instances()
+        # self._print_instances()
         self._logger.on_start()
         print("Train %s" % Context.config['train.agent'])
         self._world.train()
@@ -38,11 +38,11 @@ class Experiment:
         self._update_title()
         self._world.restore()
         self._logger.restore()
-        self._print_instances()
+        # self._print_instances()
 
         episodes = Context.config['exp.episodes']
         steps = Context.config['exp.steps']
-        for ep in xrange(episodes):
+        for ep in range(episodes):
             reward = self._world.run_episode(steps)
             Context.window_title['episode'] = "|  %d: R = %+.0f" % (ep, reward)
             print("%3d  Reward = %+7.0f" % (ep, reward))
@@ -52,6 +52,9 @@ class Experiment:
         self._platform = Context.config['exp.platform_class']()
         self._world = Context.config['exp.world_class']()
 
+    def main_report(self):
+        pass
+
     @property
     def work_path(self):
         return os.path.join(Context.config['exp.base_path'], self.id)
@@ -59,5 +62,5 @@ class Experiment:
     def _update_title(self):
         Context.window_title['exp'] = "| %s #%s" % (Context.mode, self.id)
 
-    def _print_instances(self):
+    def print_instances(self):
         print(str(self).replace('\t', '  '))

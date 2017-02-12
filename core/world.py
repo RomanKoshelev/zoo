@@ -7,6 +7,7 @@ class GymWorld:
     def __init__(self):
         Context.world = self
         self.state = None
+        self._env = None
         self.env_id = Context.config['env.id']
         self._env = gym.make(self.env_id)
         self.reset()

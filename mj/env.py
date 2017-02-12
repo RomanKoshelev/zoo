@@ -14,6 +14,7 @@ from utils.string_tools import tab
 
 class ZooMujocoEnv(MujocoEnv):
     def __init__(self):
+        self.viewer = None
         self.work_path = Context.work_path
         self.world = Context.world
         self.step_num = 0
@@ -80,7 +81,7 @@ class ZooMujocoEnv(MujocoEnv):
     def _update_joints(self, jpos):
         qpos = self.model.data.qpos.ravel().copy()
         qvel = self.model.data.qvel.ravel().copy()
-        for j, pos in jpos.iteritems():
+        for j, pos in jpos.items():
             qposadr, qveladr, _ = self.model.joint_adr(j)
             qpos[qposadr] = pos
             qvel[qveladr] = 0.
@@ -93,9 +94,9 @@ class ZooMujocoEnv(MujocoEnv):
     def get_sensor_val(self, sensor_name):
         dims = np.asarray(self.model.sensor_dim).flat
         data = np.asarray(self.model.data.sensordata).flat
-        dim_idx = self.sensor_names.index(six.b(sensor_name))
+        dim_idx = self.sensor_names.index(sensor_name)
         data_idx = np.sum(dims[:dim_idx])
-        return np.asarray([data[data_idx + i] for i in xrange(dims[dim_idx])])
+        return np.asarray([data[data_idx + i] for i in range(dims[dim_idx])])
 
     def _get_sensor_dim(self, idx):
         dims = np.asarray(self.model.sensor_dim).flat
@@ -109,13 +110,13 @@ class ZooMujocoEnv(MujocoEnv):
     @property
     def actuator_names(self):
         start_addr = ctypes.addressof(self.model.names.contents)
-        return [ctypes.string_at(start_addr + int(inc))
+        return [ctypes.string_at(start_addr + int(inc)).decode("utf-8")
                 for inc in self.model.name_actuatoradr.flatten()]
 
     @property
     def sensor_names(self):
         start_addr = ctypes.addressof(self.model.names.contents)
-        return [ctypes.string_at(start_addr + int(inc))
+        return [ctypes.string_at(start_addr + int(inc)).decode("utf-8")
                 for inc in self.model.name_sensoradr.flatten()]
 
     @property

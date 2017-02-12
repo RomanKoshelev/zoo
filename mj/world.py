@@ -26,7 +26,7 @@ class MujocoWorld(GymWorld, MujocoAgent):
     def run_episode(self, steps):
         self.reset()
         reward = 0
-        for t in xrange(steps):
+        for t in range(steps):
             self.render()
             actions = self.predict_actions(self.empty_actions)
             s, r, done, _ = self.step(actions)

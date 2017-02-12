@@ -12,17 +12,17 @@ class CriticNetwork(object):
         self.L2 = cfg.L2C
 
         with tf.variable_scope('master'):
-            self.state, self.action, self.out, self.net = \
+            self.state, self.action, self.out, self.weights = \
                 self.create_critic_network(state_size, action_size)
 
         with tf.variable_scope('target'):
             self.target_state, self.target_action, self.target_update, self.target_net, self.target_out = \
-                self.crate_critic_target_network(state_size, action_size, self.net)
+                self.crate_critic_target_network(state_size, action_size, self.weights)
 
         # TRAINING
         self.y = tf.placeholder(tf.float32, [None, 1], name='y')
         self.error = tf.reduce_mean(tf.square(self.y - self.out))
-        self.weight_decay = tf.add_n([self.L2 * tf.nn.l2_loss(var) for var in self.net])
+        self.weight_decay = tf.add_n([self.L2 * tf.nn.l2_loss(var) for var in self.weights])
         self.loss = self.error + self.weight_decay
         self.optimize = tf.train.AdamOptimizer(cfg.LRC).minimize(self.loss)
 

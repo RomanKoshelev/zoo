@@ -13,7 +13,7 @@ class TensorflowMind:
         self._algorithm = None
         self._algorithm_class = algorithm_class
         self._logger = Context.logger
-        self._saved_episode = None
+        self._saved_episode = -1
 
     def __str__(self):
         return "%s:\n\t%s\n\t%s" % (

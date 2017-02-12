@@ -121,7 +121,7 @@ class Reporter:
         s += "<pre>\n"
         for g in GROUPS:
             s += "<b>  %s:</b>\n" % GROUP_NAMES[g]
-            for k, v in iter(sorted(Context.config.iteritems())):
+            for k, v in iter(sorted(Context.config.items())):
                 if k.startswith(g + '.'):
                     s += "    %-32s %s\n" % (k + ":", to_str(v))
         s += "</pre>\n"

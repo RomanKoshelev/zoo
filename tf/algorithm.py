@@ -24,7 +24,7 @@ class TensorflowAlgorithm(object):
 
     @property
     def _variables(self):
-        return tf.get_collection(tf.GraphKeys.VARIABLES, scope=self.scope)
+        return tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, scope=self.scope)
 
     @property
     def scope(self):
@@ -32,7 +32,7 @@ class TensorflowAlgorithm(object):
         return name.replace('-', '_').replace(':', '_').replace(' ', '_').replace('.', '_')
 
     def _initialize_variables(self):
-        self.sess.run(tf.initialize_variables(self._variables))
+        self.sess.run(tf.variables_initializer(self._variables))
 
     def predict(self, s):
         raise NotImplementedError
@@ -66,12 +66,12 @@ class TensorflowAlgorithm(object):
 
     @staticmethod
     def _do_save_state(data_list, path):
-        with open(path, 'w') as f:
+        with open(path, 'wb') as f:
             pickle.dump(data_list, f, protocol=pickle.HIGHEST_PROTOCOL)
 
     @staticmethod
     def _do_restore_state(path):
-        with open(path, 'r') as f:
+        with open(path, 'rb') as f:
             return pickle.load(f)
 
     @staticmethod

@@ -1,5 +1,17 @@
-TODO:
-- add ball_dist to scorpion.inputs
+REFACTORING:
+> use new reports
+- show reports in browser
+- plot critic error
+- plot actor error
+- save training state every 10% to be able restore it if need -- use 009/bak/0010000 folder
+- use 009 config and try to fit the best metaparameters
+- train with .2 noise rate
+- train with actor LR/=2
+- manage LR -- use lr_method fo actor and critic to establish learning process
+
+THEN:
+- use relative ball coords and speed in scorpion.inputs (rel to scorpion basis)
+- init ball in random cube above the agent
 - train to move target to ball (dist ball-target)
 - train to move target to fixed ball if failed to mobile one
 - report eval actions to be shure it works (with corresponded actuators names)
@@ -8,12 +20,15 @@ TODO:
 - simulate MVP model (arm and spoon)4
 
 LATER:
+- add BN to improve stability and accelerate learning
 - use task to encapsulate trainig goals (episode_jpos_method, reward_method, done, etc)
 - train: freeze or remove the ball and the turret
 - save params to out_path/params.txt
-- move to python 3.4
 
 DONE:
++ fix warnings in termninal
++ move to python 3.5
++ install http server
 x train to catch the ball (add ball.velocity to inputs) reward := z^2 - |x| - |y| if z>2, done := z<1
 + train scorpion with pretrained tentacle
 + demo pretrained tentacle
