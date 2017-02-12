@@ -1,8 +1,10 @@
 REFACTORING:
-> use new reports
-- show reports in browser
+> add train report
 - plot critic error
 - plot actor error
+- use events in mind and algorithms
+- implement new algorithm for test
+
 - save training state every 10% to be able restore it if need -- use 009/bak/0010000 folder
 - use 009 config and try to fit the best metaparameters
 - train with .2 noise rate
@@ -26,6 +28,8 @@ LATER:
 - save params to out_path/params.txt
 
 DONE:
++ use new reports
++ show reports in browser
 + fix warnings in termninal
 + move to python 3.5
 + install http server

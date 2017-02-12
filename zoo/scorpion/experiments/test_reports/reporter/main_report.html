@@ -27,7 +27,7 @@
         <table width=100%><tr><td bgcolor='#888'>&nbsp;<font size=+2 color=#FFF>test_reports</font></td></tr></table><table width=100%><tr><td bgcolor='#CCC'>&nbsp;<font size=+4 color=#FFF>Main</font></td></tr></table><div id='report_menu'></div><font color=#888888><pre>
   Description:     make reports greate again
   Host name:       bernard
-  Reported at:     20:31:13 2017-02-12
+  Reported at:     21:15:10 2017-02-12
 </pre></font>
 <h2>Configuration</h2>
 <pre>
@@ -43,11 +43,32 @@
     exp.save_every_episodes:         100
     exp.steps:                       300
     exp.world_class:                 <i>zoo.scorpion.world</i>.ScorpionWorld
-<b>  BaseDataset:</b>
-<b>  BaseNetwork:</b>
-<b>  Training:</b>
-    train.agent:                     world.scorpion
-<b>  Testing:</b>
+<b>  Algorithm:</b>
+    alg.batch_size:                  128
+    alg.buffer_size:                 100000
+    alg.noise_rate_method:           <i>utils.noise_tools</i>.linear_05_00
+    alg.noise_sigma:                 0.1
+    alg.noise_theta:                 0.01
+<b>  Mind:</b>
+    mind.evaluate_every_episodes:    10
+<b>  Environment:</b>
+    env.assets:                      ../assets/
+    env.done_method:                 <i>zoo.scorpion.task_done</i>.done_ball_under_1
+    env.episode_jpos_method:         <i>zoo.scorpion.task_init_jpos</i>.jpos_init_ball
+    env.frame_skip:                  2
+    env.id:                          Zoo:Mujoco:Scorpion-v1
+    env.init_every_episods:          30
+    env.reward_method:               <i>zoo.scorpion.task_rewards</i>.ball_height_reward
+    env.step_jpos_method:            <i>zoo.scorpion.task_init_jpos</i>.jpos_do_nothing
+    env.target_range_xz:             [[-0.7, 0.7], [0.5, 1.0]]
+    env.world.agents:                ['scorpion', 'ball']
+    env.world.scorpion.agents:       ['tentacle', 'target']
+    env.world.scorpion.algorithm:    <i>alg.ddpg_peter_kovacs.ddpg_alg</i>.DDPG_PeterKovacs
+    env.world.scorpion.class:        <i>zoo.scorpion.scorpion</i>.ScorpionAgent
+    env.world.scorpion.inputs:       ['ball_x', 'ball_y', 'ball_z', 'ball_vx', 'ball_vy', 'ball_vz']
+    env.world.scorpion.tentacle.algorithm: <i>alg.ddpg_peter_kovacs.ddpg_alg</i>.DDPG_PeterKovacs
+    env.world.scorpion.tentacle.inputs: ['target_x', 'target_z']
+    env.world.scorpion.tentacle.mind_path: ../experiments/003/mind/world.scorpion.tentacle
 <b>  Reporting:</b>
     report.diagram_mean_frame:       50
     report.http_home:                /rmus/experiments/scorpion/
@@ -56,7 +77,6 @@
     report.summary_every_episodes:   30
     report.width:                    116
     report.write_every_episodes:     2
-<b>  Logging:</b>
 </pre>
 <br/><br/><br/><table width=100%%><tr><td bgcolor='#CCC'><font color=#FFF>&nbsp;</font></td></tr></table>
 </td></tr></table></font></body></html>

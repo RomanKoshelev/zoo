@@ -22,5 +22,5 @@ config['env.episode_jpos_method'] = jpos_init_ball
 config['env.done_method'] = done_ball_under_1
 
 exp = Experiment(config)
-exp.main_report()
 exp.print_instances()
+exp.train()

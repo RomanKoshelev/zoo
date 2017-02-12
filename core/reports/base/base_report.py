@@ -8,15 +8,14 @@ from utils.lazyproperty import lazyproperty
 from utils.os_tools import make_dir_if_not_exists
 from utils.time_tools import datetime_after_secs
 
-GROUPS = ['exp', 'ds', 'nn', 'train', 'test', 'report', 'log']
+GROUPS = ['exp', 'alg', 'mind', 'env', 'report']  # 'view'
 GROUP_NAMES = {
     'exp': "Experiment",
-    'ds': "BaseDataset",
-    'nn': "BaseNetwork",
+    'env': "Environment",
+    'mind': "Mind",
+    'alg': "Algorithm",
     'report': "Reporting",
-    'train': "Training",
-    'test': "Testing",
-    'log': "Logging",
+    'view': "Viewing"
 }
 
 

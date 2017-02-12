@@ -1,13 +1,11 @@
-from __future__ import print_function
-
 import os
 import pickle
 
 from core.context import Context
-from core.reporter import Reporter
+from core.reports.train_report import TrainReport
 from utils.os_tools import make_dir_if_not_exists
 from utils.stopwatch import Stopwatch
-from utils.string_tools import hms, tab
+from utils.string_tools import hms
 
 WORK_DIR = "logger/"
 
@@ -21,15 +19,13 @@ class Logger:
         self._saved_time = 0.
         self._train_history = []
         self._eval_history = []
-        self._reporter = Reporter()
 
     def __str__(self):
-        return "%s:\n\t%s\n\t%s\n\t%s\n\t%s" % (
+        return "%s:\n\t%s\n\t%s\n\t%s" % (
             self.__class__.__name__,
             "saved_time: %s" % hms(self._saved_time),
             "train_history: %d" % len(self._train_history),
             "eval_history: %d" % len(self._eval_history),
-            "reporter: %s" % tab(self._reporter),
         )
 
     def on_start(self):
@@ -43,7 +39,7 @@ class Logger:
         self._update_training_title(self._episodes, e, n, r, q)
 
         if (e + 1) % Context.config['report.write_every_episodes'] == 0:
-            self._write_html_report()
+            self._write_train_report()
 
         if (e + 1) % Context.config['report.summary_every_episodes'] == 0:
             self._log_summary(e, self._episodes, self.time_spent)
@@ -103,7 +99,7 @@ class Logger:
             return False
         return True
 
-    def _write_html_report(self):
+    def _write_train_report(self):
         info = {
             'ep': len(self._train_history),
             'eps': self._episodes,
@@ -113,7 +109,9 @@ class Logger:
             'train_history': self._train_history,
             'eval_history': self._eval_history,
         }
-        self._reporter.write_html_report(info)
+        report = TrainReport(Context.config, info)
+        report.make()
+        report.save()
 
     def _log_evaluiation_end(self, r):
         pass

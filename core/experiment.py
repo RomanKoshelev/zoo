@@ -13,6 +13,7 @@ class Experiment:
         self.id = config['exp.id']
         Context.work_path = self.work_path
         self._make_instances()
+        self.main_report()
 
     def __str__(self):
         return "%s:\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s" % (
